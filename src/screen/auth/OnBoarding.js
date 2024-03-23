@@ -1,13 +1,13 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View} from 'react-native';
 import React, {useRef} from 'react';
-import AuthContainer from '../../components/AuthContainer';
 import AppIntroSlider from 'react-native-app-intro-slider';
-import {slides} from '../../utils';
+import ROUTES, {slides} from '../../utils';
 import themes from '../../assets/themes';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import SVGIcons from '../../components/SVGIcons';
 import icons from '../../assets/icons';
 import {useNavigation} from '@react-navigation/native';
+import AuthContainer from '../../components/AuthContainer';
 
 const OnBoarding = () => {
   const sliderRef = useRef();
@@ -39,7 +39,7 @@ const OnBoarding = () => {
         dotStyle={styles.dotStyle}
         activeDotStyle={styles.activeDotStyle}
         renderDoneButton={renderNextButton}
-        onDone={() => navigation.navigate('GetStart')}
+        onDone={() => navigation.navigate(ROUTES.Starting)}
       />
     </AuthContainer>
   );
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     color: themes.primary,
     marginLeft: hp('3%'),
     fontSize: hp('3.4%'),
-    width: hp('42%'),
+    width: Platform.OS === 'ios' ? hp('45%') : hp('42%'),
     fontWeight: 'bold',
   },
   contentWrapper: {

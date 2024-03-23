@@ -1,9 +1,9 @@
 import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
-import AuthContainer from '../../components/AuthContainer';
-import {typeImages} from '../../utils';
+import ROUTES, {typeImages} from '../../utils';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {useNavigation} from '@react-navigation/native';
+import AuthContainer from '../../components/AuthContainer';
 
 const GetStart = () => {
   const navigation = useNavigation();
@@ -13,7 +13,7 @@ const GetStart = () => {
       {typeImages.map(item => (
         <TouchableOpacity
           activeOpacity={0.9}
-          onPress={() => navigation.navigate('Login')}>
+          onPress={() => navigation.navigate(ROUTES.Login)}>
           <Image source={item.image} style={styles.imageStyle} />
         </TouchableOpacity>
       ))}
@@ -28,6 +28,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     height: hp('22%'),
     width: hp('36.5%'),
-    marginBottom: hp('3%'),
+    marginBottom: hp('5%'),
   },
 });
