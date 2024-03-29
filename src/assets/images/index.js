@@ -13,5 +13,6 @@ export default {
     cat5: require('../images/cat5.png'),
     restaurant1: require('../images/restaurant1.png'),
     restaurant2: require('../images/restaurant2.png'),
-    detail: require('../images/detailimage.png')
+    detail: require('../images/detailimage.png'),
+    food: require('../images/discountfood.png')
 }

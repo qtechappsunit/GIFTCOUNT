@@ -1,4 +1,6 @@
+import {Linking} from 'react-native';
 import images from '../assets/images';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const slides = [
   {
@@ -19,10 +21,12 @@ export const typeImages = [
   {
     id: 1,
     image: images.driver,
+    type: 'rider',
   },
   {
     id: 2,
     image: images.customer,
+    type: 'customer',
   },
 ];
 
@@ -120,6 +124,22 @@ export const multipleImages = [
     id: 4,
     image: images.detail,
   },
+  {
+    id: 5,
+    image: images.detail,
+  },
 ];
+
+export const getUserType = async key => {
+  return await AsyncStorage.getItem(key);
+};
+
+export const setUserType = (key, type) => {
+  AsyncStorage.setItem(key, type);
+};
+
+export const linking = async url => {
+  await Linking.openURL(url);
+};
 
 export default ROUTES;

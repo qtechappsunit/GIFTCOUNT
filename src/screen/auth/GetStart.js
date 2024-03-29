@@ -1,6 +1,6 @@
 import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
-import ROUTES, {typeImages} from '../../utils';
+import ROUTES, {setUserType, typeImages} from '../../utils';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {useNavigation} from '@react-navigation/native';
 import AuthContainer from '../../components/AuthContainer';
@@ -8,12 +8,18 @@ import AuthContainer from '../../components/AuthContainer';
 const GetStart = () => {
   const navigation = useNavigation();
 
+  const onTypeSet = type => {
+    setUserType('role', type);
+    navigation.navigate(ROUTES.Login);
+  };
+
   return (
     <AuthContainer logoImageStyle={{marginVertical: hp('1%')}}>
-      {typeImages.map(item => (
+      {typeImages.map((item, index) => (
         <TouchableOpacity
           activeOpacity={0.9}
-          onPress={() => navigation.navigate(ROUTES.Login)}>
+          key={index}
+          onPress={() => onTypeSet(item.type)}>
           <Image source={item.image} style={styles.imageStyle} />
         </TouchableOpacity>
       ))}
