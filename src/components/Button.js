@@ -2,6 +2,7 @@ import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import themes from '../assets/themes';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import fonts from '../assets/fonts';
 
 const Button = ({onPress, buttonText, style}) => {
   return (
@@ -28,5 +29,6 @@ const styles = StyleSheet.create({
     fontSize: hp('2%'),
     fontWeight: 'bold',
     alignSelf: 'center',
+    fontFamily: fonts.bold,
   },
 });

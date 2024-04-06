@@ -56,6 +56,7 @@ const ROUTES = {
   QRCode: 'QRCode',
   Profile: 'Profile',
   RestaurantDetail: 'RestaurantDetail',
+  Points: 'Points',
 };
 
 export const categories = [

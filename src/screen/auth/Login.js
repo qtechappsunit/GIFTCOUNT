@@ -7,7 +7,10 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import themes from '../../assets/themes';
 import InputField from '../../components/InputField';
 import icons from '../../assets/icons';
@@ -15,12 +18,15 @@ import Button from '../../components/Button';
 import ROUTES, {socialIcons} from '../../utils';
 import {useNavigation} from '@react-navigation/native';
 import AuthContainer from '../../components/AuthContainer';
+import fonts from '../../assets/fonts';
 
 const Login = () => {
   const navigation = useNavigation();
 
   return (
-    <ScrollView style={styles.scrollContainer}>
+    <ScrollView
+      style={styles.scrollContainer}
+      showsVerticalScrollIndicator={false}>
       <AuthContainer logoImageStyle={{marginVertical: hp('1%')}}>
         <View style={styles.screen}>
           <Text style={styles.heading}>Login</Text>
@@ -47,7 +53,8 @@ const Login = () => {
           />
           <TouchableOpacity
             activeOpacity={0.9}
-            onPress={() => navigation.navigate(ROUTES.Register)}>
+            // onPress={() => navigation.navigate(ROUTES.Register)}
+          >
             <Text style={[styles.text, {marginTop: hp('2%')}]}>
               Don't have an account? Sign Up
             </Text>
@@ -59,8 +66,8 @@ const Login = () => {
         </View>
         <Text style={styles.socialMediatext}>Login using</Text>
         <View style={styles.socialWrapper}>
-          {socialIcons.map(item => (
-            <Image source={item.icon} />
+          {socialIcons.map((item, ind) => (
+            <Image source={item.icon} key={ind} />
           ))}
         </View>
       </AuthContainer>
@@ -82,11 +89,13 @@ const styles = StyleSheet.create({
     color: themes.red,
     fontWeight: 'bold',
     fontSize: hp('4%'),
+    fontFamily: fonts.markRegular,
   },
   text: {
     color: themes.primary,
     marginTop: hp('1%'),
     fontSize: hp('2%'),
+    fontFamily: fonts.regular,
   },
   inputWrapper: {
     paddingTop: hp('4%'),
@@ -115,17 +124,21 @@ const styles = StyleSheet.create({
   ORtext: {
     color: themes.white,
     fontSize: hp('1.5%'),
-    fontWeight: 'bold',
+    fontFamily: fonts.bold,
   },
   socialMediatext: {
     color: themes.primary,
     fontSize: hp('2%'),
     alignSelf: 'center',
     marginTop: hp('3.5%'),
+    fontFamily: fonts.regular,
   },
   socialWrapper: {
     flexDirection: 'row',
     paddingTop: hp('3%'),
     justifyContent: 'space-evenly',
+    marginBottom: hp(2),
+    width: wp(60),
+    alignSelf: 'center',
   },
 });

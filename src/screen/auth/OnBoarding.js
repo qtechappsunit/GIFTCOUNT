@@ -8,6 +8,7 @@ import SVGIcons from '../../components/SVGIcons';
 import icons from '../../assets/icons';
 import {useNavigation} from '@react-navigation/native';
 import AuthContainer from '../../components/AuthContainer';
+import fonts from '../../assets/fonts';
 
 const OnBoarding = () => {
   const sliderRef = useRef();
@@ -52,8 +53,8 @@ const styles = StyleSheet.create({
     color: themes.primary,
     marginLeft: hp('3%'),
     fontSize: hp('3.4%'),
-    width: Platform.OS === 'ios' ? hp('45%') : hp('42%'),
-    fontWeight: 'bold',
+    width: Platform.OS === 'ios' ? hp('45%') : hp('42%'), 
+    fontFamily: fonts.bold,
   },
   contentWrapper: {
     // paddingTop: hp('3%'),

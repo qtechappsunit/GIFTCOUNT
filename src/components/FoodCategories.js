@@ -2,10 +2,14 @@ import {StyleSheet, Text, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import themes from '../assets/themes';
+import fonts from '../assets/fonts';
 
 const FoodCategories = ({catName, catImage, onCatPress, catStyle}) => {
   return (
-    <TouchableOpacity style={[styles.categoryStyle,catStyle]} activeOpacity={0.9} onPress={onCatPress}>
+    <TouchableOpacity
+      style={[styles.categoryStyle, catStyle]}
+      activeOpacity={0.9}
+      onPress={onCatPress}>
       <Image source={catImage} style={styles.imageStyle} borderRadius={100} />
       <Text style={styles.text}>{catName}</Text>
     </TouchableOpacity>
@@ -29,5 +33,6 @@ const styles = StyleSheet.create({
     color: themes.light_black,
     marginTop: hp('1%'),
     marginBottom: hp('1%'),
+    fontFamily: fonts.bold,
   },
 });

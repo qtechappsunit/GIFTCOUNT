@@ -1,10 +1,17 @@
-import React from 'react'
-import Routes from './routes'
+import React, {useEffect} from 'react';
+import Routes from './routes';
+import {LogBox, SafeAreaView} from 'react-native';
 
 const App = () => {
-  return (
-        <Routes />
-  )
-}
+  useEffect(() => {
+    LogBox.ignoreAllLogs();
+  }, []);
 
-export default App
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <Routes />
+    </SafeAreaView>
+  );
+};
+
+export default App;

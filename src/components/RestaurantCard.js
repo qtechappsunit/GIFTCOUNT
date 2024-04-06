@@ -5,8 +5,9 @@ import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import themes from '../assets/themes';
 import SVGIcons from './SVGIcons';
 import icons from '../assets/icons';
+import fonts from '../assets/fonts';
 
-const RestaurantCard = ({onPress, name, items, rating, discount,date}) => {
+const RestaurantCard = ({onPress, name, items, rating, discount, date}) => {
   return (
     <TouchableOpacity
       style={styles.cardStyle}
@@ -23,13 +24,13 @@ const RestaurantCard = ({onPress, name, items, rating, discount,date}) => {
         </View>
       </View>
       <Text style={styles.name}>{name}</Text>
-        <Text style={styles.itemText}>{items}</Text>
-        <View style={styles.textWrapper}>
-            <SVGIcons image={icons.star} />
-            <Text style={styles.ratingText}>{rating}</Text>
-          <Text style={styles.validityText}>Validity</Text>
-          <Text style={styles.dateText}>{date}</Text>
-        </View>
+      <Text style={styles.itemText}>{items}</Text>
+      <View style={styles.textWrapper}>
+        <SVGIcons image={icons.star} />
+        <Text style={styles.ratingText}>{rating}</Text>
+        <Text style={styles.validityText}>Validity</Text>
+        <Text style={styles.dateText}>{date}</Text>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -38,7 +39,7 @@ export default RestaurantCard;
 
 const styles = StyleSheet.create({
   cardStyle: {
-    marginBottom: hp('7')
+    marginBottom: hp('7'),
   },
   imageStyle: {
     height: hp('20%'),
@@ -60,6 +61,7 @@ const styles = StyleSheet.create({
     color: themes.white,
     marginBottom: hp('0.2%'),
     fontWeight: 'bold',
+    fontFamily: fonts.bold,
     fontSize: hp('1.8%'),
   },
   wrapper: {
@@ -67,14 +69,16 @@ const styles = StyleSheet.create({
   },
   name: {
     color: themes.white,
-    fontSize: hp('2.2%'),
+    fontSize: hp('2.8%'),
     marginTop: hp('3%'),
     fontWeight: 'bold',
+    fontFamily: fonts.regular,
   },
   itemText: {
     color: themes.primary,
-    fontSize: hp('1.7%'),
+    fontSize: hp(2),
     marginTop: hp('0.8%'),
+    fontFamily: fonts.regular,
   },
   textWrapper: {
     flexDirection: 'row',
@@ -91,8 +95,8 @@ const styles = StyleSheet.create({
     color: themes.red,
     fontWeight: 'bold',
   },
-  dateText:{
+  dateText: {
     color: themes.primary,
-    fontSize: hp('1.8%')
-  }
+    fontSize: hp('1.8%'),
+  },
 });

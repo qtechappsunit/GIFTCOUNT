@@ -5,6 +5,7 @@ import icons from '../assets/icons';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import themes from '../assets/themes';
 import images from '../assets/images';
+import fonts from '../assets/fonts';
 
 const Header = () => {
   return (
@@ -13,7 +14,8 @@ const Header = () => {
         <TouchableOpacity
           style={styles.iconView}
           activeOpacity={0.9}
-          onPress={() => alert('working in progress')}>
+          // onPress={() => alert('working in progress')}
+        >
           <SVGIcons image={icons.Menu} />
         </TouchableOpacity>
         <Text style={styles.userNameStyle}>Rider Name</Text>
@@ -47,6 +49,7 @@ const styles = StyleSheet.create({
     color: themes.primary,
     fontSize: hp('2.3%'),
     marginLeft: hp('1.5%'),
+    fontFamily: fonts.markRegular,
   },
   logoStyle: {
     height: hp('14%'),

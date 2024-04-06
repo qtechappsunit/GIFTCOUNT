@@ -1,18 +1,37 @@
-import {FlatList, ScrollView, StyleSheet, Text} from 'react-native';
-import React, {useState} from 'react';
+import {FlatList, ScrollView, View, StyleSheet, Text} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Wrapper from '../../components/Wrapper';
 import Header from '../../components/Header';
 import SearchBar from '../../components/SearchBar';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import FoodCategories from '../../components/FoodCategories';
-import ROUTES, {categories, restaurants} from '../../utils';
+import ROUTES, {categories, getUserType, restaurants} from '../../utils';
 import themes from '../../assets/themes';
 import RestaurantCard from '../../components/RestaurantCard';
 import {useNavigation} from '@react-navigation/native';
+import CongratsModal from '../../components/CongratsModal';
+import fonts from '../../assets/fonts';
+import SVGIcons from '../../components/SVGIcons';
+import icons from '../../assets/icons';
 
 const Home = () => {
-  const [catId, setCatId] = useState(0);
   const navigation = useNavigation();
+  const [catId, setCatId] = useState(0);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    getType();
+  }, []);
+
+  const getType = async () => {
+    const type = await getUserType('role');
+    if (type == 'customer') {
+      setVisible(true);
+    }
+  };
 
   const renderCategories = () => {
     return (
@@ -54,7 +73,13 @@ const Home = () => {
         )}
         contentContainerStyle={styles.cardWrapper}
         ListHeaderComponent={() => (
-          <Text style={styles.headerText}>Open Restaurants</Text>
+          <View style={styles.openRestaurantView}>
+            <Text style={styles.headerText}>Open Restaurants</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={styles.seeText}>See All</Text>
+              <SVGIcons image={icons.seeAllArrow} />
+            </View>
+          </View>
         )}
       />
     );
@@ -70,6 +95,7 @@ const Home = () => {
         {renderCategories()}
         {renderCards()}
       </ScrollView>
+      <CongratsModal modalVisible={visible} setModalVisible={setVisible} />
     </Wrapper>
   );
 };
@@ -77,6 +103,17 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
+  seeText: {
+    color: themes.primary,
+    fontFamily: fonts.regular,
+  },
+  openRestaurantView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: wp(90),
+    justifyContent: 'space-between',
+    marginBottom: hp(3),
+  },
   screen: {
     marginLeft: hp('2.5%'),
   },
@@ -94,7 +131,7 @@ const styles = StyleSheet.create({
   headerText: {
     color: themes.heading,
     fontWeight: 'bold',
-    marginBottom: hp('4%'),
     fontSize: hp('2.8%'),
+    fontFamily: fonts.bold,
   },
 });

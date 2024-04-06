@@ -1,8 +1,4 @@
-import {
-  StyleSheet,
-  Image,
-  View,
-} from 'react-native';
+import {StyleSheet, Image, View} from 'react-native';
 import React from 'react';
 import themes from '../assets/themes';
 import images from '../assets/images';
@@ -37,5 +33,6 @@ const styles = StyleSheet.create({
     marginVertical: hp('17%'),
     alignSelf: 'center',
     width: hp('35%'),
+    resizeMode: 'contain',
   },
 });

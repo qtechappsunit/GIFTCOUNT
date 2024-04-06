@@ -26,6 +26,7 @@ const MainStack = () => {
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
+        tabBarHideOnKeyboard: true,
         tabBarStyle: {
           borderTopWidth: 0,
           height: TabBarHeight,
@@ -33,8 +34,8 @@ const MainStack = () => {
         },
       }}>
       <Tab.Screen
-        name={'HomeStack'}
-        component={HomeStack}
+        name={ROUTES.Home}
+        component={Home}
         options={{
           tabBarIcon: ({focused}) =>
             focused ? (
@@ -76,19 +77,6 @@ const MainStack = () => {
         }}
       />
     </Tab.Navigator>
-  );
-};
-
-const HomeStack = () => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-        animation: 'fade_from_bottom',
-      }}>
-      <Tab.Screen name={ROUTES.Home} component={Home} />
-      <Tab.Screen name={ROUTES.RestaurantDetail} component={RestaurantDetail} />
-    </Stack.Navigator>
   );
 };
 

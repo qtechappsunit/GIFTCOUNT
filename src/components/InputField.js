@@ -3,10 +3,19 @@ import React from 'react';
 import themes from '../assets/themes';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import SVGIcons from './SVGIcons';
+import fonts from '../assets/fonts';
 
-const InputField = ({keyboardType, placeholder, value, onChangeText, icon, style, secureTextEntry}) => {
+const InputField = ({
+  keyboardType,
+  placeholder,
+  value,
+  onChangeText,
+  icon,
+  style,
+  secureTextEntry,
+}) => {
   return (
-    <View style={[styles.inputStyle,style]}>
+    <View style={[styles.inputStyle, style]}>
       <SVGIcons image={icon} style={styles.inputIcon} />
       <TextInput
         placeholder={placeholder}
@@ -36,6 +45,7 @@ const styles = StyleSheet.create({
     width: '80%',
     opacity: 0.7,
     fontSize: hp('2%'),
+    fontFamily: fonts.regular,
   },
   inputIcon: {
     marginLeft: Platform.OS === 'android' && hp('1%'),

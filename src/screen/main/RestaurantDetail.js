@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -16,11 +17,14 @@ import SVGIcons from '../../components/SVGIcons';
 import icons from '../../assets/icons';
 import images from '../../assets/images';
 import Button from '../../components/Button';
+import RedirectingModal from '../../components/RedirectingModal';
+import {useNavigation} from '@react-navigation/native';
+import fonts from '../../assets/fonts';
 
 const RestaurantDetail = () => {
+  const nav = useNavigation();
   const [role, setRole] = useState('');
-
-  // console.log('rolee', role);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     getType();
@@ -34,12 +38,19 @@ const RestaurantDetail = () => {
   const renderImages = () => {
     return (
       <View style={styles.swiperWrapper}>
+        <TouchableOpacity onPress={() => nav.goBack()} style={styles.backArrow}>
+          <SVGIcons
+            image={icons.arrowNext}
+            style={{transform: [{rotate: '180deg'}]}}
+          />
+        </TouchableOpacity>
         <Swiper
           activeDotStyle={styles.activeStyle}
           dotColor={themes.secondary}
           dotStyle={styles.inactiveStyle}>
-          {multipleImages.map(item => (
+          {multipleImages.map((item, ind) => (
             <Image
+              key={ind}
               source={item.image}
               style={styles.imageStyle}
               borderBottomLeftRadius={30}
@@ -70,10 +81,6 @@ const RestaurantDetail = () => {
     );
   };
 
-  const onOrderPress = () => {
-    alert('working in progress');
-  };
-
   const renderDiscountCard = () => {
     return (
       <>
@@ -90,17 +97,19 @@ const RestaurantDetail = () => {
             <Button
               buttonText={'Order Now'}
               style={styles.button}
-              onPress={() => onOrderPress()}
+              onPress={() => setVisible(!visible)}
             />
           </>
         )}
+        <View style={{height: hp(1)}} />
+        <RedirectingModal visible={visible} setVisible={setVisible} />
       </>
     );
   };
 
   return (
     <Wrapper>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {renderImages()}
         {renderContent()}
         {renderDiscountCard()}
@@ -112,6 +121,16 @@ const RestaurantDetail = () => {
 export default RestaurantDetail;
 
 const styles = StyleSheet.create({
+  backArrow: {
+    padding: 10,
+    aspectRatio: 1,
+    backgroundColor: themes.white,
+    position: 'absolute',
+    top: 15,
+    zIndex: 10,
+    borderRadius: 50,
+    left: 15,
+  },
   swiperWrapper: {
     height: Platform.OS === 'ios' ? hp('37%') : hp('45%'),
   },
@@ -156,13 +175,14 @@ const styles = StyleSheet.create({
   name: {
     marginTop: hp('2%'),
     color: themes.black,
-    fontSize: hp('2.4%'),
-    fontWeight: 'bold',
+    fontSize: hp(2.8),
+    fontFamily: fonts.medium,
   },
   descStyle: {
     color: themes.white,
-    fontSize: hp('1.9%'),
+    fontSize: hp(2),
     marginTop: hp('2%'),
+    fontFamily: fonts.regular,
   },
   wrapper: {
     paddingTop: hp('1%'),
@@ -182,8 +202,10 @@ const styles = StyleSheet.create({
   discountText: {
     color: themes.black,
     fontSize: hp('2.5%'),
+    fontFamily: fonts.markRegular,
   },
   percentage: {
+    fontFamily: fonts.markRegular,
     fontSize: hp('7%'),
     color: themes.black,
     fontWeight: 'bold',

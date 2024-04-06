@@ -1,7 +1,10 @@
 import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
 import ROUTES, {setUserType, typeImages} from '../../utils';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import {useNavigation} from '@react-navigation/native';
 import AuthContainer from '../../components/AuthContainer';
 
@@ -32,8 +35,9 @@ export default GetStart;
 const styles = StyleSheet.create({
   imageStyle: {
     alignSelf: 'center',
-    height: hp('22%'),
-    width: hp('36.5%'),
+    height: hp(25),
+    width: wp(80),
+    resizeMode: 'contain',
     marginBottom: hp('5%'),
   },
 });
