@@ -21,4 +21,9 @@ export default {
   giftSparkles: require('./giftSparkles.png'),
   giftLid: require('./giftLid.png'),
   giftBox: require('./giftBox.png'),
+  restaurantOwner: require('./restaurantOwner.png'),
+  bgImage: require('./bgImage.png'),
+  uploadImage: require('./uploadImage.png'),
+  userImage: require('./userImage.png'),
+  restaurant3: require('./restaurant3.png'),
 };

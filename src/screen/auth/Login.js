@@ -1,6 +1,5 @@
 import {
   Image,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -15,8 +14,8 @@ import themes from '../../assets/themes';
 import InputField from '../../components/InputField';
 import icons from '../../assets/icons';
 import Button from '../../components/Button';
-import ROUTES, {socialIcons} from '../../utils';
-import {useNavigation} from '@react-navigation/native';
+import ROUTES, { socialIcons } from '../../utils';
+import { useNavigation } from '@react-navigation/native';
 import AuthContainer from '../../components/AuthContainer';
 import fonts from '../../assets/fonts';
 
@@ -24,60 +23,76 @@ const Login = () => {
   const navigation = useNavigation();
 
   return (
-    <ScrollView
-      style={styles.scrollContainer}
-      showsVerticalScrollIndicator={false}>
-      <AuthContainer logoImageStyle={{marginVertical: hp('1%')}}>
-        <View style={styles.screen}>
-          <Text style={styles.heading}>Login</Text>
-          <Text style={styles.text}>
-            Please enter your registered email and password.
+    <AuthContainer logoImageStyle={{ marginVertical: hp('1%') }}>
+      <View style={styles.screen}>
+        <Text style={styles.heading}>Driver Login</Text>
+        <Text style={styles.text}>
+          Please enter your registered email {`\n`} and password.
+        </Text>
+        <InputField
+          placeholder={'Email'}
+          style={styles.input}
+          keyboardType={'email-address'}
+          icon={icons.emailIcon}
+        />
+        <InputField
+          placeholder={'Password'}
+          style={styles.input}
+          icon={icons.password}
+          secureTextEntry={true}
+        />
+        <TouchableOpacity style={styles.forgotTouch} onPress={() => navigation.navigate(ROUTES.OTPScreen)}>
+          <Text style={styles.forgot}>
+            Forgot password
           </Text>
-          <View style={styles.inputWrapper}>
-            <InputField
-              placeholder={'Email'}
-              style={styles.input}
-              keyboardType={'email-address'}
-              icon={icons.emailIcon}
-            />
-            <InputField
-              placeholder={'Password'}
-              style={styles.input}
-              icon={icons.password}
-              secureTextEntry={true}
-            />
-          </View>
-          <Button
-            buttonText={'Submit'}
-            onPress={() => navigation.navigate(ROUTES.MainStack)}
-          />
-          <TouchableOpacity
-            activeOpacity={0.9}
-            // onPress={() => navigation.navigate(ROUTES.Register)}
-          >
-            <Text style={[styles.text, {marginTop: hp('2%')}]}>
-              Don't have an account? Sign Up
-            </Text>
-          </TouchableOpacity>
-          <View style={styles.border} />
-          <View style={styles.lineCircle}>
-            <Text style={styles.ORtext}>OR</Text>
-          </View>
+        </TouchableOpacity>
+        <Button
+          buttonText={'Submit'}
+          onPress={() => navigation.navigate(ROUTES.MainStack)}
+        />
+        <TouchableOpacity
+          activeOpacity={0.9}
+          style={styles.dontTouch}
+          onPress={() => navigation.navigate(ROUTES.Register)}
+        >
+          <Text style={[styles.text, { marginRight: wp(1), color: themes.white }]}>
+            Don't have an account?
+          </Text>
+          <Text style={styles.text}>Sign Up</Text>
+        </TouchableOpacity>
+        <View style={styles.border} />
+        <View style={styles.lineCircle}>
+          <Text style={styles.ORtext}>OR</Text>
         </View>
-        <Text style={styles.socialMediatext}>Login using</Text>
-        <View style={styles.socialWrapper}>
-          {socialIcons.map((item, ind) => (
-            <Image source={item.icon} key={ind} />
-          ))}
-        </View>
-      </AuthContainer>
-    </ScrollView>
+      </View>
+      <Text style={styles.socialMediatext}>Login using</Text>
+      <View style={styles.socialWrapper}>
+        {socialIcons.map((item, ind) => (
+          <Image source={item.icon} key={ind} />
+        ))}
+      </View>
+    </AuthContainer>
   );
 };
 
 export default Login;
 
 const styles = StyleSheet.create({
+  forgotTouch: {
+    alignSelf: 'flex-end'
+  },
+  dontTouch: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: hp('2%')
+  },
+  forgot: {
+    color: themes.primary,
+    marginBottom: hp(1.5),
+    fontSize: hp(2.3),
+    fontFamily: fonts.lexendBold,
+    alignSelf: "flex-end"
+  },
   scrollContainer: {
     flex: 1,
     backgroundColor: themes.secondary,
@@ -86,19 +101,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   heading: {
-    color: themes.red,
+    color: themes.white,
     fontWeight: 'bold',
     fontSize: hp('4%'),
     fontFamily: fonts.markRegular,
   },
   text: {
     color: themes.primary,
-    marginTop: hp('1%'),
-    fontSize: hp('2%'),
-    fontFamily: fonts.regular,
-  },
-  inputWrapper: {
-    paddingTop: hp('4%'),
+    marginVertical: hp(1.5),
+    fontSize: hp(2.3),
+    fontFamily: fonts.lexendBold,
+    textAlign: 'center'
   },
   input: {
     marginBottom: hp('2.4%'),

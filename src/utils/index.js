@@ -1,4 +1,4 @@
-import {Linking} from 'react-native';
+import { Linking } from 'react-native';
 import images from '../assets/images';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -27,6 +27,11 @@ export const typeImages = [
     id: 2,
     image: images.customer,
     type: 'customer',
+  },
+  {
+    id: 3,
+    image: images.restaurantOwner,
+    type: 'restaurantOwner',
   },
 ];
 
@@ -57,6 +62,9 @@ const ROUTES = {
   Profile: 'Profile',
   RestaurantDetail: 'RestaurantDetail',
   Points: 'Points',
+  OTPScreen: 'OTPScreen',
+  ResetPasswordScreen: 'ResetPasswordScreen',
+  EditProfileScreen: 'EditProfileScreen',
 };
 
 export const categories = [
@@ -90,21 +98,17 @@ export const categories = [
 export const restaurants = [
   {
     id: 1,
-    image: images.restaurant1,
-    name: 'Rose Garden Restaurant',
-    discount: '50% Discount',
-    items: 'Burger - Chicken - Riche - Wings',
-    rating: '5.7',
+    image: images.restaurant3,
+    name: 'Burger Den - Coupon 1',
     validity: '24-04-2024',
   },
   {
     id: 2,
-    image: images.restaurant2,
-    name: 'Rose Garden Restaurant',
-    discount: '40% Discount',
-    items: 'Burger - Chicken - Riche - Wings',
-    rating: '4.7',
-    validity: '24-04-2024',
+    image: images.restaurant3,
+    name: 'Burger Den - Coupon 2',
+    discount: '50%',
+    validity: 'Mon, Tue, Wed, Thu, Fri, Sat & Sun',
+    hours: '22:00 - 23:59',
   },
 ];
 

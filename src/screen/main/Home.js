@@ -1,5 +1,5 @@
-import {FlatList, ScrollView, View, StyleSheet, Text} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { FlatList, ScrollView, View, StyleSheet, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Wrapper from '../../components/Wrapper';
 import Header from '../../components/Header';
 import SearchBar from '../../components/SearchBar';
@@ -8,10 +8,10 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import FoodCategories from '../../components/FoodCategories';
-import ROUTES, {categories, getUserType, restaurants} from '../../utils';
+import ROUTES, { categories, getUserType, restaurants } from '../../utils';
 import themes from '../../assets/themes';
 import RestaurantCard from '../../components/RestaurantCard';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import CongratsModal from '../../components/CongratsModal';
 import fonts from '../../assets/fonts';
 import SVGIcons from '../../components/SVGIcons';
@@ -60,25 +60,25 @@ const Home = () => {
       <FlatList
         data={restaurants}
         scrollEnabled={false}
-        renderItem={({item, index}) => (
+        renderItem={({ item, index }) => (
           <RestaurantCard
             key={index}
             name={item.name}
             onPress={() => navigation.navigate(ROUTES.RestaurantDetail)}
             discount={item.discount}
             date={item.validity}
-            items={item.items}
-            rating={item.rating}
+            image={item?.image}
+            hour={item?.hours}
           />
         )}
         contentContainerStyle={styles.cardWrapper}
         ListHeaderComponent={() => (
           <View style={styles.openRestaurantView}>
-            <Text style={styles.headerText}>Open Restaurants</Text>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text style={styles.headerText}>Available Coupons</Text>
+            {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Text style={styles.seeText}>See All</Text>
               <SVGIcons image={icons.seeAllArrow} />
-            </View>
+            </View> */}
           </View>
         )}
       />

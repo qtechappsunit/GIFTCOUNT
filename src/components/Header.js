@@ -1,8 +1,8 @@
-import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import React from 'react';
 import SVGIcons from './SVGIcons';
 import icons from '../assets/icons';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import themes from '../assets/themes';
 import images from '../assets/images';
 import fonts from '../assets/fonts';
@@ -11,14 +11,15 @@ const Header = () => {
   return (
     <View style={styles.headerView}>
       <View style={styles.wrapper}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.iconView}
           activeOpacity={0.9}
           // onPress={() => alert('working in progress')}
         >
           <SVGIcons image={icons.Menu} />
-        </TouchableOpacity>
-        <Text style={styles.userNameStyle}>Rider Name</Text>
+        </TouchableOpacity> */}
+        <Image source={images.userImage} style={styles.userImage} />
+        <Text style={styles.userNameStyle}>Mark</Text>
       </View>
       <Image source={images.logo} style={styles.logoStyle} />
     </View>
@@ -28,6 +29,12 @@ const Header = () => {
 export default Header;
 
 const styles = StyleSheet.create({
+  userImage: {
+    width: wp(15),
+    height: wp(15),
+    borderRadius: 100,
+    resizeMode: 'contain'
+  },
   headerView: {
     flexDirection: 'row',
     padding: hp('1.9%'),

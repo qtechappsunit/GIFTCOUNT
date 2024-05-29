@@ -2,6 +2,7 @@ export default {
   primary: '#D9CA40',
   secondary: '#606060',
   gray: '#808080',
+  gray1: '#D9D9D9',
   white: '#FFFF',
   red: '#FB1C0F',
   red1: '#FF0000',

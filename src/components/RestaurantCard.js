@@ -1,13 +1,13 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import images from '../assets/images';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import themes from '../assets/themes';
 import SVGIcons from './SVGIcons';
 import icons from '../assets/icons';
 import fonts from '../assets/fonts';
 
-const RestaurantCard = ({onPress, name, items, rating, discount, date}) => {
+const RestaurantCard = ({ onPress, name, discount, date, image, hours }) => {
   return (
     <TouchableOpacity
       style={styles.cardStyle}
@@ -15,21 +15,25 @@ const RestaurantCard = ({onPress, name, items, rating, discount, date}) => {
       onPress={onPress}>
       <View style={styles.wrapper}>
         <Image
-          source={images.restaurant1}
+          source={image}
           style={styles.imageStyle}
           borderRadius={12}
         />
-        <View style={styles.discountStyle}>
-          <Text style={styles.discountText}>{discount}</Text>
-        </View>
+        {discount ? (
+          <View style={styles.discountStyle}>
+            <Text style={styles.discountText}>{discount}</Text>
+            <Text style={styles.discountText}>Discount</Text>
+          </View>
+        ) : null}
       </View>
       <Text style={styles.name}>{name}</Text>
-      <Text style={styles.itemText}>{items}</Text>
       <View style={styles.textWrapper}>
-        <SVGIcons image={icons.star} />
-        <Text style={styles.ratingText}>{rating}</Text>
         <Text style={styles.validityText}>Validity</Text>
         <Text style={styles.dateText}>{date}</Text>
+      </View>
+      <View style={styles.textWrapper}>
+        <Text style={styles.validityText}>Hours</Text>
+        <Text style={styles.dateText}>{hours}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -92,7 +96,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   validityText: {
-    color: themes.red,
+    color: themes.white,
     fontWeight: 'bold',
   },
   dateText: {

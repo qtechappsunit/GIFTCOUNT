@@ -1,16 +1,16 @@
-import {StyleSheet, Image, View} from 'react-native';
+import { StyleSheet, Image, ScrollView } from 'react-native';
 import React from 'react';
 import themes from '../assets/themes';
 import images from '../assets/images';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
-const AuthContainer = ({children, logoImageStyle}) => {
+const AuthContainer = ({ children, logoImageStyle }) => {
   return (
-    <View style={styles.backgroundStyle}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.backgroundStyle}>
       <Image source={images.background} style={styles.imageStyle} />
       <Image source={images.logo} style={[styles.logoStyle, logoImageStyle]} />
       {children}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
   backgroundStyle: {
     backgroundColor: themes.secondary,
     flex: 1,
+    paddingHorizontal: wp(3)
   },
   imageStyle: {
     opacity: 0.2,

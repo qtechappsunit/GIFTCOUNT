@@ -1,7 +1,7 @@
-import {Platform, StyleSheet, TextInput, View} from 'react-native';
+import { Platform, StyleSheet, TextInput, View } from 'react-native';
 import React from 'react';
 import themes from '../assets/themes';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import SVGIcons from './SVGIcons';
 import fonts from '../assets/fonts';
 
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     backgroundColor: themes.navy_blue,
     flexDirection: 'row',
     padding: Platform.OS === 'ios' ? hp('2%') : hp('0.5%'),
-    width: hp('40%'),
+    width: wp(85),
     borderRadius: 100,
   },
   input: {
