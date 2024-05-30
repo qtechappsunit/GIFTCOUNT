@@ -9,7 +9,7 @@ import {
   Linking,
   Image,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import Container from '../../components/AuthContainer';
 import images from '../../assets/images';
 import {
@@ -18,14 +18,14 @@ import {
 } from 'react-native-responsive-screen';
 import SVGIcons from '../../components/SVGIcons';
 import icons from '../../assets/icons';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import themes from '../../assets/themes';
 import fonts from '../../assets/fonts';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import {RNCamera} from 'react-native-camera';
+import { RNCamera } from 'react-native-camera';
 import ROUTES from '../../utils';
 
-const {height, width} = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
 const QRCode = () => {
   const nav = useNavigation();
@@ -37,11 +37,11 @@ const QRCode = () => {
     // );
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      nav.navigate(ROUTES.Points);
-    }, 2000);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     nav.navigate(ROUTES.Points);
+  //   }, 2000);
+  // }, []);
 
   return (
     <ImageBackground
@@ -55,7 +55,7 @@ const QRCode = () => {
             style={styles.backView}>
             <SVGIcons
               image={icons.arrowNext}
-              style={{transform: [{rotate: '180deg'}]}}
+              style={{ transform: [{ rotate: '180deg' }] }}
             />
           </TouchableOpacity>
           <Text style={styles.headText}>Scan QR Code</Text>
@@ -102,19 +102,19 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -hp(17),
     right: 0,
-    transform: [{rotate: '180deg'}],
+    transform: [{ rotate: '180deg' }],
   },
   redcorner3: {
     position: 'absolute',
     bottom: -hp(17),
     left: 0,
-    transform: [{rotateX: '180deg'}],
+    transform: [{ rotateX: '180deg' }],
   },
   redcorner2: {
     position: 'absolute',
     top: -hp(17),
     right: 0,
-    transform: [{rotateY: '180deg'}],
+    transform: [{ rotateY: '180deg' }],
   },
   redcorner1: {
     position: 'absolute',
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   },
   cameraCont: {
     height: hp(45),
-    width: wp(55),
+    width: wp(50),
     alignSelf: 'center',
   },
   redCorners: {
@@ -149,7 +149,8 @@ const styles = StyleSheet.create({
     width: wp(80),
     backgroundColor: themes.primary,
     alignSelf: 'center',
-    padding: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
     marginTop: hp(10),
     borderRadius: 15,
   },
@@ -168,10 +169,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginTop: hp(7)
   },
   cont: {
-    height: height,
-    width: width,
+    height: hp(110),
+    width: wp(100),
     padding: wp(3),
   },
 });

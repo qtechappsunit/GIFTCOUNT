@@ -7,33 +7,33 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Wrapper from '../../components/Wrapper';
 import Swiper from 'react-native-swiper';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import {getUserType, multipleImages} from '../../utils';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import ROUTES, { getUserType, multipleImages } from '../../utils';
 import themes from '../../assets/themes';
 import SVGIcons from '../../components/SVGIcons';
 import icons from '../../assets/icons';
 import images from '../../assets/images';
 import Button from '../../components/Button';
 import RedirectingModal from '../../components/RedirectingModal';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import fonts from '../../assets/fonts';
 
 const RestaurantDetail = () => {
   const nav = useNavigation();
-  const [role, setRole] = useState('');
+  // const [role, setRole] = useState('');
   const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
-    getType();
-  }, []);
+  // useEffect(() => {
+  //   getType();
+  // }, []);
 
-  const getType = async () => {
-    const type = await getUserType('role');
-    setRole(type);
-  };
+  // const getType = async () => {
+  //   const type = await getUserType('role');
+  //   setRole(type);
+  // };
 
   const renderImages = () => {
     return (
@@ -41,7 +41,7 @@ const RestaurantDetail = () => {
         <TouchableOpacity onPress={() => nav.goBack()} style={styles.backArrow}>
           <SVGIcons
             image={icons.arrowNext}
-            style={{transform: [{rotate: '180deg'}]}}
+            style={{ transform: [{ rotate: '180deg' }] }}
           />
         </TouchableOpacity>
         <Swiper
@@ -65,18 +65,30 @@ const RestaurantDetail = () => {
   const renderContent = () => {
     return (
       <View style={styles.contentWrapper}>
-        <View style={styles.textWrapper}>
+        {/* <View style={styles.textWrapper}>
           <SVGIcons image={icons.star} />
           <Text style={styles.ratingText}>{'5.7'}</Text>
           <Text style={styles.validityText}>Validity</Text>
           <Text style={styles.dateText}>{'24-04-2024'}</Text>
-        </View>
-        <Text style={styles.name}>Rose Garden Restaurant</Text>
+        </View> */}
+        <Text style={styles.name}>Burger Den - Coupon 1</Text>
         <Text style={styles.descStyle}>
           Garden Restaurant is the perfect spot for an evening out. The historic
           white-columned Merritt House, restored and renovated to its gleaming
           splendor, is home to Galley and Garden.
         </Text>
+        <View style={styles.row}>
+          <Text style={styles.subHead}>Min order value</Text>
+          <Text style={styles.subVal}>$20</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.subHead}>Validity</Text>
+          <Text style={styles.subVal}>24-04-2024</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.subHead}>Code Validation</Text>
+          <Text style={styles.subVal}>1</Text>
+        </View>
       </View>
     );
   };
@@ -85,14 +97,23 @@ const RestaurantDetail = () => {
     return (
       <>
         <View style={styles.wrapper}>
-          <Image source={images.food} style={styles.foodStyle} />
+          <Image source={images.burger} style={styles.foodStyle} />
           <View style={styles.discountView}>
-            <Text style={styles.discountText}>Flat</Text>
+            {/* <Text style={styles.discountText}>Flat</Text>
             <Text style={styles.percentage}>50%</Text>
-            <Text style={styles.discountText}>Discount</Text>
+            <Text style={styles.discountText}>Discount</Text> */}
+            <TouchableOpacity
+              style={[styles.btn, { marginBottom: hp(2) }]}
+              onPress={() => nav.navigate(ROUTES.QRCode)}
+            >
+              <Text style={styles.btnText}>Get QR code</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.btn}>
+              <Text style={styles.btnText}>Copy Link</Text>
+            </TouchableOpacity>
           </View>
         </View>
-        {role == 'customer' && (
+        {/* {role == 'customer' && (
           <>
             <Button
               buttonText={'Order Now'}
@@ -100,8 +121,8 @@ const RestaurantDetail = () => {
               onPress={() => setVisible(!visible)}
             />
           </>
-        )}
-        <View style={{height: hp(1)}} />
+        )} */}
+        <View style={{ height: hp(2) }} />
         <RedirectingModal visible={visible} setVisible={setVisible} />
       </>
     );
@@ -121,6 +142,30 @@ const RestaurantDetail = () => {
 export default RestaurantDetail;
 
 const styles = StyleSheet.create({
+  btnText: {
+    color: themes.white,
+    fontFamily: fonts.lexendExtraBold
+  },
+  btn: {
+    backgroundColor: themes.red1,
+    paddingVertical: hp(2),
+    paddingHorizontal: hp(3.5),
+    borderRadius: 50
+  },
+  subVal: {
+    fontFamily: fonts.lexendBold,
+    color: themes.primary
+  },
+  subHead: {
+    width: wp(40),
+    fontFamily: fonts.lexendBold,
+    color: themes.white
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: hp(1),
+  },
   backArrow: {
     padding: 10,
     aspectRatio: 1,
@@ -136,6 +181,8 @@ const styles = StyleSheet.create({
   },
   imageStyle: {
     width: '100%',
+    resizeMode: 'cover',
+    height: hp(45)
   },
   activeStyle: {
     borderColor: themes.white,
@@ -148,6 +195,7 @@ const styles = StyleSheet.create({
     height: hp('1.5%'),
     width: hp('1.5%'),
     borderRadius: 100,
+    backgroundColor: themes.white
   },
   contentWrapper: {
     paddingTop: hp('2%'),
@@ -174,22 +222,22 @@ const styles = StyleSheet.create({
   },
   name: {
     marginTop: hp('2%'),
-    color: themes.black,
+    color: themes.white,
     fontSize: hp(2.8),
-    fontFamily: fonts.medium,
+    fontFamily: fonts.lexendBold,
   },
   descStyle: {
-    color: themes.white,
+    color: themes.primary,
     fontSize: hp(2),
-    marginTop: hp('2%'),
-    fontFamily: fonts.regular,
+    marginTop: hp(2),
+    fontFamily: fonts.lexendBold,
   },
   wrapper: {
     paddingTop: hp('1%'),
     flexDirection: 'row',
   },
   foodStyle: {
-    height: hp('20%'),
+    height: hp(30),
     width: '55%',
   },
   discountView: {

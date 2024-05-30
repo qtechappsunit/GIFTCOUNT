@@ -12,6 +12,8 @@ import { Platform, StyleSheet, View } from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import RestaurantDetail from '../screen/main/RestaurantDetail';
 import EditProfileScreen from '../screen/main/EditProfileScreen';
+import AnalyticsScreen from '../screen/main/AnalyticsScreen';
+import PayrollScreen from '../screen/main/PayrollScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -66,23 +68,37 @@ const MainStack = () => {
         }}
       />
       <Tab.Screen
-        name={ROUTES.Profile}
-        component={Profile}
+        name={ROUTES.AnalyticStack}
+        component={AnalyticalStack}
         options={{
-          tabBarIcon: ({ focused }) => (
-            // focused ? (
-            //   <View style={styles.iconView}>
-            //     <SVGImage image={icons.home_active} />
-            //   </View>
-            // ) : (
-            <SVGIcons image={icons.profile} />
-          ),
-          // ),
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <View style={styles.iconView}>
+                <SVGIcons image={icons.redAnalyticsIcon} />
+              </View>
+            ) : (
+              <SVGIcons image={icons.whiteAnalyticsIcon} />
+            ),
         }}
       />
     </Tab.Navigator>
   );
 };
+
+const AnalyticalStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        animation: 'fade_from_bottom',
+      }}
+      initialRouteName={ROUTES.AnalyticsScreen}
+    >
+      <Stack.Screen name={ROUTES.AnalyticsScreen} component={AnalyticsScreen} />
+      <Stack.Screen name={ROUTES.PayrollScreen} component={PayrollScreen} />
+    </Stack.Navigator>
+  )
+}
 
 export default MainStack;
 

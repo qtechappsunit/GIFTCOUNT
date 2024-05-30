@@ -1,12 +1,12 @@
-import {Platform, StyleSheet, Text, View} from 'react-native';
-import React, {useRef} from 'react';
+import { Platform, StyleSheet, Text, View } from 'react-native';
+import React, { useRef } from 'react';
 import AppIntroSlider from 'react-native-app-intro-slider';
-import ROUTES, {slides} from '../../utils';
+import ROUTES, { slides } from '../../utils';
 import themes from '../../assets/themes';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import SVGIcons from '../../components/SVGIcons';
 import icons from '../../assets/icons';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import AuthContainer from '../../components/AuthContainer';
 import fonts from '../../assets/fonts';
 
@@ -14,7 +14,7 @@ const OnBoarding = () => {
   const sliderRef = useRef();
   const navigation = useNavigation();
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <View style={styles.contentWrapper}>
         <Text style={styles.textStyle}>{item.text}</Text>
@@ -53,11 +53,12 @@ const styles = StyleSheet.create({
     color: themes.primary,
     marginLeft: hp('3%'),
     fontSize: hp('3.4%'),
-    width: Platform.OS === 'ios' ? hp('45%') : hp('42%'), 
+    width: Platform.OS === 'ios' ? hp('45%') : hp('42%'),
     fontFamily: fonts.bold,
   },
   contentWrapper: {
-    // paddingTop: hp('3%'),
+    paddingTop: hp('3%'),
+    marginBottom: hp(15),
   },
   nextButton: {
     backgroundColor: themes.primary,
@@ -66,10 +67,6 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  paginationWrapper: {
-    flexDirection: 'row',
-    gap: 10,
   },
   dotStyle: {
     backgroundColor: themes.black,

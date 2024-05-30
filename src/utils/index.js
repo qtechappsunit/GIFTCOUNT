@@ -65,6 +65,9 @@ const ROUTES = {
   OTPScreen: 'OTPScreen',
   ResetPasswordScreen: 'ResetPasswordScreen',
   EditProfileScreen: 'EditProfileScreen',
+  AnalyticStack: 'AnalyticStack',
+  AnalyticsScreen: 'AnalyticsScreen',
+  PayrollScreen: 'PayrollScreen',
 };
 
 export const categories = [
@@ -108,30 +111,30 @@ export const restaurants = [
     name: 'Burger Den - Coupon 2',
     discount: '50%',
     validity: 'Mon, Tue, Wed, Thu, Fri, Sat & Sun',
-    hours: '22:00 - 23:59',
+    hours: '(22:00 - 23:59)',
   },
 ];
 
 export const multipleImages = [
   {
     id: 1,
-    image: images.detail,
+    image: images.restaurant3,
   },
   {
     id: 2,
-    image: images.detail,
+    image: images.restaurant3,
   },
   {
     id: 3,
-    image: images.detail,
+    image: images.restaurant3,
   },
   {
     id: 4,
-    image: images.detail,
+    image: images.restaurant3,
   },
   {
     id: 5,
-    image: images.detail,
+    image: images.restaurant3,
   },
 ];
 

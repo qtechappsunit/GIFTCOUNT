@@ -26,4 +26,8 @@ export default {
   uploadImage: require('./uploadImage.png'),
   userImage: require('./userImage.png'),
   restaurant3: require('./restaurant3.png'),
+  burger: require('./burger.png'),
+  qrCode: require('./qrCode.png'),
+  star: require('./star.png'),
+  back: require('./back.png'),
 };
