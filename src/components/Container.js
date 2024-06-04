@@ -1,17 +1,19 @@
 import React from 'react';
-import { Image, ImageBackground, ScrollView, StyleSheet } from 'react-native';
+import { Image, ImageBackground, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
 import images from '../assets/images';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 const Container = ({ children, logo }) => {
     return (
         <ImageBackground source={images.bgImage} style={styles.bg} resizeMode='cover'>
-            <ScrollView showsVerticalScrollIndicator={false} style={styles.inner}>
-                {logo ? (
-                    <Image source={images.logo} style={styles.logo} />
-                ) : null}
-                {children}
-            </ScrollView>
+            <KeyboardAvoidingView style={{ flex: 1 }}>
+                <ScrollView showsVerticalScrollIndicator={false} style={styles.inner}>
+                    {logo ? (
+                        <Image source={images.logo} style={styles.logo} />
+                    ) : null}
+                    {children}
+                </ScrollView>
+            </KeyboardAvoidingView>
         </ImageBackground>
     );
 };

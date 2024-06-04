@@ -13,6 +13,8 @@ const InputField = ({
   icon,
   style,
   secureTextEntry,
+  rightIcon,
+  editable,
 }) => {
   return (
     <View style={[styles.inputStyle, style]}>
@@ -25,7 +27,11 @@ const InputField = ({
         value={value}
         onChangeText={onChangeText}
         keyboardType={keyboardType}
+        editable={editable}
       />
+      {rightIcon ? (
+        <SVGIcons image={rightIcon} style={styles.inputIcon} />
+      ) : null}
     </View>
   );
 };
@@ -39,6 +45,7 @@ const styles = StyleSheet.create({
     padding: Platform.OS === 'ios' ? hp('2%') : hp('0.5%'),
     width: wp(85),
     borderRadius: 100,
+    alignItems: "center"
   },
   input: {
     color: themes.placeholder_color,
@@ -49,6 +56,5 @@ const styles = StyleSheet.create({
   },
   inputIcon: {
     marginLeft: Platform.OS === 'android' && hp('1%'),
-    marginTop: Platform.OS === 'android' && hp('1.7%'),
   },
 });

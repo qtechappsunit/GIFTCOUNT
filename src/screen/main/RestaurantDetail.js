@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Wrapper from '../../components/Wrapper';
 import Swiper from 'react-native-swiper';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import ROUTES, { getUserType, multipleImages } from '../../utils';
+import ROUTES, { multipleImages } from '../../utils';
 import themes from '../../assets/themes';
 import SVGIcons from '../../components/SVGIcons';
 import icons from '../../assets/icons';
@@ -20,20 +20,13 @@ import Button from '../../components/Button';
 import RedirectingModal from '../../components/RedirectingModal';
 import { useNavigation } from '@react-navigation/native';
 import fonts from '../../assets/fonts';
+import { useSelector } from 'react-redux';
+import DiscountCodeModal from '../../components/DiscountCodeModal';
 
 const RestaurantDetail = () => {
+  const { userType } = useSelector(state => state?.authReducer);
   const nav = useNavigation();
-  // const [role, setRole] = useState('');
   const [visible, setVisible] = useState(false);
-
-  // useEffect(() => {
-  //   getType();
-  // }, []);
-
-  // const getType = async () => {
-  //   const type = await getUserType('role');
-  //   setRole(type);
-  // };
 
   const renderImages = () => {
     return (
@@ -99,31 +92,37 @@ const RestaurantDetail = () => {
         <View style={styles.wrapper}>
           <Image source={images.burger} style={styles.foodStyle} />
           <View style={styles.discountView}>
-            {/* <Text style={styles.discountText}>Flat</Text>
-            <Text style={styles.percentage}>50%</Text>
-            <Text style={styles.discountText}>Discount</Text> */}
-            <TouchableOpacity
-              style={[styles.btn, { marginBottom: hp(2) }]}
-              onPress={() => nav.navigate(ROUTES.QRCode)}
-            >
-              <Text style={styles.btnText}>Get QR code</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btn}>
-              <Text style={styles.btnText}>Copy Link</Text>
-            </TouchableOpacity>
+            {userType == 'rider' ? (
+              <>
+                <TouchableOpacity
+                  style={[styles.btn, { marginBottom: hp(2) }]}
+                  onPress={() => nav.navigate(ROUTES.QRCode)}
+                >
+                  <Text style={styles.btnText}>Get QR code</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.btn}>
+                  <Text style={styles.btnText}>Copy Link</Text>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <>
+                <Text style={styles.discountText}>Flat</Text>
+                <Text style={styles.percentage}>50%</Text>
+                <Text style={styles.discountText}>Discount</Text>
+              </>
+            )}
           </View>
         </View>
-        {/* {role == 'customer' && (
-          <>
-            <Button
-              buttonText={'Order Now'}
-              style={styles.button}
-              onPress={() => setVisible(!visible)}
-            />
-          </>
-        )} */}
+        {userType == 'customer' ? (
+          <Button
+            buttonText={'Get Discount Code'}
+            style={styles.button}
+            onPress={() => setVisible(!visible)}
+          />
+        ) : null}
         <View style={{ height: hp(2) }} />
-        <RedirectingModal visible={visible} setVisible={setVisible} />
+        {/* <RedirectingModal visible={visible} setVisible={setVisible} /> */}
+        <DiscountCodeModal modalVisible={visible} setModalVisible={setVisible} />
       </>
     );
   };

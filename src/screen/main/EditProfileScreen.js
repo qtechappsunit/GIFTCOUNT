@@ -10,13 +10,21 @@ import icons from '../../assets/icons';
 import InputField from '../../components/InputField';
 import { useNavigation } from '@react-navigation/native';
 import ROUTES from '../../utils';
+import { useSelector } from 'react-redux';
 
 const EditProfileScreen = () => {
+    const { userType } = useSelector(state => state?.authReducer);
     const nav = useNavigation();
 
     return (
         <Container logo={true}>
-            <Text style={styles.text}>Driver</Text>
+            {userType == 'rider' ? (
+                <Text style={styles.text}>Driver</Text>
+            ) : userType == 'customer' ? (
+                <Text style={styles.text}>Customer</Text>
+            ) : (
+                <Text style={styles.text}>Restaurant Owner</Text>
+            )}
             <Text style={styles.heading}>Hi Mark,</Text>
             <Text style={styles.text}>
                 Please enter your registered email {`\n`} and password.
@@ -43,37 +51,59 @@ const EditProfileScreen = () => {
             </View>
             <View style={styles.fieldRow}>
                 <InputField
-                    placeholder={'Change password'}
-                    style={styles.input}
-                    icon={icons.password}
-                    secureTextEntry={true}
-                />
-                <SvgXml xml={icons.yellowPencilIcon} />
-            </View>
-            <View style={styles.fieldRow}>
-                <InputField
                     placeholder={'+1 234 678 3125'}
                     style={styles.input}
                     icon={icons.telePhone}
                 />
                 <SvgXml xml={icons.yellowPencilIcon} />
             </View>
-            <View style={styles.fieldRow}>
-                <InputField
-                    placeholder={'Bank IBAN'}
-                    style={styles.input}
-                    icon={icons.bankIcon}
-                />
-                <SvgXml xml={icons.yellowPencilIcon} />
-            </View>
-            <View style={styles.fieldRow}>
-                <InputField
-                    placeholder={'Physical Address'}
-                    style={styles.input}
-                    icon={icons.locIcon}
-                />
-                <SvgXml xml={icons.yellowPencilIcon} />
-            </View>
+            {userType == 'rider' ? (
+                <View style={styles.fieldRow}>
+                    <InputField
+                        placeholder={'Bank IBAN'}
+                        style={styles.input}
+                        icon={icons.bankIcon}
+                    />
+                    <SvgXml xml={icons.yellowPencilIcon} />
+                </View>
+            ) : null}
+            {userType != 'owner' ? (
+                <View style={styles.fieldRow}>
+                    <InputField
+                        placeholder={'Physical Address'}
+                        style={styles.input}
+                        icon={icons.locIcon}
+                    />
+                    <SvgXml xml={icons.yellowPencilIcon} />
+                </View>
+            ) : (
+                <>
+                    <View style={styles.fieldRow}>
+                        <InputField
+                            placeholder={'Restaurant Address'}
+                            style={styles.input}
+                            icon={icons.locIcon}
+                        />
+                        <SvgXml xml={icons.yellowPencilIcon} />
+                    </View>
+                    <View style={styles.fieldRow}>
+                        <InputField
+                            placeholder={'Restaurant Name'}
+                            style={styles.input}
+                            icon={icons.grayHomeIcon}
+                        />
+                        <SvgXml xml={icons.yellowPencilIcon} />
+                    </View>
+                    <View style={styles.fieldRow}>
+                        <InputField
+                            placeholder={'Restaurant Website'}
+                            style={styles.input}
+                            icon={icons.websiteIcon}
+                        />
+                        <SvgXml xml={icons.yellowPencilIcon} />
+                    </View>
+                </>
+            )}
             <TouchableOpacity onPress={() => nav.navigate(ROUTES.Login)}>
                 <Text style={[styles.heading, styles.border]}>Logout</Text>
             </TouchableOpacity>

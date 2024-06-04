@@ -22,16 +22,16 @@ const Home = () => {
   const [catId, setCatId] = useState(0);
   const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
-    getType();
-  }, []);
+  // useEffect(() => {
+  //   getType();
+  // }, []);
 
-  const getType = async () => {
-    const type = await getUserType('role');
-    if (type == 'customer') {
-      setVisible(true);
-    }
-  };
+  // const getType = async () => {
+  //   const type = await getUserType('role');
+  //   if (type == 'customer') {
+  //     setVisible(true);
+  //   }
+  // };
 
   const renderCategories = () => {
     return (

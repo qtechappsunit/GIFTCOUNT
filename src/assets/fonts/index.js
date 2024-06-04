@@ -8,6 +8,7 @@ const fonts = {
   lexendBold: 'Lexend-Bold',
   lexendRegular: 'Lexend-Regular',
   lexendExtraBold: 'Lexend-ExtraBold',
+  lexendSemiBold: 'Lexend-SemiBold',
 };
 
 export default fonts;

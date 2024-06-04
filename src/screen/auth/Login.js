@@ -18,14 +18,22 @@ import ROUTES, { socialIcons } from '../../utils';
 import { useNavigation } from '@react-navigation/native';
 import AuthContainer from '../../components/AuthContainer';
 import fonts from '../../assets/fonts';
+import { useSelector } from 'react-redux';
 
 const Login = () => {
+  const { userType } = useSelector(state => state?.authReducer);
   const navigation = useNavigation();
 
   return (
     <AuthContainer logoImageStyle={{ marginVertical: hp('1%') }}>
       <View style={styles.screen}>
-        <Text style={styles.heading}>Driver Login</Text>
+        {userType == 'rider' ? (
+          <Text style={styles.heading}>Driver Login</Text>
+        ) : userType == 'customer' ? (
+          <Text style={styles.heading}>Customer Login</Text>
+        ) : (
+          <Text style={styles.heading}>Restaurant Owner{`\n`} Login</Text>
+        )}
         <Text style={styles.text}>
           Please enter your registered email {`\n`} and password.
         </Text>
@@ -105,6 +113,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: hp('4%'),
     fontFamily: fonts.markRegular,
+    textAlign: 'center'
   },
   text: {
     color: themes.primary,

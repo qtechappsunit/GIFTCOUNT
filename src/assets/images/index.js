@@ -30,4 +30,5 @@ export default {
   qrCode: require('./qrCode.png'),
   star: require('./star.png'),
   back: require('./back.png'),
+  profileCreatedImage: require('./profileCreatedImage.png'),
 };

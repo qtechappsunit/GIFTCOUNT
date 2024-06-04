@@ -31,7 +31,7 @@ export const typeImages = [
   {
     id: 3,
     image: images.restaurantOwner,
-    type: 'restaurantOwner',
+    type: 'owner',
   },
 ];
 
@@ -66,6 +66,7 @@ const ROUTES = {
   ResetPasswordScreen: 'ResetPasswordScreen',
   EditProfileScreen: 'EditProfileScreen',
   AnalyticStack: 'AnalyticStack',
+  HomeStack: 'HomeStack',
   AnalyticsScreen: 'AnalyticsScreen',
   PayrollScreen: 'PayrollScreen',
 };

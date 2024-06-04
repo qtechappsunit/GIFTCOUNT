@@ -1,5 +1,5 @@
-import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Container from '../../components/Container';
 import images from '../../assets/images';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
@@ -8,14 +8,24 @@ import fonts from '../../assets/fonts';
 import InputField from '../../components/InputField';
 import icons from '../../assets/icons';
 import Button from '../../components/Button';
-import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import CuisineTypeModal from '../../components/CuisineTypeModal';
+import ProfileCreatedModal from '../../components/ProfileCreatedModal';
 
 const Register = () => {
-  const nav = useNavigation();
+  const { userType } = useSelector(state => state?.authReducer);
+  const [open, setOpen] = useState(false);
+  const [openProfileModal, setOpenProfileModal] = useState(false);
 
   return (
     <Container logo={true}>
-      <Text style={styles.forgot}>Driver</Text>
+      {userType == 'rider' ? (
+        <Text style={styles.forgot}>Driver</Text>
+      ) : userType == 'customer' ? (
+        <Text style={styles.forgot}>Customer</Text>
+      ) : (
+        <Text style={styles.forgot}>Restaurant Owner</Text>
+      )}
       <Text style={styles.heading}>Signup</Text>
       <Text style={styles.forgot}>Please enter your registered email {`\n`}and password</Text>
       <View style={styles.uploadImageView}>
@@ -23,36 +33,89 @@ const Register = () => {
         <Text style={styles.upText}>upload image</Text>
       </View>
       <View style={styles.inputView}>
-        <InputField
-          placeholder={'First Name'}
-          style={styles.input}
-          icon={icons.userIcon}
-        />
-        <InputField
-          placeholder={'Last Name'}
-          style={styles.input}
-          icon={icons.userIcon}
-        />
+        {userType == 'rider' || userType == 'customer' ? (
+          <>
+            <InputField
+              placeholder={'First Name'}
+              style={styles.input}
+              icon={icons.userIcon}
+            />
+            <InputField
+              placeholder={'Last Name'}
+              style={styles.input}
+              icon={icons.userIcon}
+            />
+            <InputField
+              placeholder={'Phone number'}
+              style={styles.input}
+              icon={icons.telePhone}
+            />
+          </>
+        ) : (
+          <>
+            <InputField
+              placeholder={'Restaurant Name'}
+              style={styles.input}
+              icon={icons.grayHomeIcon}
+            />
+            <InputField
+              placeholder={'Owner Name'}
+              style={styles.input}
+              icon={icons.userIcon}
+            />
+            <InputField
+              placeholder={'Restaurant Address'}
+              style={styles.input}
+              icon={icons.locIcon}
+            />
+            <InputField
+              placeholder={'Restaurant Phone'}
+              style={styles.input}
+              icon={icons.telePhone}
+            />
+            <InputField
+              placeholder={'Restaurant Website'}
+              style={styles.input}
+              icon={icons.websiteIcon}
+            />
+            <TouchableOpacity onPress={() => setOpen(!open)}>
+              <InputField
+                placeholder={'Select Cuisine Types'}
+                style={styles.input}
+                icon={icons.cuisineIcon}
+                editable={false}
+                rightIcon={icons.downArrow}
+              />
+            </TouchableOpacity>
+          </>
+        )}
         <InputField
           placeholder={'Email'}
           style={styles.input}
           icon={icons.emailIcon}
         />
-        <InputField
-          placeholder={'Phone number'}
-          style={styles.input}
-          icon={icons.telePhone}
-        />
-        <InputField
-          placeholder={'Bank IBAN'}
-          style={styles.input}
-          icon={icons.bankIcon}
-        />
-        <InputField
-          placeholder={'Physical Address'}
-          style={styles.input}
-          icon={icons.locIcon}
-        />
+        {userType == 'rider' ? (
+          <>
+            <InputField
+              placeholder={'Bank IBAN'}
+              style={styles.input}
+              icon={icons.bankIcon}
+            />
+            <InputField
+              placeholder={'Physical Address'}
+              style={styles.input}
+              icon={icons.locIcon}
+            />
+          </>
+        ) : userType == 'customer' ? (
+          <>
+            <InputField
+              placeholder={'Bank IBAN'}
+              style={styles.input}
+              icon={icons.bankIcon}
+            />
+          </>
+        ) : null}
         <InputField
           placeholder={'Password'}
           style={styles.input}
@@ -69,8 +132,10 @@ const Register = () => {
       <Button
         buttonText={'Submit'}
         style={styles.btn}
-        onPress={() => nav.goBack()}
+        onPress={() => setOpenProfileModal(!openProfileModal)}
       />
+      <CuisineTypeModal modalVisible={open} setModalVisible={setOpen} />
+      <ProfileCreatedModal modalVisible={openProfileModal} setModalVisible={setOpenProfileModal} />
     </Container>
   );
 };
