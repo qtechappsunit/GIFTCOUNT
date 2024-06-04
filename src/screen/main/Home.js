@@ -1,37 +1,26 @@
-import { FlatList, ScrollView, View, StyleSheet, Text } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { FlatList, ScrollView, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
 import Wrapper from '../../components/Wrapper';
 import Header from '../../components/Header';
 import SearchBar from '../../components/SearchBar';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import FoodCategories from '../../components/FoodCategories';
-import ROUTES, { categories, getUserType, restaurants } from '../../utils';
+import ROUTES, { categories, restaurants } from '../../utils';
 import themes from '../../assets/themes';
 import RestaurantCard from '../../components/RestaurantCard';
 import { useNavigation } from '@react-navigation/native';
 import CongratsModal from '../../components/CongratsModal';
 import fonts from '../../assets/fonts';
-import SVGIcons from '../../components/SVGIcons';
 import icons from '../../assets/icons';
+import { useSelector } from 'react-redux';
+import { SvgXml } from 'react-native-svg';
 
 const Home = () => {
+  const { userType } = useSelector(state => state?.authReducer);
   const navigation = useNavigation();
+  const nav = useNavigation();
   const [catId, setCatId] = useState(0);
   const [visible, setVisible] = useState(false);
-
-  // useEffect(() => {
-  //   getType();
-  // }, []);
-
-  // const getType = async () => {
-  //   const type = await getUserType('role');
-  //   if (type == 'customer') {
-  //     setVisible(true);
-  //   }
-  // };
 
   const renderCategories = () => {
     return (
@@ -91,6 +80,14 @@ const Home = () => {
       <ScrollView
         contentContainerStyle={styles.screen}
         showsVerticalScrollIndicator={false}>
+        {userType == 'owner' ? (
+          <TouchableOpacity onPress={() => nav.navigate(ROUTES.CreateCouponScreen)} style={styles.addCouponView}>
+            <View style={styles.addIconView}>
+              <SvgXml xml={icons.addOutlineWhiteIcon} />
+            </View>
+            <Text style={styles.addText}>Add Discount Coupon</Text>
+          </TouchableOpacity>
+        ) : null}
         <SearchBar />
         {renderCategories()}
         {renderCards()}
@@ -103,6 +100,28 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
+  addText: {
+    fontSize: wp(5.5),
+    marginTop: wp(2),
+    color: themes.white,
+    fontFamily: fonts.lexendBold,
+  },
+  addIconView: {
+    padding: 10,
+    borderWidth: 1,
+    borderColor: themes.white,
+    borderRadius: 50,
+    aspectRatio: 1
+  },
+  addCouponView: {
+    alignItems: 'center',
+    width: wp(89),
+    padding: wp(5),
+    marginBottom: wp(5),
+    borderWidth: 5,
+    borderColor: themes.red1,
+    borderRadius: 10
+  },
   seeText: {
     color: themes.primary,
     fontFamily: fonts.regular,

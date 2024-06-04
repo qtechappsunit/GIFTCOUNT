@@ -30,12 +30,12 @@ const { height, width } = Dimensions.get('window');
 const QRCode = () => {
   const nav = useNavigation();
 
-  const onSuccess = e => {
-    console.log('onSuccess e', e);
-    // Linking.openURL(e.data).catch(err =>
-    //   console.error('An error occured', err),
-    // );
-  };
+  // const onSuccess = e => {
+  //   console.log('onSuccess e', e);
+  // Linking.openURL(e.data).catch(err =>
+  //   console.error('An error occured', err),
+  // );
+  // };
 
   // useEffect(() => {
   //   setTimeout(() => {
@@ -66,12 +66,13 @@ const QRCode = () => {
             Scan the QR Code to {'\n'} Collect your Points
           </Text>
           <TouchableOpacity style={styles.redCorners}>
-            <QRCodeScanner
+            {/* <QRCodeScanner
               cameraType="back"
               onRead={onSuccess}
               flashMode={RNCamera.Constants.FlashMode.torch}
               cameraStyle={styles.cameraCont}
-            />
+            /> */}
+            <Image source={images.QRimage} style={styles.qrImage} />
             <Image
               source={images.redCorner}
               style={[styles.redcorner1, styles.redImg]}
@@ -98,15 +99,20 @@ const QRCode = () => {
 export default QRCode;
 
 const styles = StyleSheet.create({
+  qrImage: {
+    resizeMode: 'contain',
+    width: wp(60),
+    height: wp(60),
+  },
   redcorner4: {
     position: 'absolute',
-    bottom: -hp(17),
+    bottom: -hp(14),
     right: 0,
     transform: [{ rotate: '180deg' }],
   },
   redcorner3: {
     position: 'absolute',
-    bottom: -hp(17),
+    bottom: -hp(14),
     left: 0,
     transform: [{ rotateX: '180deg' }],
   },
@@ -133,10 +139,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   redCorners: {
-    width: wp(70),
-    height: hp(50),
     marginTop: hp(2),
     padding: wp(5),
+    paddingBottom: wp(10),
     alignSelf: 'center',
   },
   desText: {
@@ -144,13 +149,14 @@ const styles = StyleSheet.create({
     fontSize: wp(5),
     textAlign: 'center',
     fontFamily: fonts.bold,
+    marginBottom: wp(5),
   },
   qrView: {
     width: wp(80),
     backgroundColor: themes.primary,
     alignSelf: 'center',
     paddingHorizontal: 20,
-    paddingVertical: 30,
+    paddingVertical: 20,
     marginTop: hp(10),
     borderRadius: 15,
   },

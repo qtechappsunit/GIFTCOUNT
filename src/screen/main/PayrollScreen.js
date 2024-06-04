@@ -1,12 +1,12 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import Container from '../../components/Container'
-import images from '../../assets/images'
-import { useNavigation } from '@react-navigation/native'
-import themes from '../../assets/themes'
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import fonts from '../../assets/fonts'
-import { Table, TableWrapper, Row } from 'react-native-table-component';
+import React from 'react';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Container from '../../components/Container';
+import images from '../../assets/images';
+import { useNavigation } from '@react-navigation/native';
+import themes from '../../assets/themes';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import fonts from '../../assets/fonts';
+import { Table, Row } from 'react-native-table-component';
 
 const tableData = [
     {
@@ -137,12 +137,12 @@ const PayrollScreen = () => {
             <Text style={styles.text}>
                 Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur
             </Text>
-            <ScrollView horizontal={true}>
+            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                 <View>
                     <Table>
                         <Row data={tableHead} widthArr={widthArr} style={styles.header} textStyle={styles.TableTextHead} />
                     </Table>
-                    <ScrollView style={styles.dataWrapper}>
+                    <ScrollView showsVerticalScrollIndicator={false}>
                         <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
                             {tableRows.map((rowData, index) => (
                                 <Row
@@ -158,14 +158,13 @@ const PayrollScreen = () => {
                 </View>
             </ScrollView>
         </Container>
-    )
-}
+    );
+};
 
-export default PayrollScreen
+export default PayrollScreen;
 
 const styles = StyleSheet.create({
     header: {
-        // height: 50,
         backgroundColor: themes.red1,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
@@ -175,24 +174,18 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: themes.navy_blue,
         fontSize: hp(1.9),
-        // fontFamily: fonts.lexendBold,
         paddingVertical: wp(1),
     },
     TableTextHead: {
         textAlign: 'center',
         color: themes.primary,
-        // marginVertical: hp(1.5),
         fontSize: hp(2.3),
         fontFamily: fonts.lexendBold,
         paddingVertical: hp(1)
     },
-    dataWrapper: {
-        // marginTop: -1,
-    },
     row: {
         backgroundColor: '#E7E6E1',
-        padding: 5,
-        // borderBottomLeftRadius: 15,
+        // padding: 5,
     },
     heading: {
         color: themes.white,
@@ -219,4 +212,4 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         aspectRatio: 1,
     },
-})
+});

@@ -15,7 +15,8 @@ import AnalyticsScreen from '../screen/main/AnalyticsScreen';
 import PayrollScreen from '../screen/main/PayrollScreen';
 import { useSelector } from 'react-redux';
 import CouponHistoryScreen from '../screen/main/CouponHistoryScreen';
-import SearchCouponScreen from '../screen/main/searchCouponScreen';
+import SearchCouponScreen from '../screen/main/SearchCouponScreen';
+import CreateCouponScreen from '../screen/main/CreateCouponScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -47,7 +48,6 @@ const MainStack = () => {
           tabBarIcon: ({ focused }) =>
             focused ? (
               <View style={styles.iconView}>
-                {/* <SVGIcons image={icons.home_active} /> */}
                 <SVGIcons image={icons.userRedIcon} />
               </View>
             ) : (
@@ -62,11 +62,9 @@ const MainStack = () => {
           tabBarIcon: ({ focused }) =>
             focused ? (
               <View style={styles.iconView}>
-                {/* <SVGIcons image={icons.qrcode_active} /> */}
                 <SVGIcons image={icons.home_active} />
               </View>
             ) : (
-              // <SVGIcons image={icons.qrcode} />
               <SVGIcons image={icons.home} />
             ),
         }}
@@ -115,6 +113,8 @@ const HomeStack = () => {
     >
       <Stack.Screen name={ROUTES.Home} component={Home} />
       <Stack.Screen name={ROUTES.RestaurantDetail} component={RestaurantDetail} />
+      <Stack.Screen name={ROUTES.QRCode} component={QRCode} />
+      <Stack.Screen name={ROUTES.CreateCouponScreen} component={CreateCouponScreen} />
     </Stack.Navigator>
   );
 };

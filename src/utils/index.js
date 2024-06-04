@@ -69,6 +69,7 @@ const ROUTES = {
   HomeStack: 'HomeStack',
   AnalyticsScreen: 'AnalyticsScreen',
   PayrollScreen: 'PayrollScreen',
+  CreateCouponScreen: 'CreateCouponScreen',
 };
 
 export const categories = [
