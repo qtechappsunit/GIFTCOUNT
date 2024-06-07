@@ -62,13 +62,7 @@ const Home = () => {
         )}
         contentContainerStyle={styles.cardWrapper}
         ListHeaderComponent={() => (
-          <View style={styles.openRestaurantView}>
-            <Text style={styles.headerText}>Available Coupons</Text>
-            {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.seeText}>See All</Text>
-              <SVGIcons image={icons.seeAllArrow} />
-            </View> */}
-          </View>
+          <Text style={styles.headerText}>Available Coupons</Text>
         )}
       />
     );
@@ -76,10 +70,10 @@ const Home = () => {
 
   return (
     <Wrapper>
-      <Header />
       <ScrollView
         contentContainerStyle={styles.screen}
         showsVerticalScrollIndicator={false}>
+        <Header />
         {userType == 'owner' ? (
           <TouchableOpacity onPress={() => nav.navigate(ROUTES.CreateCouponScreen)} style={styles.addCouponView}>
             <View style={styles.addIconView}>
@@ -125,13 +119,6 @@ const styles = StyleSheet.create({
   seeText: {
     color: themes.primary,
     fontFamily: fonts.regular,
-  },
-  openRestaurantView: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: wp(90),
-    justifyContent: 'space-between',
-    marginBottom: hp(3),
   },
   screen: {
     marginLeft: hp('2.5%'),

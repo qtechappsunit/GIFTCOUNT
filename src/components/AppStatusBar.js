@@ -6,7 +6,7 @@ const AppStatusBar = () => {
     <StatusBar
       backgroundColor={'transparent'}
       barStyle={'light-content'}
-      translucent={true}
+      // translucent={true}
     />
   );
 };

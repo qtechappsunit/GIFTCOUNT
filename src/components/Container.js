@@ -23,6 +23,7 @@ export default Container;
 const styles = StyleSheet.create({
     inner: {
         paddingHorizontal: wp(3),
+        overflow: 'visible',
     },
     logo: {
         resizeMode: 'contain',

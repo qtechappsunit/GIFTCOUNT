@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Container from '../../components/Container';
 import images from '../../assets/images';
@@ -114,6 +114,7 @@ const rowData = [
 
 const PayrollScreen = () => {
     const nav = useNavigation();
+    const [his, setHis] = useState(0);
 
     const tableHead = tableData.map(item => item.title);
     const widthArr = new Array(tableHead.length).fill(wp(33));
@@ -133,30 +134,57 @@ const PayrollScreen = () => {
             <TouchableOpacity onPress={() => nav.goBack()} style={styles.backTouch}>
                 <Image source={images.back} style={styles.back} />
             </TouchableOpacity>
-            <Text style={styles.heading}>Payroll History</Text>
+            <Text style={styles.heading}>History</Text>
             <Text style={styles.text}>
                 Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur
             </Text>
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                <View>
-                    <Table>
-                        <Row data={tableHead} widthArr={widthArr} style={styles.header} textStyle={styles.TableTextHead} />
-                    </Table>
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
-                            {tableRows.map((rowData, index) => (
-                                <Row
-                                    key={index}
-                                    data={rowData}
-                                    widthArr={widthArr}
-                                    style={[styles.row, { backgroundColor: themes.gray1 }]}
-                                    textStyle={styles.TableTextBody}
-                                />
-                            ))}
+            <View style={styles.TabView}>
+                <TouchableOpacity
+                    style={[styles.Tab, { backgroundColor: his == 0 ? themes.red1 : 'transparent' }]}
+                    onPress={() => setHis(0)}
+                >
+                    <Text style={styles.tabText}>Payroll History</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.Tab, { backgroundColor: his == 1 ? themes.red1 : 'transparent' }]}
+                    onPress={() => setHis(1)}
+                >
+                    <Text style={styles.tabText}>Checkout History</Text>
+                </TouchableOpacity>
+            </View>
+            {his == 0 ? (
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                    <View>
+                        <Table>
+                            <Row data={tableHead} widthArr={widthArr} style={styles.header} textStyle={styles.TableTextHead} />
                         </Table>
-                    </ScrollView>
+                        <ScrollView showsVerticalScrollIndicator={false}>
+                            <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
+                                {tableRows.map((rowData, index) => (
+                                    <Row
+                                        key={index}
+                                        data={rowData}
+                                        widthArr={widthArr}
+                                        style={[styles.row, { backgroundColor: themes.gray1 }]}
+                                        textStyle={styles.TableTextBody}
+                                    />
+                                ))}
+                            </Table>
+                        </ScrollView>
+                    </View>
+                </ScrollView>
+            ) : (
+                <View style={styles.yellowRow}>
+                    <View style={styles.redPart}>
+                        <Text style={styles.paidText}>Paid</Text>
+                        <Text style={styles.codeText}>#4567890</Text>
+                    </View>
+                    <View style={styles.innerRow}>
+                        <Text style={styles.dateText}>18{`\n`}Jan'24</Text>
+                        <Text style={styles.amountText}>$30 recieved in bank account for 600 points collected</Text>
+                    </View>
                 </View>
-            </ScrollView>
+            )}
         </Container>
     );
 };
@@ -164,6 +192,67 @@ const PayrollScreen = () => {
 export default PayrollScreen;
 
 const styles = StyleSheet.create({
+    amountText: {
+        width: wp(50),
+        textAlign: 'center',
+        alignSelf: 'center',
+        fontFamily: fonts.markRegular,
+        fontSize: wp(3),
+    },
+    innerRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        padding: 20,
+    },
+    dateText: {
+        textAlign: 'center',
+        color: themes.navy_blue,
+        width: wp(20),
+        fontFamily: fonts.markRegular,
+    },
+    codeText: {
+        color: themes.white,
+        textAlign: 'center',
+        fontFamily: fonts.markRegular,
+    },
+    paidText: {
+        color: themes.white,
+        textAlign: 'center',
+        fontFamily: fonts.markRegular,
+        fontSize: wp(5),
+    },
+    redPart: {
+        backgroundColor: themes.red1,
+        // width: wp(20),
+        transform: [{ rotate: '-90deg' }],
+        padding: 5,
+        // height: hp(8),
+        // position: 'absolute',
+        // left: 0,
+    },
+    yellowRow: {
+        backgroundColor: themes.yellow,
+        // padding: 15,
+        width: wp(100),
+        flexDirection: 'row',
+    },
+    tabText: {
+        color: themes.primary,
+        fontSize: wp(4),
+        fontFamily: fonts.lexendBold,
+    },
+    Tab: {
+        width: wp(49),
+        height: hp(8),
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    TabView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: hp(3),
+    },
     header: {
         backgroundColor: themes.red1,
         borderTopLeftRadius: 10,
@@ -185,7 +274,6 @@ const styles = StyleSheet.create({
     },
     row: {
         backgroundColor: '#E7E6E1',
-        // padding: 5,
     },
     heading: {
         color: themes.white,

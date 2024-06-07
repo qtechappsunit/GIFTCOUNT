@@ -15,6 +15,7 @@ const InputField = ({
   secureTextEntry,
   rightIcon,
   editable,
+  textColor
 }) => {
   return (
     <View style={[styles.inputStyle, style]}>
@@ -22,8 +23,8 @@ const InputField = ({
       <TextInput
         placeholder={placeholder}
         secureTextEntry
-        placeholderTextColor={themes.placeholder_color}
-        style={styles.input}
+        placeholderTextColor={textColor ? textColor : themes.placeholder_color}
+        style={[styles.input, { color: textColor }]}
         value={value}
         onChangeText={onChangeText}
         keyboardType={keyboardType}

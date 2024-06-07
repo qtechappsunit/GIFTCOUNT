@@ -107,14 +107,6 @@ const Register = () => {
               icon={icons.locIcon}
             />
           </>
-        ) : userType == 'customer' ? (
-          <>
-            <InputField
-              placeholder={'Bank IBAN'}
-              style={styles.input}
-              icon={icons.bankIcon}
-            />
-          </>
         ) : null}
         <InputField
           placeholder={'Password'}

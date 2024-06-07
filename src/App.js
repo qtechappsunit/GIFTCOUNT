@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Routes from './routes';
-import { LogBox, SafeAreaView } from 'react-native';
+import { KeyboardAvoidingView, LogBox, Platform, SafeAreaView } from 'react-native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './Store/store';
@@ -14,7 +14,9 @@ const App = () => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <SafeAreaView style={{ flex: 1 }}>
-          <Routes />
+          <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <Routes />
+          </KeyboardAvoidingView>
         </SafeAreaView>
       </PersistGate>
     </Provider>

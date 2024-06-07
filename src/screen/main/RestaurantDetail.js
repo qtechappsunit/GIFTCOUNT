@@ -17,16 +17,24 @@ import SVGIcons from '../../components/SVGIcons';
 import icons from '../../assets/icons';
 import images from '../../assets/images';
 import Button from '../../components/Button';
-import RedirectingModal from '../../components/RedirectingModal';
 import { useNavigation } from '@react-navigation/native';
 import fonts from '../../assets/fonts';
 import { useSelector } from 'react-redux';
 import DiscountCodeModal from '../../components/DiscountCodeModal';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const RestaurantDetail = () => {
   const { userType } = useSelector(state => state?.authReducer);
   const nav = useNavigation();
   const [visible, setVisible] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    { label: 'Active', value: 'Active' },
+    { label: 'Inactive', value: 'Inactive' },
+    { label: 'Delete', value: 'Delete' },
+    { label: 'Edit', value: 'Edit' },
+  ]);
 
   const renderImages = () => {
     return (
@@ -121,7 +129,6 @@ const RestaurantDetail = () => {
           />
         ) : null}
         <View style={{ height: hp(2) }} />
-        {/* <RedirectingModal visible={visible} setVisible={setVisible} /> */}
         <DiscountCodeModal modalVisible={visible} setModalVisible={setVisible} />
       </>
     );
@@ -133,6 +140,22 @@ const RestaurantDetail = () => {
         {renderImages()}
         {renderContent()}
         {renderDiscountCard()}
+        {userType == 'owner' ? (
+          <DropDownPicker
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            placeholder={'Active'}
+            style={styles.dropView}
+            textStyle={styles.dropText}
+            dropDownContainerStyle={styles.dropdownStyle}
+            showArrowIcon={true}
+            showTickIcon={false}
+          />
+        ) : null}
       </ScrollView>
     </Wrapper>
   );
@@ -141,6 +164,25 @@ const RestaurantDetail = () => {
 export default RestaurantDetail;
 
 const styles = StyleSheet.create({
+  dropdownStyle: {
+    width: wp(70),
+    alignSelf: 'center',
+    backgroundColor: themes.navy_blue,
+    borderWidth: 2,
+    borderColor: themes.green1,
+  },
+  dropText: {
+    color: themes.white,
+    textAlign: 'center',
+  },
+  dropView: {
+    width: wp(70),
+    backgroundColor: themes.navy_blue,
+    alignSelf: 'center',
+    borderRadius: 50,
+    borderColor: themes.green1,
+    borderWidth: 2,
+  },
   btnText: {
     color: themes.white,
     fontFamily: fonts.lexendExtraBold

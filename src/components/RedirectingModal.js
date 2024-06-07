@@ -12,7 +12,7 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 
-const RedirectingModal = ({visible, setVisible}) => {
+const RedirectingModal = ({ visible, setVisible }) => {
   return (
     <Modal
       animationType="fade"
@@ -44,9 +44,9 @@ const styles = StyleSheet.create({
   modalView: {
     backgroundColor: themes.primary,
     borderRadius: 20,
-    padding: 35,
+    paddingVertical: 80,
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: themes.black,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    width: wp(90)
   },
   modalText: {
     textAlign: 'center',

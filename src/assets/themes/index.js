@@ -1,5 +1,6 @@
 export default {
   primary: '#D9CA40',
+  yellow: '#FFC22C',
   secondary: '#606060',
   gray: '#808080',
   gray1: '#D9D9D9',
@@ -16,5 +17,6 @@ export default {
   black: 'black',
   blue: 'blue',
   green: 'green',
+  green1: '#00FF0A',
   darkBlue: '#082A6B',
 };

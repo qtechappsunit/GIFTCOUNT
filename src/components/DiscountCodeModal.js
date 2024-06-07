@@ -105,5 +105,6 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
         overflow: 'hidden',
+        width: wp(90)
     },
 });
