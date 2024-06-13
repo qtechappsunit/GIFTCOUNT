@@ -125,7 +125,7 @@ const SearchCouponScreen = () => {
                 </ScrollView>
             </View>
             {/* </ScrollView> */}
-            <View style={{ height: hp(12) }} />
+            {/* <View style={{ height: hp(5) }} /> */}
         </Container>
     );
 };

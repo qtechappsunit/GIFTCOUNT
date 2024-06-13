@@ -115,6 +115,7 @@ const rowData = [
 const PayrollScreen = () => {
     const nav = useNavigation();
     const [his, setHis] = useState(0);
+    const [paid, setPaid] = useState(false);
 
     const tableHead = tableData.map(item => item.title);
     const widthArr = new Array(tableHead.length).fill(wp(33));
@@ -174,16 +175,40 @@ const PayrollScreen = () => {
                     </View>
                 </ScrollView>
             ) : (
-                <View style={styles.yellowRow}>
-                    <View style={styles.redPart}>
-                        <Text style={styles.paidText}>Paid</Text>
-                        <Text style={styles.codeText}>#4567890</Text>
-                    </View>
-                    <View style={styles.innerRow}>
-                        <Text style={styles.dateText}>18{`\n`}Jan'24</Text>
-                        <Text style={styles.amountText}>$30 recieved in bank account for 600 points collected</Text>
-                    </View>
-                </View>
+                <>
+                    <TouchableOpacity onPress={() => setPaid(!paid)} style={styles.yellowRow}>
+                        <View style={styles.redPart}>
+                            <Text style={styles.paidText}>Paid</Text>
+                            <Text style={styles.codeText}>#4567890</Text>
+                        </View>
+                        <View style={styles.innerRow}>
+                            <Text style={styles.dateText}>18{`\n`}Jan'24</Text>
+                            <Text style={styles.amountText}>$30 recieved in bank account for 600 points collected</Text>
+                        </View>
+                    </TouchableOpacity>
+                    {paid ? (
+                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ marginTop: hp(2) }}>
+                            <View>
+                                <Table>
+                                    <Row data={tableHead} widthArr={widthArr} style={styles.header} textStyle={styles.TableTextHead} />
+                                </Table>
+                                <ScrollView showsVerticalScrollIndicator={false}>
+                                    <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
+                                        {tableRows.map((rowData, index) => (
+                                            <Row
+                                                key={index}
+                                                data={rowData}
+                                                widthArr={widthArr}
+                                                style={[styles.row, { backgroundColor: themes.gray1 }]}
+                                                textStyle={styles.TableTextBody}
+                                            />
+                                        ))}
+                                    </Table>
+                                </ScrollView>
+                            </View>
+                        </ScrollView>
+                    ) : null}
+                </>
             )}
         </Container>
     );
