@@ -7,33 +7,36 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Wrapper from '../../components/Wrapper';
 import Swiper from 'react-native-swiper';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import ROUTES, { multipleImages } from '../../utils';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
+import ROUTES, {multipleImages} from '../../utils';
 import themes from '../../assets/themes';
 import SVGIcons from '../../components/SVGIcons';
 import icons from '../../assets/icons';
 import images from '../../assets/images';
 import Button from '../../components/Button';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import fonts from '../../assets/fonts';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import DiscountCodeModal from '../../components/DiscountCodeModal';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 const RestaurantDetail = () => {
-  const { userType } = useSelector(state => state?.authReducer);
+  const {userType} = useSelector(state => state?.authReducer);
   const nav = useNavigation();
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    { label: 'Active', value: 'Active' },
-    { label: 'Inactive', value: 'Inactive' },
-    { label: 'Delete', value: 'Delete' },
-    { label: 'Edit', value: 'Edit' },
+    {label: 'Active', value: 'Active'},
+    {label: 'Inactive', value: 'Inactive'},
+    {label: 'Delete', value: 'Delete'},
+    {label: 'Edit', value: 'Edit'},
   ]);
 
   const renderImages = () => {
@@ -42,7 +45,7 @@ const RestaurantDetail = () => {
         <TouchableOpacity onPress={() => nav.goBack()} style={styles.backArrow}>
           <SVGIcons
             image={icons.arrowNext}
-            style={{ transform: [{ rotate: '180deg' }] }}
+            style={{transform: [{rotate: '180deg'}]}}
           />
         </TouchableOpacity>
         <Swiper
@@ -103,12 +106,13 @@ const RestaurantDetail = () => {
             {userType == 'rider' ? (
               <>
                 <TouchableOpacity
-                  style={[styles.btn, { marginBottom: hp(2) }]}
-                  onPress={() => nav.navigate(ROUTES.QRCode)}
-                >
+                  style={[styles.btn, {marginBottom: hp(2)}]}
+                  onPress={() => nav.navigate(ROUTES.QRCode)}>
                   <Text style={styles.btnText}>Get QR code</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btn}>
+                <TouchableOpacity
+                  style={styles.btn}
+                  onPress={() => alert('Link copied')}>
                   <Text style={styles.btnText}>Copy Link</Text>
                 </TouchableOpacity>
               </>
@@ -128,8 +132,11 @@ const RestaurantDetail = () => {
             onPress={() => setVisible(!visible)}
           />
         ) : null}
-        <View style={{ height: hp(2) }} />
-        <DiscountCodeModal modalVisible={visible} setModalVisible={setVisible} />
+        <View style={{height: hp(2)}} />
+        <DiscountCodeModal
+          modalVisible={visible}
+          setModalVisible={setVisible}
+        />
       </>
     );
   };
@@ -185,22 +192,22 @@ const styles = StyleSheet.create({
   },
   btnText: {
     color: themes.white,
-    fontFamily: fonts.lexendExtraBold
+    fontFamily: fonts.lexendExtraBold,
   },
   btn: {
     backgroundColor: themes.red1,
     paddingVertical: hp(2),
     paddingHorizontal: hp(3.5),
-    borderRadius: 50
+    borderRadius: 50,
   },
   subVal: {
     fontFamily: fonts.lexendBold,
-    color: themes.primary
+    color: themes.primary,
   },
   subHead: {
     width: wp(40),
     fontFamily: fonts.lexendBold,
-    color: themes.white
+    color: themes.white,
   },
   row: {
     flexDirection: 'row',
@@ -223,7 +230,7 @@ const styles = StyleSheet.create({
   imageStyle: {
     width: '100%',
     resizeMode: 'cover',
-    height: hp(45)
+    height: hp(45),
   },
   activeStyle: {
     borderColor: themes.white,
@@ -236,7 +243,7 @@ const styles = StyleSheet.create({
     height: hp('1.5%'),
     width: hp('1.5%'),
     borderRadius: 100,
-    backgroundColor: themes.white
+    backgroundColor: themes.white,
   },
   contentWrapper: {
     paddingTop: hp('2%'),

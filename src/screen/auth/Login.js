@@ -41,12 +41,14 @@ const Login = () => {
           placeholder={'Email'}
           style={styles.input}
           keyboardType={'email-address'}
+          textColor={themes.placeholder_color}
           icon={icons.emailIcon}
         />
         <InputField
           placeholder={'Password'}
           style={styles.input}
           icon={icons.password}
+          textColor={themes.placeholder_color}
           secureTextEntry={true}
         />
         <TouchableOpacity style={styles.forgotTouch} onPress={() => navigation.navigate(ROUTES.OTPScreen)}>

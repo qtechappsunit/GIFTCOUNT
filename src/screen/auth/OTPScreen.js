@@ -23,6 +23,7 @@ const OTPScreen = () => {
                 <InputField
                     placeholder={'Enter OTP'}
                     style={styles.input}
+                    textColor={themes.placeholder_color}
                     keyboardType={'email-address'}
                     icon={icons.password}
                 />

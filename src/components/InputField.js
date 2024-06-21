@@ -22,7 +22,7 @@ const InputField = ({
       <SVGIcons image={icon} style={styles.inputIcon} />
       <TextInput
         placeholder={placeholder}
-        secureTextEntry
+        secureTextEntry={secureTextEntry}
         placeholderTextColor={textColor ? textColor : themes.placeholder_color}
         style={[styles.input, { color: textColor }]}
         value={value}

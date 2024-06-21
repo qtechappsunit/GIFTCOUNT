@@ -10,6 +10,7 @@ import RedirectingModal from './RedirectingModal';
 
 const DiscountCodeModal = ({ modalVisible, setModalVisible }) => {
     const [redirect, setRedirect] = useState(false);
+    const [visible, setVisible] = useState(false)
 
     return (
         <Modal
