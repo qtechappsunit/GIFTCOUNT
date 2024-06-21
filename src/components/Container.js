@@ -13,7 +13,7 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 
-const Container = ({children, logo}) => {
+const Container = ({children, logo, style}) => {
   return (
     <ImageBackground
       source={images.bgImage}
@@ -24,7 +24,7 @@ const Container = ({children, logo}) => {
         behavior={Platform.OS === 'android' ? 'height' : 'padding'}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          style={styles.inner}
+          style={[styles.inner, style]}
           automaticallyAdjustKeyboardInsets={true}>
           {logo ? <Image source={images.logo} style={styles.logo} /> : null}
           {children}
@@ -38,7 +38,7 @@ export default Container;
 
 const styles = StyleSheet.create({
   inner: {
-    paddingHorizontal: wp(3),
+    paddingHorizontal: wp(6),
     overflow: 'visible',
   },
   logo: {

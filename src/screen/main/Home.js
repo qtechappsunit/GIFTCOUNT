@@ -1,22 +1,32 @@
-import { FlatList, ScrollView, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import {
+  FlatList,
+  ScrollView,
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useState} from 'react';
 import Wrapper from '../../components/Wrapper';
 import Header from '../../components/Header';
 import SearchBar from '../../components/SearchBar';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import FoodCategories from '../../components/FoodCategories';
-import ROUTES, { categories, restaurants } from '../../utils';
+import ROUTES, {categories, restaurants} from '../../utils';
 import themes from '../../assets/themes';
 import RestaurantCard from '../../components/RestaurantCard';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import CongratsModal from '../../components/CongratsModal';
 import fonts from '../../assets/fonts';
 import icons from '../../assets/icons';
-import { useSelector } from 'react-redux';
-import { SvgXml } from 'react-native-svg';
+import {useSelector} from 'react-redux';
+import {SvgXml} from 'react-native-svg';
 
 const Home = () => {
-  const { userType } = useSelector(state => state?.authReducer);
+  const {userType} = useSelector(state => state?.authReducer);
   const navigation = useNavigation();
   const nav = useNavigation();
   const [catId, setCatId] = useState(0);
@@ -49,7 +59,7 @@ const Home = () => {
       <FlatList
         data={restaurants}
         scrollEnabled={false}
-        renderItem={({ item, index }) => (
+        renderItem={({item, index}) => (
           <RestaurantCard
             key={index}
             name={item.name}
@@ -75,14 +85,18 @@ const Home = () => {
         showsVerticalScrollIndicator={false}>
         <Header />
         {userType == 'owner' ? (
-          <TouchableOpacity onPress={() => nav.navigate(ROUTES.CreateCouponScreen)} style={styles.addCouponView}>
+          <TouchableOpacity
+            onPress={() => nav.navigate(ROUTES.CreateCouponScreen)}
+            style={styles.addCouponView}>
             <View style={styles.addIconView}>
               <SvgXml xml={icons.addOutlineWhiteIcon} />
             </View>
             <Text style={styles.addText}>Add Discount Coupon</Text>
           </TouchableOpacity>
         ) : null}
-        <SearchBar />
+        <SearchBar
+          placeholder={'Search dishes, restaurants'}
+        />
         {renderCategories()}
         {renderCards()}
       </ScrollView>
@@ -105,23 +119,25 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: themes.white,
     borderRadius: 50,
-    aspectRatio: 1
+    aspectRatio: 1,
   },
   addCouponView: {
     alignItems: 'center',
-    width: wp(89),
+    alignSelf: 'center',
+    width: wp(82),
     padding: wp(5),
     marginBottom: wp(5),
     borderWidth: 5,
     borderColor: themes.red1,
-    borderRadius: 10
+    borderRadius: 10,
   },
   seeText: {
     color: themes.primary,
     fontFamily: fonts.regular,
   },
   screen: {
-    marginLeft: hp('2.5%'),
+    // marginLeft: hp('2%'),
+    // padding: hp(1)
   },
   categoriesWrapper: {
     paddingTop: hp('4%'),
@@ -133,6 +149,7 @@ const styles = StyleSheet.create({
   },
   cardWrapper: {
     paddingTop: hp('5%'),
+    marginLeft: hp(2.4),
   },
   headerText: {
     color: themes.heading,

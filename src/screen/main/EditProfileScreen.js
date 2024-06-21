@@ -124,7 +124,7 @@ const EditProfileScreen = () => {
       <Button
         buttonText={'Change Password'}
         style={{alignSelf: 'center', marginVertical: hp(4)}}
-        onPress={() => nav.navigate(ROUTES.ResetPasswordScreen)}
+        onPress={() => nav.navigate(ROUTES.ResetPasswordScreen,{type: 'change'})}
       />
       <View style={styles.view} />
     </Container>

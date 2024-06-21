@@ -46,6 +46,7 @@ export default RestaurantCard;
 const styles = StyleSheet.create({
   cardStyle: {
     marginBottom: hp('7'),
+    // alignSelf: 'center'
   },
   imageStyle: {
     height: hp('20%'),

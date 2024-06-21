@@ -10,24 +10,39 @@ import Button from '../../components/Button';
 import ROUTES from '../../utils';
 import {useNavigation} from '@react-navigation/native';
 
-const ResetPasswordScreen = () => {
+const ResetPasswordScreen = ({route}) => {
   const nav = useNavigation();
+
+  const screenType = route?.params?.type;
 
   return (
     <Container logo={true}>
       <View style={styles.inner}>
-        <Text style={styles.heading}>Reset Password</Text>
+        <Text style={styles.heading}>
+          {screenType === 'change' ? 'Change Password' : 'Reset Password'}
+        </Text>
         <Text style={styles.text}>Please enter your new password</Text>
+        {screenType === 'change' && (
+          <InputField
+            placeholder={'Current Password'}
+            style={styles.input}
+            secureTextEntry={true}
+            textColor={themes.placeholder_color}
+            icon={icons.password}
+          />
+        )}
         <InputField
           placeholder={'Enter new password'}
           style={styles.input}
-          keyboardType={'email-address'}
+          secureTextEntry={true}
+          textColor={themes.placeholder_color}
           icon={icons.password}
         />
         <InputField
           placeholder={'Retype new password'}
           style={styles.input}
-          keyboardType={'email-address'}
+          secureTextEntry={true}
+          textColor={themes.placeholder_color}
           icon={icons.password}
         />
         <Button

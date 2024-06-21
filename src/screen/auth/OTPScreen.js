@@ -30,7 +30,7 @@ const OTPScreen = () => {
                 <Button
                     buttonText={'Submit'}
                     style={styles.btn}
-                    onPress={() => nav.navigate(ROUTES.ResetPasswordScreen)}
+                    onPress={() => nav.navigate(ROUTES.ResetPasswordScreen,{type: 'reset'})}
                 />
             </View>
         </Container>

@@ -201,113 +201,110 @@ const PayrollScreen = () => {
   ]);
 
   return (
-    <Container logo={true}>
-      <TouchableOpacity onPress={() => nav.goBack()} style={styles.backTouch}>
-        <Image source={images.back} style={styles.back} />
-      </TouchableOpacity>
-      <Text style={styles.heading}>History</Text>
-      <Text style={styles.text}>
-        Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
-        consectetur
-      </Text>
-      <View style={styles.TabView}>
-        <TouchableOpacity
-          style={[
-            styles.Tab,
-            {backgroundColor: his == 0 ? themes.red1 : 'transparent'},
-          ]}
-          onPress={() => setHis(0)}>
-          <Text style={styles.tabText}>Current Payroll</Text>
+    <>
+      <Container logo={true} style={{paddingHorizontal: hp(0)}}>
+        <TouchableOpacity onPress={() => nav.goBack()} style={styles.backTouch}>
+          <Image source={images.back} style={styles.back} />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.Tab,
-            {backgroundColor: his == 1 ? themes.red1 : 'transparent'},
-          ]}
-          onPress={() => setHis(1)}>
-          <Text style={styles.tabText}>Payout History</Text>
-        </TouchableOpacity>
-      </View>
-      {his == 0 ? (
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={{height: hp(35)}}>
-          <View>
-            <Table>
-              <Row
-                data={tableHead}
-                widthArr={widthArr}
-                style={styles.header}
-                textStyle={styles.TableTextHead}
-              />
-            </Table>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              style={{maxHeight: hp(50)}}>
-              <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
-                {tableRows.map((rowData, index) => (
-                  <Row
-                    key={index}
-                    data={rowData}
-                    widthArr={widthArr}
-                    style={[styles.row, {backgroundColor: themes.gray1}]}
-                    textStyle={styles.TableTextBody}
-                  />
-                ))}
-              </Table>
-            </ScrollView>
-          </View>
-        </ScrollView>
-      ) : (
-        <>
+        <View style={{paddingHorizontal: hp(4)}}>
+          <Text style={styles.heading}>History</Text>
+          <Text style={styles.text}>
+            Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
+            consectetur
+          </Text>
+        </View>
+        <View style={styles.TabView}>
           <TouchableOpacity
-            onPress={() => setPaid(!paid)}
-            style={styles.yellowRow}>
-            <View style={styles.redPart}>
-              <Text style={styles.paidText}>Paid</Text>
-              <Text style={styles.codeText}>#4567890</Text>
-            </View>
-            <View style={styles.innerRow}>
-              <Text style={styles.dateText}>18{`\n`}Jan'24</Text>
-              <Text style={styles.amountText}>
-                $30 recieved in bank account for 600 points collected
-              </Text>
-            </View>
+            style={[
+              styles.Tab,
+              {backgroundColor: his == 0 ? themes.red1 : 'transparent'},
+            ]}
+            onPress={() => setHis(0)}>
+            <Text style={styles.tabText}>Current Payroll</Text>
           </TouchableOpacity>
-          {paid ? (
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              style={{marginTop: hp(2)}}>
-              <View>
-                <Table>
-                  <Row
-                    data={tableHead}
-                    widthArr={widthArr}
-                    style={styles.header}
-                    textStyle={styles.TableTextHead}
-                  />
+          <TouchableOpacity
+            style={[
+              styles.Tab,
+              {backgroundColor: his == 1 ? themes.red1 : 'transparent'},
+            ]}
+            onPress={() => setHis(1)}>
+            <Text style={styles.tabText}>Payout History</Text>
+          </TouchableOpacity>
+        </View>
+        {his == 0 ? (
+          <ScrollView horizontal={true} style={{height: hp(35)}}>
+            <View>
+              <Table>
+                <Row
+                  data={tableHead}
+                  widthArr={widthArr}
+                  style={styles.header}
+                  textStyle={styles.TableTextHead}
+                />
+              </Table>
+              <ScrollView style={{maxHeight: hp(50)}}>
+                <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
+                  {tableRows.map((rowData, index) => (
+                    <Row
+                      key={index}
+                      data={rowData}
+                      widthArr={widthArr}
+                      style={[styles.row, {backgroundColor: themes.gray1}]}
+                      textStyle={styles.TableTextBody}
+                    />
+                  ))}
                 </Table>
-                <ScrollView showsVerticalScrollIndicator={false}>
-                  <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
-                    {tableRows.slice(0, 4).map((rowData, index) => (
-                      <Row
-                        key={index}
-                        data={rowData}
-                        widthArr={widthArr}
-                        style={[styles.row, {backgroundColor: themes.gray1}]}
-                        textStyle={styles.TableTextBody}
-                      />
-                    ))}
-                  </Table>
-                </ScrollView>
+              </ScrollView>
+            </View>
+          </ScrollView>
+        ) : (
+          <>
+            <TouchableOpacity
+              onPress={() => setPaid(!paid)}
+              style={styles.yellowRow}>
+              <View style={styles.redPart}>
+                <Text style={styles.paidText}>Paid</Text>
+                <Text style={styles.codeText}>#4567890</Text>
               </View>
-            </ScrollView>
-          ) : null}
-        </>
-      )}
-    </Container>
+              <View style={styles.innerRow}>
+                <Text style={styles.dateText}>18{`\n`}Jan'24</Text>
+                <Text style={styles.amountText}>
+                  $30 recieved in bank account for 600 points collected
+                </Text>
+              </View>
+            </TouchableOpacity>
+            {paid ? (
+              <ScrollView horizontal={true} style={{marginTop: hp(2)}}>
+                <View>
+                  <Table>
+                    <Row
+                      data={tableHead}
+                      widthArr={widthArr}
+                      style={styles.header}
+                      textStyle={styles.TableTextHead}
+                    />
+                  </Table>
+                  <ScrollView>
+                    <Table
+                      borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
+                      {tableRows.slice(0, 4).map((rowData, index) => (
+                        <Row
+                          key={index}
+                          data={rowData}
+                          widthArr={widthArr}
+                          style={[styles.row, {backgroundColor: themes.gray1}]}
+                          textStyle={styles.TableTextBody}
+                        />
+                      ))}
+                    </Table>
+                  </ScrollView>
+                </View>
+              </ScrollView>
+            ) : null}
+          </>
+        )}
+      </Container>
+    </>
   );
 };
 
@@ -365,7 +362,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.lexendBold,
   },
   Tab: {
-    width: wp(49),
+    width: wp(44),
     height: hp(8),
     justifyContent: 'center',
     alignItems: 'center',
@@ -373,6 +370,7 @@ const styles = StyleSheet.create({
   TabView: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginHorizontal: hp(3),
     marginVertical: hp(3),
   },
   header: {
@@ -416,6 +414,7 @@ const styles = StyleSheet.create({
   },
   backTouch: {
     backgroundColor: themes.navy_blue,
+    left: hp(3.5),
     padding: 13,
     position: 'absolute',
     top: hp(10),

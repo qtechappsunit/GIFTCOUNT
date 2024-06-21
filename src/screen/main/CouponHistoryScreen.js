@@ -217,10 +217,7 @@ const CouponHistoryScreen = () => {
         Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
         consectetur
       </Text>
-      <ScrollView
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        style={{height: hp(35)}}>
+      <ScrollView horizontal={true} style={{height: hp(35), marginTop: hp(2)}}>
         <View>
           <Table>
             <Row
@@ -230,9 +227,7 @@ const CouponHistoryScreen = () => {
               textStyle={styles.TableTextHead}
             />
           </Table>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={styles.innerVerticalScroll}>
+          <ScrollView style={styles.innerVerticalScroll}>
             <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
               {tableRows.map((rowData, index) => (
                 <Row
@@ -287,6 +282,7 @@ const styles = StyleSheet.create({
     color: themes.white,
     fontWeight: 'bold',
     fontSize: hp('4%'),
+    marginTop: hp(4),
     fontFamily: fonts.markRegular,
   },
   back: {
@@ -303,6 +299,6 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   innerVerticalScroll: {
-    maxHeight: hp(50)
+    maxHeight: hp(50),
   },
 });

@@ -19,6 +19,7 @@ import fonts from '../../assets/fonts';
 import InputField from '../../components/InputField';
 import icons from '../../assets/icons';
 import {Table, Row} from 'react-native-table-component';
+import SearchBar from '../../components/SearchBar';
 
 const tableData = [
   {
@@ -116,7 +117,7 @@ const SearchCouponScreen = () => {
   const nav = useNavigation();
 
   const tableHead = tableData.map(item => item.title);
-  const widthArr = new Array(tableHead.length).fill(wp(22));
+  const widthArr = new Array(tableHead.length).fill(wp(22.5));
 
   const tableRows = rowData.map(row => [
     row.date,
@@ -131,11 +132,15 @@ const SearchCouponScreen = () => {
         <Image source={images.back} style={styles.back} />
       </TouchableOpacity>
       <Text style={styles.createText}>Search Coupon</Text>
-      <InputField
+      {/* <InputField
         placeholder={'Search Coupon Code'}
         style={styles.input}
         icon={icons.search}
         textColor={themes.black}
+      /> */}
+      <SearchBar
+        placeholder={'Search coupon code'}
+        style={{width: '100%', marginVertical: hp(2)}}
       />
       <View style={styles.userView}>
         <Image source={images.userImage} style={styles.userImage} />
@@ -148,15 +153,13 @@ const SearchCouponScreen = () => {
           </View>
         </View>
       </View>
-      <Text style={[styles.createText, {alignSelf: 'center', marginTop: 0}]}>
-        Coupon History
-      </Text>
+      <Text style={[styles.createText, {marginTop: 0}]}>Coupon History</Text>
       <Text style={styles.lorem}>
         Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
         consectetur
       </Text>
       {/* <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}> */}
-      <View style={{alignSelf: 'center'}}>
+      <View style={{alignSelf: 'center', paddingTop: hp(3)}}>
         <Table>
           <Row
             data={tableHead}
@@ -192,8 +195,8 @@ export default SearchCouponScreen;
 const styles = StyleSheet.create({
   header: {
     backgroundColor: themes.red1,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     borderWidth: 1,
   },
   row: {
@@ -216,7 +219,9 @@ const styles = StyleSheet.create({
     color: themes.primary,
     fontFamily: fonts.lexendBold,
     fontSize: wp(4),
-    marginVertical: wp(3),
+    // textAlign: 'center',
+    marginLeft: hp(1.4),
+    marginVertical: wp(1),
   },
   availableText: {
     color: themes.navy_blue,
@@ -261,7 +266,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderRadius: 15,
+    borderRadius: 20,
+    marginBottom: hp(6),
   },
   input: {
     backgroundColor: themes.white,
@@ -275,6 +281,7 @@ const styles = StyleSheet.create({
     fontSize: wp(6.5),
     fontFamily: fonts.lexendBold,
     marginTop: wp(10),
+    marginLeft: hp(1.3),
   },
   back: {
     resizeMode: 'contain',
