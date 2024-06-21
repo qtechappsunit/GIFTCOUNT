@@ -220,6 +220,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.lexendBold,
     fontSize: wp(4),
     // textAlign: 'center',
+    width: '92%',
     marginLeft: hp(1.4),
     marginVertical: wp(1),
   },

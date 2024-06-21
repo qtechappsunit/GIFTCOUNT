@@ -56,7 +56,8 @@ export default AnalyticsScreen;
 
 const styles = StyleSheet.create({
     btn: {
-        width: wp(90),
+        // width: wp(90),
+        alignSelf: 'center',
         marginVertical: hp(5),
         paddingVertical: hp(2.5)
     },

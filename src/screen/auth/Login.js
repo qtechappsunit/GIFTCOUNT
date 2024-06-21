@@ -1,10 +1,4 @@
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {
   heightPercentageToDP as hp,
@@ -14,18 +8,18 @@ import themes from '../../assets/themes';
 import InputField from '../../components/InputField';
 import icons from '../../assets/icons';
 import Button from '../../components/Button';
-import ROUTES, { socialIcons } from '../../utils';
-import { useNavigation } from '@react-navigation/native';
+import ROUTES, {socialIcons} from '../../utils';
+import {useNavigation} from '@react-navigation/native';
 import AuthContainer from '../../components/AuthContainer';
 import fonts from '../../assets/fonts';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 const Login = () => {
-  const { userType } = useSelector(state => state?.authReducer);
+  const {userType} = useSelector(state => state?.authReducer);
   const navigation = useNavigation();
 
   return (
-    <AuthContainer logoImageStyle={{ marginVertical: hp('1%') }}>
+    <AuthContainer logoImageStyle={{marginVertical: hp('1%')}}>
       <View style={styles.screen}>
         {userType == 'rider' ? (
           <Text style={styles.heading}>Driver Login</Text>
@@ -51,10 +45,10 @@ const Login = () => {
           textColor={themes.placeholder_color}
           secureTextEntry={true}
         />
-        <TouchableOpacity style={styles.forgotTouch} onPress={() => navigation.navigate(ROUTES.OTPScreen)}>
-          <Text style={styles.forgot}>
-            Forgot password
-          </Text>
+        <TouchableOpacity
+          style={styles.forgotTouch}
+          onPress={() => navigation.navigate(ROUTES.OTPScreen)}>
+          <Text style={styles.forgot}>Forgot password</Text>
         </TouchableOpacity>
         <Button
           buttonText={'Submit'}
@@ -63,9 +57,9 @@ const Login = () => {
         <TouchableOpacity
           activeOpacity={0.9}
           style={styles.dontTouch}
-          onPress={() => navigation.navigate(ROUTES.Register)}
-        >
-          <Text style={[styles.text, { marginRight: wp(1), color: themes.white }]}>
+          onPress={() => navigation.navigate(ROUTES.Register)}>
+          <Text
+            style={[styles.text, {marginRight: wp(1), color: themes.white}]}>
             Don't have an account?
           </Text>
           <Text style={styles.text}>Sign Up</Text>
@@ -78,7 +72,30 @@ const Login = () => {
       <Text style={styles.socialMediatext}>Login using</Text>
       <View style={styles.socialWrapper}>
         {socialIcons.map((item, ind) => (
-          <Image source={item.icon} key={ind} />
+          <View
+            style={
+              ind == 2 && {
+                height: hp(5),
+                width: hp(5),
+                alignItems: 'center',
+                alignSelf: 'center',
+                justifyContent: 'center',
+                backgroundColor: themes.black,
+                borderRadius: 100,
+              }
+            }>
+            <Image
+              source={item.icon}
+              key={ind}
+              style={
+                ind == 1
+                  ? {height: hp(6), width: hp(6)}
+                  : ind == 2
+                  ? {tintColor: themes.white, height: hp(2.7), width: hp(2.7)}
+                  : styles.imageStyle
+              }
+            />
+          </View>
         ))}
       </View>
     </AuthContainer>
@@ -89,19 +106,19 @@ export default Login;
 
 const styles = StyleSheet.create({
   forgotTouch: {
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
   },
   dontTouch: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: hp('2%')
+    marginTop: hp('2%'),
   },
   forgot: {
     color: themes.primary,
     marginBottom: hp(1.5),
     fontSize: hp(2.3),
     fontFamily: fonts.lexendBold,
-    alignSelf: "flex-end"
+    alignSelf: 'flex-end',
   },
   scrollContainer: {
     flex: 1,
@@ -115,14 +132,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: hp('4%'),
     fontFamily: fonts.markRegular,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   text: {
     color: themes.primary,
     marginVertical: hp(1.5),
     fontSize: hp(2.3),
     fontFamily: fonts.lexendBold,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   input: {
     marginBottom: hp('2.4%'),
@@ -164,5 +181,9 @@ const styles = StyleSheet.create({
     marginBottom: hp(2),
     width: wp(60),
     alignSelf: 'center',
+  },
+  imageStyle: {
+    height: hp(5),
+    width: hp(5),
   },
 });
