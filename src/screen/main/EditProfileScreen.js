@@ -124,7 +124,9 @@ const EditProfileScreen = () => {
       <Button
         buttonText={'Change Password'}
         style={{alignSelf: 'center', marginVertical: hp(4)}}
-        onPress={() => nav.navigate(ROUTES.ResetPasswordScreen,{type: 'change'})}
+        onPress={() =>
+          nav.navigate(ROUTES.ResetPasswordScreen, {type: 'change'})
+        }
       />
       <View style={styles.view} />
     </Container>
@@ -162,16 +164,17 @@ const styles = StyleSheet.create({
     height: wp(30),
   },
   userImageView: {
-    alignSelf: 'center',
-    borderWidth: 5,
-    borderColor: themes.white,
-    borderRadius: 30,
     overflow: 'hidden',
-    marginVertical: hp(2),
+    borderRadius: 30,
+    borderWidth: 5,
+    borderRadius: 30,
+    borderColor: themes.white,
+    alignSelf: 'center',
+    marginVertical: 10,
   },
   text: {
     color: themes.primary,
-    marginVertical: hp(1.5),
+    marginBottom: hp(1.5),
     fontSize: hp(2.3),
     fontFamily: fonts.lexendBold,
   },

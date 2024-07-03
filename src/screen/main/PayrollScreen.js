@@ -41,7 +41,7 @@ const tableData = [
   },
   {
     id: 6,
-    title: 'Price Gain',
+    title: 'Amount',
   },
   {
     id: 7,
@@ -206,7 +206,7 @@ const PayrollScreen = () => {
         <TouchableOpacity onPress={() => nav.goBack()} style={styles.backTouch}>
           <Image source={images.back} style={styles.back} />
         </TouchableOpacity>
-        <View style={{paddingHorizontal: hp(4)}}>
+        <View style={{paddingHorizontal: hp(4), paddingTop: hp(1.5)}}>
           <Text style={styles.heading}>History</Text>
           <Text style={styles.text}>
             Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
@@ -417,7 +417,7 @@ const styles = StyleSheet.create({
     left: hp(3.5),
     padding: 13,
     position: 'absolute',
-    top: hp(10),
+    top: hp(7),
     borderRadius: 50,
     aspectRatio: 1,
   },

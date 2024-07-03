@@ -1,13 +1,14 @@
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AuthStack from './AuthStack';
-import { NavigationContainer } from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import AppStatusBar from '../components/AppStatusBar';
 import ROUTES from '../utils';
 import MainStack from './MainStack';
 import Points from '../screen/main/Points';
 import OTPScreen from '../screen/auth/OTPScreen';
 import ResetPasswordScreen from '../screen/auth/ResetPasswordScreen';
+import ForgetPassword from '../screen/auth/ForgetPassword';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,8 +25,15 @@ const Routes = () => {
           <Stack.Screen name={ROUTES.AuthStack} component={AuthStack} />
           <Stack.Screen name={ROUTES.MainStack} component={MainStack} />
           <Stack.Screen name={ROUTES.Points} component={Points} />
+          <Stack.Screen
+            name={ROUTES.ForgetPassword}
+            component={ForgetPassword}
+          />
           <Stack.Screen name={ROUTES.OTPScreen} component={OTPScreen} />
-          <Stack.Screen name={ROUTES.ResetPasswordScreen} component={ResetPasswordScreen} />
+          <Stack.Screen
+            name={ROUTES.ResetPasswordScreen}
+            component={ResetPasswordScreen}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </>

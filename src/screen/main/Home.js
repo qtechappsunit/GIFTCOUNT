@@ -94,9 +94,7 @@ const Home = () => {
             <Text style={styles.addText}>Add Discount Coupon</Text>
           </TouchableOpacity>
         ) : null}
-        <SearchBar
-          placeholder={'Search dishes, restaurants'}
-        />
+        <SearchBar placeholder={'Search dishes, restaurants'} />
         {renderCategories()}
         {renderCards()}
       </ScrollView>
@@ -135,13 +133,9 @@ const styles = StyleSheet.create({
     color: themes.primary,
     fontFamily: fonts.regular,
   },
-  screen: {
-    // marginLeft: hp('2%'),
-    // padding: hp(1)
-  },
   categoriesWrapper: {
     paddingTop: hp('4%'),
-    marginHorizontal: hp('-3%'),
+    marginHorizontal: hp('-1%'),
     flexDirection: 'row',
   },
   contentWrapper: {
@@ -155,6 +149,7 @@ const styles = StyleSheet.create({
     color: themes.heading,
     fontWeight: 'bold',
     fontSize: hp('2.8%'),
+    marginBottom: hp(2.5),
     fontFamily: fonts.bold,
   },
 });

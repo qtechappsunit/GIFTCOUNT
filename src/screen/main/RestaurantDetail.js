@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
     backgroundColor: themes.navy_blue,
     alignSelf: 'center',
     borderRadius: 50,
+    marginBottom: hp(3),
     borderColor: themes.green1,
     borderWidth: 2,
   },
@@ -198,6 +199,8 @@ const styles = StyleSheet.create({
     backgroundColor: themes.red1,
     paddingVertical: hp(2),
     paddingHorizontal: hp(3.5),
+    width: '90%',
+    alignItems: 'center',
     borderRadius: 50,
   },
   subVal: {

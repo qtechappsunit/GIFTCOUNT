@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     width: wp(40),
     height: wp(40),
     alignSelf: 'flex-end',
-    marginTop: hp(3),
+    // marginTop: hp(1),
     marginBottom: -hp(4),
   },
   bg: {

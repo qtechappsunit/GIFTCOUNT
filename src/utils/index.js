@@ -62,6 +62,7 @@ const ROUTES = {
   Profile: 'Profile',
   RestaurantDetail: 'RestaurantDetail',
   Points: 'Points',
+  ForgetPassword: 'ForgetPassword',
   OTPScreen: 'OTPScreen',
   ResetPasswordScreen: 'ResetPasswordScreen',
   EditProfileScreen: 'EditProfileScreen',

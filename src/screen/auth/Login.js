@@ -47,7 +47,7 @@ const Login = () => {
         />
         <TouchableOpacity
           style={styles.forgotTouch}
-          onPress={() => navigation.navigate(ROUTES.OTPScreen)}>
+          onPress={() => navigation.navigate(ROUTES.ForgetPassword)}>
           <Text style={styles.forgot}>Forgot password</Text>
         </TouchableOpacity>
         <Button

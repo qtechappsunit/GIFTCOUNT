@@ -4,13 +4,10 @@ import {
   Text,
   ImageBackground,
   ScrollView,
-  Dimensions,
   TouchableOpacity,
-  Linking,
   Image,
 } from 'react-native';
-import React, { useEffect } from 'react';
-import Container from '../../components/AuthContainer';
+import React from 'react';
 import images from '../../assets/images';
 import {
   heightPercentageToDP as hp,
@@ -18,14 +15,10 @@ import {
 } from 'react-native-responsive-screen';
 import SVGIcons from '../../components/SVGIcons';
 import icons from '../../assets/icons';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import themes from '../../assets/themes';
 import fonts from '../../assets/fonts';
-import QRCodeScanner from 'react-native-qrcode-scanner';
-import { RNCamera } from 'react-native-camera';
-import ROUTES from '../../utils';
 
-const { height, width } = Dimensions.get('window');
 
 const QRCode = () => {
   const nav = useNavigation();
@@ -55,7 +48,7 @@ const QRCode = () => {
             style={styles.backView}>
             <SVGIcons
               image={icons.arrowNext}
-              style={{ transform: [{ rotate: '180deg' }] }}
+              style={{transform: [{rotate: '180deg'}]}}
             />
           </TouchableOpacity>
           <Text style={styles.headText}>Scan QR Code</Text>
@@ -108,19 +101,19 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -hp(14),
     right: 0,
-    transform: [{ rotate: '180deg' }],
+    transform: [{rotate: '180deg'}],
   },
   redcorner3: {
     position: 'absolute',
     bottom: -hp(14),
     left: 0,
-    transform: [{ rotateX: '180deg' }],
+    transform: [{rotateX: '180deg'}],
   },
   redcorner2: {
     position: 'absolute',
     top: -hp(17),
     right: 0,
-    transform: [{ rotateY: '180deg' }],
+    transform: [{rotateY: '180deg'}],
   },
   redcorner1: {
     position: 'absolute',
@@ -157,7 +150,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingHorizontal: 20,
     paddingVertical: 20,
-    marginTop: hp(10),
+    marginTop: hp(15),
     borderRadius: 15,
   },
   headText: {
@@ -169,13 +162,14 @@ const styles = StyleSheet.create({
     backgroundColor: themes.red,
     padding: 8,
     aspectRatio: 1,
+    marginLeft: hp(0.7),
     borderRadius: 50,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: hp(7)
+    // marginTop: hp(7),
   },
   cont: {
     height: hp(110),

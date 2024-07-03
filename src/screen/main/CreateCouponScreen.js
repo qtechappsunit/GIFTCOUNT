@@ -265,7 +265,7 @@ const CreateCouponScreen = () => {
         />
         <View style={styles.whiteLine} />
         <Text style={[styles.couponText, {marginBottom: hp(2)}]}>
-          Select Cruisine
+          Select Cuisine
         </Text>
         <FlatList
           data={cruisineData}
