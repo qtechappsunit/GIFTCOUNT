@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import React, {useState} from 'react';
 import Wrapper from '../../components/Wrapper';
@@ -24,6 +25,7 @@ import fonts from '../../assets/fonts';
 import icons from '../../assets/icons';
 import {useSelector} from 'react-redux';
 import {SvgXml} from 'react-native-svg';
+import images from '../../assets/images';
 
 const Home = () => {
   const {userType} = useSelector(state => state?.authReducer);
@@ -54,6 +56,24 @@ const Home = () => {
     );
   };
 
+  const ListHeaderComponent = () => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginBottom: hp(4),
+        }}>
+        <Text style={styles.headerText}>Available Coupons</Text>
+        {userType === 'customer' && (
+          <TouchableOpacity activeOpacity={0.9} onPress={() => nav.navigate('QRCode')}>
+            <Image source={images.qr_code} style={styles.iconStyle} />
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  };
+
   const renderCards = () => {
     return (
       <FlatList
@@ -71,9 +91,7 @@ const Home = () => {
           />
         )}
         contentContainerStyle={styles.cardWrapper}
-        ListHeaderComponent={() => (
-          <Text style={styles.headerText}>Available Coupons</Text>
-        )}
+        ListHeaderComponent={ListHeaderComponent}
       />
     );
   };
@@ -149,7 +167,13 @@ const styles = StyleSheet.create({
     color: themes.heading,
     fontWeight: 'bold',
     fontSize: hp('2.8%'),
-    marginBottom: hp(2.5),
     fontFamily: fonts.bold,
+  },
+  iconStyle: {
+    height: hp('3.7%'),
+    alignSelf: 'center',
+    marginRight: hp(2),
+    tintColor: themes.heading,
+    width: hp('3.7%'),
   },
 });

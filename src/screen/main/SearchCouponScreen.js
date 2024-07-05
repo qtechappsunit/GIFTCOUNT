@@ -16,8 +16,6 @@ import {
 } from 'react-native-responsive-screen';
 import themes from '../../assets/themes';
 import fonts from '../../assets/fonts';
-import InputField from '../../components/InputField';
-import icons from '../../assets/icons';
 import {Table, Row} from 'react-native-table-component';
 import SearchBar from '../../components/SearchBar';
 
@@ -148,9 +146,9 @@ const SearchCouponScreen = () => {
         <View>
           <Text style={styles.nameText}>Coupon Name</Text>
           <Text style={styles.codeText}>ABC123D</Text>
-          <View style={styles.availableTextView}>
+          <TouchableOpacity style={styles.availableTextView}>
             <Text style={styles.availableText}>Available - 3 of 5</Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
       <Text style={[styles.createText, {marginTop: 0}]}>Coupon History</Text>
@@ -234,11 +232,11 @@ const styles = StyleSheet.create({
   availableTextView: {
     marginTop: 2,
     paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingVertical: 12,
     backgroundColor: themes.primary,
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: themes.black,
-    borderRadius: 5,
+    borderRadius: 10,
   },
   codeText: {
     fontFamily: fonts.lexendBold,
@@ -280,7 +278,7 @@ const styles = StyleSheet.create({
   createText: {
     color: themes.white,
     fontSize: wp(6.5),
-    fontFamily: fonts.lexendBold,
+    fontFamily: fonts.markRegular,
     marginTop: wp(10),
     marginLeft: hp(1.3),
   },

@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  Dimensions,
 } from 'react-native';
 import React from 'react';
 import images from '../../assets/images';
@@ -18,17 +19,24 @@ import icons from '../../assets/icons';
 import {useNavigation} from '@react-navigation/native';
 import themes from '../../assets/themes';
 import fonts from '../../assets/fonts';
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import {RNCamera} from 'react-native-camera';
+import {useSelector} from 'react-redux';
 
+const height = Dimensions.get('screen').height;
+const width = Dimensions.get('window').height;
 
 const QRCode = () => {
+  const {userType} = useSelector(state => state.authReducer);
+
   const nav = useNavigation();
 
-  // const onSuccess = e => {
-  //   console.log('onSuccess e', e);
-  // Linking.openURL(e.data).catch(err =>
-  //   console.error('An error occured', err),
-  // );
-  // };
+  const onSuccess = e => {
+    console.log('onSuccess e', e);
+    Linking.openURL(e.data).catch(err =>
+      console.error('An error occured', err),
+    );
+  };
 
   // useEffect(() => {
   //   setTimeout(() => {
@@ -36,57 +44,114 @@ const QRCode = () => {
   //   }, 2000);
   // }, []);
 
-  return (
-    <ImageBackground
-      style={styles.cont}
-      source={images.splashBg}
-      resizeMode={'cover'}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+  const QRCodeImage = () => {
+    return (
+      <ImageBackground
+        style={styles.cont}
+        source={images.splashBg}
+        resizeMode={'cover'}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.header}>
+            <TouchableOpacity
+              onPress={() => nav.goBack()}
+              style={styles.backView}>
+              <SVGIcons
+                image={icons.arrowNext}
+                style={{transform: [{rotate: '180deg'}]}}
+              />
+            </TouchableOpacity>
+            <Text style={styles.headText}>Scan QR Code</Text>
+            <View />
+          </View>
+          <View style={styles.qrView}>
+            <Text style={styles.desText}>
+              Scan the QR Code to {'\n'} Collect your Points
+            </Text>
+            <TouchableOpacity style={styles.redCorners}>
+              <Image source={images.QRimage} style={styles.qrImage} />
+              <Image
+                source={images.redCorner}
+                style={[styles.redcorner1, styles.redImg]}
+              />
+              <Image
+                source={images.redCorner}
+                style={[styles.redcorner2, styles.redImg]}
+              />
+              <Image
+                source={images.redCorner}
+                style={[styles.redcorner3, styles.redImg]}
+              />
+              <Image
+                source={images.redCorner}
+                style={[styles.redcorner4, styles.redImg]}
+              />
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </ImageBackground>
+    );
+  };
+
+  const QRCodeCamera = () => {
+    return (
+      <View>
         <View style={styles.header}>
           <TouchableOpacity
             onPress={() => nav.goBack()}
-            style={styles.backView}>
+            style={[
+              styles.backView,
+              {
+                alignItems: 'center',
+                backgroundColor: themes.red,
+                borderRadius: 19,
+                justifyContent: 'center',
+                position: 'absolute',
+                left: 20,
+                top: 20,
+                zIndex: 1,
+              },
+            ]}>
             <SVGIcons
               image={icons.arrowNext}
               style={{transform: [{rotate: '180deg'}]}}
             />
           </TouchableOpacity>
-          <Text style={styles.headText}>Scan QR Code</Text>
-          <View />
         </View>
-        <View style={styles.qrView}>
-          <Text style={styles.desText}>
-            Scan the QR Code to {'\n'} Collect your Points
-          </Text>
-          <TouchableOpacity style={styles.redCorners}>
-            {/* <QRCodeScanner
-              cameraType="back"
-              onRead={onSuccess}
-              flashMode={RNCamera.Constants.FlashMode.torch}
-              cameraStyle={styles.cameraCont}
-            /> */}
-            <Image source={images.QRimage} style={styles.qrImage} />
-            <Image
-              source={images.redCorner}
-              style={[styles.redcorner1, styles.redImg]}
-            />
-            <Image
-              source={images.redCorner}
-              style={[styles.redcorner2, styles.redImg]}
-            />
-            <Image
-              source={images.redCorner}
-              style={[styles.redcorner3, styles.redImg]}
-            />
-            <Image
-              source={images.redCorner}
-              style={[styles.redcorner4, styles.redImg]}
-            />
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </ImageBackground>
-  );
+        <QRCodeScanner
+          cameraType="back"
+          onRead={onSuccess}
+          flashMode={RNCamera.Constants.FlashMode.torch} 
+          cameraStyle={styles.cameraCont}
+        />
+        <Image
+          source={images.redCorner}
+          style={[styles.redcorner1, {top: hp(5), left: hp(5)}, styles.redImg]}
+        />
+        <Image
+          source={images.redCorner}
+          style={[styles.redcorner2, {top: hp(5), right: hp(5)}, styles.redImg]}
+        />
+        <Image
+          source={images.redCorner}
+          style={[
+            styles.redcorner3,
+            {bottom: -hp(85), left: hp(5)},
+            styles.redImg,
+          ]}
+        />
+        <Image
+          source={images.redCorner}
+          style={[
+            styles.redcorner4,
+            {bottom: -hp(85), right: hp(5)},
+            styles.redImg,
+          ]}
+        />
+      </View>
+    );
+  };
+
+  return userType === 'rider' ? QRCodeImage() : QRCodeCamera();
 };
 
 export default QRCode;
@@ -127,9 +192,8 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   cameraCont: {
-    height: hp(45),
-    width: wp(50),
-    alignSelf: 'center',
+    height: height,
+    width: width,
   },
   redCorners: {
     marginTop: hp(2),

@@ -32,5 +32,6 @@ export default {
   back: require('./back.png'),
   profileCreatedImage: require('./profileCreatedImage.png'),
   QRimage: require('./QRimage.png'),
-  cross: require('../images/cross.png')
+  cross: require('../images/cross.png'),
+  qr_code: require('../images/qrcode_icon.png'),
 };

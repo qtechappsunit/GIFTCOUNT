@@ -397,7 +397,6 @@ const styles = StyleSheet.create({
   },
   heading: {
     color: themes.white,
-    fontWeight: 'bold',
     fontSize: hp('4%'),
     fontFamily: fonts.markRegular,
   },

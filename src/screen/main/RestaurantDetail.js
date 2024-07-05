@@ -25,11 +25,13 @@ import fonts from '../../assets/fonts';
 import {useSelector} from 'react-redux';
 import DiscountCodeModal from '../../components/DiscountCodeModal';
 import DropDownPicker from 'react-native-dropdown-picker';
+import CouponStatusModal from '../../components/CouponStatusModal';
 
 const RestaurantDetail = () => {
   const {userType} = useSelector(state => state?.authReducer);
   const nav = useNavigation();
   const [visible, setVisible] = useState(false);
+  const [confirmationModal, setConfirmationModal] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
@@ -148,20 +150,35 @@ const RestaurantDetail = () => {
         {renderContent()}
         {renderDiscountCard()}
         {userType == 'owner' ? (
-          <DropDownPicker
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
-            placeholder={'Active'}
-            style={styles.dropView}
-            textStyle={styles.dropText}
-            dropDownContainerStyle={styles.dropdownStyle}
-            showArrowIcon={true}
-            showTickIcon={false}
-          />
+          <>
+            <DropDownPicker
+              open={open}
+              value={value}
+              items={items}
+              setOpen={setConfirmationModal}
+              setValue={val => {
+                setValue(val);
+                setOpen(false);
+              }}
+              setItems={setItems}
+              placeholder={'Active'}
+              style={styles.dropView}
+              textStyle={styles.dropText}
+              dropDownContainerStyle={styles.dropdownStyle}
+              showArrowIcon={true}
+              showTickIcon={false}
+            />
+            <CouponStatusModal
+              visible={confirmationModal}
+              setVisible={setConfirmationModal}
+              onStatusChange={value => {
+                if (value === 'yes') {
+                  setOpen(true);
+                }
+                setConfirmationModal(!confirmationModal);
+              }}
+            />
+          </>
         ) : null}
       </ScrollView>
     </Wrapper>

@@ -33,7 +33,7 @@ const tableData = [
   },
   {
     id: 4,
-    title: 'C.Name',
+    title: 'Coupon Name',
   },
   // {
   //     id: 5,
@@ -195,7 +195,7 @@ const rowData = [
 const CouponHistoryScreen = () => {
   const nav = useNavigation();
   const tableHead = tableData.map(item => item.title);
-  const widthArr = new Array(tableHead.length).fill(wp(33));
+  const widthArr = new Array(tableHead.length).fill(wp(38));
 
   const tableRows = rowData.map(row => [
     row.date,
@@ -217,7 +217,7 @@ const CouponHistoryScreen = () => {
         Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
         consectetur
       </Text>
-      <ScrollView horizontal={true} style={{height: hp(35), marginTop: hp(2)}}>
+      <ScrollView horizontal={true} style={{height: hp(35), marginTop: hp(2)}} showsHorizontalScrollIndicator={true}>
         <View>
           <Table>
             <Row
@@ -227,7 +227,7 @@ const CouponHistoryScreen = () => {
               textStyle={styles.TableTextHead}
             />
           </Table>
-          <ScrollView style={styles.innerVerticalScroll}>
+          <ScrollView style={styles.innerVerticalScroll} showsVerticalScrollIndicator={true}>
             <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
               {tableRows.map((rowData, index) => (
                 <Row
@@ -280,7 +280,6 @@ const styles = StyleSheet.create({
   },
   heading: {
     color: themes.white,
-    fontWeight: 'bold',
     fontSize: hp('4%'),
     marginTop: hp(4),
     fontFamily: fonts.markRegular,

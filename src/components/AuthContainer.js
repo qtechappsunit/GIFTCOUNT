@@ -4,9 +4,9 @@ import themes from '../assets/themes';
 import images from '../assets/images';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
-const AuthContainer = ({ children, logoImageStyle }) => {
+const AuthContainer = ({ children, logoImageStyle, scrollEnabled }) => {
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.backgroundStyle}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.backgroundStyle} scrollEnabled={scrollEnabled}>
       <Image source={images.background} style={styles.imageStyle} />
       <Image source={images.logo} style={[styles.logoStyle, logoImageStyle]} />
       {children}

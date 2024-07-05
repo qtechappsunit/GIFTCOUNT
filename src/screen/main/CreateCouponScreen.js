@@ -108,9 +108,9 @@ const CreateCouponScreen = () => {
     });
   };
 
-  const handleConfirm = date => {
-    console.warn('A date has been picked: ', date);
-  };
+  // const handleConfirm = date => {
+  //   console.warn('A date has been picked: ', date);
+  // };
 
   const renderItem = ({item}) => (
     <BouncyCheckbox
@@ -122,6 +122,7 @@ const CreateCouponScreen = () => {
       textStyle={{
         fontFamily: fonts.regular,
         color: themes?.white,
+        textDecorationLine: 'none',
         fontSize: wp(3.5),
       }}
       style={{marginVertical: wp(2), width: wp(25)}}
@@ -191,13 +192,13 @@ const CreateCouponScreen = () => {
             keyboardType={'numeric'}
           /> */}
           <DateModal
-            onConfirm={(date) => {
+            onConfirm={date => {
               setState({
                 ...state,
-                date: moment(date).format('MM/DD/YYYY')
-              })
+                date: moment(date).format('MM/DD/YYYY'),
+              });
             }}
-            mode={"date"}
+            mode={'date'}
             text={state.date}
           />
         </View>
@@ -416,5 +417,4 @@ const styles = StyleSheet.create({
     width: wp(100),
     paddingHorizontal: wp(3),
   },
-
 });

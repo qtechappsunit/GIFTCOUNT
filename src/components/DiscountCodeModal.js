@@ -22,6 +22,11 @@ import RedirectingModal from './RedirectingModal';
 const DiscountCodeModal = ({modalVisible, setModalVisible}) => {
   const [redirect, setRedirect] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [isBlurred, setIsBlurred] = useState(false);
+
+  const toggleBlur = () => {
+    setIsBlurred(!isBlurred);
+  };
 
   return (
     <Modal
@@ -44,7 +49,10 @@ const DiscountCodeModal = ({modalVisible, setModalVisible}) => {
           <View style={styles.row}>
             {['B', 'B', '5', '6', '7', 'M'].map((val, ind) => (
               <View key={ind} style={styles.codeLetterView}>
-                <Text style={styles.codeLetter}>{val}</Text>
+                <Text
+                  style={[isBlurred ? styles.blurredText : styles.codeLetter]}>
+                  {val}
+                </Text>
               </View>
             ))}
           </View>
@@ -60,6 +68,11 @@ const DiscountCodeModal = ({modalVisible, setModalVisible}) => {
             style={styles.button}
             leftIcon={icons.websiteIconWhite}
             onPress={() => setRedirect(!redirect)}
+          />
+          <Button
+            buttonText={'AVAIL COUPON'}
+            style={styles.button}
+            onPress={toggleBlur}
           />
           <RedirectingModal visible={redirect} setVisible={setRedirect} />
         </ImageBackground>
@@ -126,5 +139,17 @@ const styles = StyleSheet.create({
   crossStyle: {
     height: hp(3.4),
     width: hp(3.4),
+  },
+  blurredText: {
+    height: 1,
+    color: themes.white,
+    shadowOpacity: 1,
+    shadowColor: 'red',
+    shadowOffset: {width: 10, height: 10},
+    shadowRadius: 5,
+    elevation: 5,
+    borderWidth: 0.5,
+    borderColor: 'white',
+    backgroundColor: 'rgba(255, 255, 255, 1)',
   },
 });

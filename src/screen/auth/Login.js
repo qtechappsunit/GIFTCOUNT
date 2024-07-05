@@ -19,7 +19,9 @@ const Login = () => {
   const navigation = useNavigation();
 
   return (
-    <AuthContainer logoImageStyle={{marginVertical: hp('1%')}}>
+    <AuthContainer
+      logoImageStyle={{marginVertical: hp('-5%')}}
+      scrollEnabled={false}>
       <View style={styles.screen}>
         {userType == 'rider' ? (
           <Text style={styles.heading}>Driver Login</Text>
@@ -116,7 +118,7 @@ const styles = StyleSheet.create({
   forgot: {
     color: themes.primary,
     marginBottom: hp(1.5),
-    fontSize: hp(2.3),
+    fontSize: hp(2.1),
     fontFamily: fonts.lexendBold,
     alignSelf: 'flex-end',
   },
@@ -129,20 +131,23 @@ const styles = StyleSheet.create({
   },
   heading: {
     color: themes.white,
-    fontWeight: 'bold',
-    fontSize: hp('4%'),
+    // fontWeight: 'bold',
+    marginTop: hp(2.5),
+    marginBottom: hp(0.7),
+    fontSize: hp('3.7%'),
     fontFamily: fonts.markRegular,
     textAlign: 'center',
   },
   text: {
     color: themes.primary,
-    marginVertical: hp(1.5),
-    fontSize: hp(2.3),
+    // marginVertical: hp(0),
+    fontSize: hp(2.1),
     fontFamily: fonts.lexendBold,
     textAlign: 'center',
   },
   input: {
-    marginBottom: hp('2.4%'),
+    marginBottom: hp('1%'),
+    marginTop: hp(2),
   },
   border: {
     borderBottomColor: themes.red,

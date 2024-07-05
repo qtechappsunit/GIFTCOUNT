@@ -8,7 +8,6 @@ import {
 import React from 'react';
 import themes from '../assets/themes';
 import {
-  heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 
