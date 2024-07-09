@@ -52,14 +52,9 @@ const Register = () => {
               style={styles.input}
               icon={icons.userIcon}
             />
-            {userType === 'customer' && (
-              <InputField
-                placeholder={'Address'}
-                textColor={themes.placeholder_color}
-                style={styles.input}
-                icon={icons.locIcon}
-              />
-            )}
+            {/* {userType === 'customer' && ( */}
+
+            {/* )} */}
             <InputField
               placeholder={'Phone number'}
               textColor={themes.placeholder_color}
@@ -82,12 +77,12 @@ const Register = () => {
               textColor={themes.placeholder_color}
               icon={icons.userIcon}
             />
-            <InputField
+            {/* <InputField
               placeholder={'Restaurant Address'}
               style={styles.input}
               textColor={themes.placeholder_color}
               icon={icons.locIcon}
-            />
+            /> */}
             <InputField
               placeholder={'Restaurant Phone'}
               style={styles.input}
@@ -114,6 +109,31 @@ const Register = () => {
           </>
         )}
         <InputField
+          placeholder={'Street'}
+          textColor={themes.placeholder_color}
+          style={styles.input}
+          icon={icons.locIcon}
+        />
+        <InputField
+          placeholder={'City'}
+          textColor={themes.placeholder_color}
+          style={styles.input}
+          icon={icons.locIcon}
+        />
+        <InputField
+          placeholder={'State'}
+          textColor={themes.placeholder_color}
+          style={styles.input}
+          icon={icons.locIcon}
+        />
+        <InputField
+          placeholder={'Zip-code'}
+          textColor={themes.placeholder_color}
+          keyboardType={'numeric'}
+          style={styles.input}
+          icon={icons.locIcon}
+        />
+         <InputField
           placeholder={'Email'}
           style={styles.input}
           textColor={themes.placeholder_color}
@@ -128,12 +148,12 @@ const Register = () => {
               textColor={themes.placeholder_color}
               icon={icons.bankIcon}
             />
-            <InputField
+            {/* <InputField
               placeholder={'Physical Address'}
               style={styles.input}
               textColor={themes.placeholder_color}
               icon={icons.locIcon}
-            />
+            /> */}
           </>
         ) : null}
         <InputField

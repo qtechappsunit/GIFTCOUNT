@@ -66,6 +66,43 @@ const EditProfileScreen = () => {
         />
         <SvgXml xml={icons.yellowPencilIcon} />
       </View>
+      <View style={styles.fieldRow}>
+        <InputField
+          placeholder={'Street'}
+          textColor={themes.placeholder_color}
+          style={styles.input}
+          icon={icons.locIcon}
+        />
+        <SvgXml xml={icons.yellowPencilIcon} />
+      </View>
+      <View style={styles.fieldRow}>
+        <InputField
+          placeholder={'City'}
+          textColor={themes.placeholder_color}
+          style={styles.input}
+          icon={icons.locIcon}
+        />
+        <SvgXml xml={icons.yellowPencilIcon} />
+      </View>
+      <View style={styles.fieldRow}>
+        <InputField
+          placeholder={'State'}
+          textColor={themes.placeholder_color}
+          style={styles.input}
+          icon={icons.locIcon}
+        />
+        <SvgXml xml={icons.yellowPencilIcon} />
+      </View>
+      <View style={styles.fieldRow}>
+        <InputField
+          placeholder={'Zip-code'}
+          textColor={themes.placeholder_color}
+          style={styles.input}
+          keyboardType={'numeric'}
+          icon={icons.locIcon}
+        />
+        <SvgXml xml={icons.yellowPencilIcon} />
+      </View>
       {userType == 'rider' ? (
         <View style={styles.fieldRow}>
           <InputField
@@ -77,19 +114,18 @@ const EditProfileScreen = () => {
           <SvgXml xml={icons.yellowPencilIcon} />
         </View>
       ) : null}
-      {userType != 'owner' ? (
-        <View style={styles.fieldRow}>
-          <InputField
-            placeholder={'Physical Address'}
-            style={styles.input}
-            textColor={themes.placeholder_color}
-            icon={icons.locIcon}
-          />
-          <SvgXml xml={icons.yellowPencilIcon} />
-        </View>
-      ) : (
+      {userType == 'owner' && (
+        // <View style={styles.fieldRow}>
+        //   <InputField
+        //     placeholder={'Physical Address'}
+        //     style={styles.input}
+        //     textColor={themes.placeholder_color}
+        //     icon={icons.locIcon}
+        //   />
+        //   <SvgXml xml={icons.yellowPencilIcon} />
+        // </View>
         <>
-          <View style={styles.fieldRow}>
+          {/* <View style={styles.fieldRow}>
             <InputField
               placeholder={'Restaurant Address'}
               textColor={themes.placeholder_color}
@@ -97,7 +133,7 @@ const EditProfileScreen = () => {
               icon={icons.locIcon}
             />
             <SvgXml xml={icons.yellowPencilIcon} />
-          </View>
+          </View> */}
           <View style={styles.fieldRow}>
             <InputField
               placeholder={'Restaurant Name'}

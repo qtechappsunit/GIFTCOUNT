@@ -22,7 +22,7 @@ import RedirectingModal from './RedirectingModal';
 const DiscountCodeModal = ({modalVisible, setModalVisible}) => {
   const [redirect, setRedirect] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [isBlurred, setIsBlurred] = useState(false);
+  const [isBlurred, setIsBlurred] = useState(true);
 
   const toggleBlur = () => {
     setIsBlurred(!isBlurred);
@@ -69,11 +69,13 @@ const DiscountCodeModal = ({modalVisible, setModalVisible}) => {
             leftIcon={icons.websiteIconWhite}
             onPress={() => setRedirect(!redirect)}
           />
+          {isBlurred &&
           <Button
             buttonText={'AVAIL COUPON'}
             style={styles.button}
             onPress={toggleBlur}
           />
+        }
           <RedirectingModal visible={redirect} setVisible={setRedirect} />
         </ImageBackground>
       </View>
