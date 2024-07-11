@@ -34,4 +34,5 @@ export default {
   QRimage: require('./QRimage.png'),
   cross: require('../images/cross.png'),
   qr_code: require('../images/qrcode_icon.png'),
+  moreOptions: require('../images/verticaldot.png')
 };

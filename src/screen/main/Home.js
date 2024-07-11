@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  Image,
 } from 'react-native';
 import React, {useState} from 'react';
 import Wrapper from '../../components/Wrapper';
@@ -16,7 +15,7 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import FoodCategories from '../../components/FoodCategories';
-import ROUTES, {categories, restaurants} from '../../utils';
+import ROUTES, {categories, OptionsData, restaurants} from '../../utils';
 import themes from '../../assets/themes';
 import RestaurantCard from '../../components/RestaurantCard';
 import {useNavigation} from '@react-navigation/native';
@@ -25,7 +24,9 @@ import fonts from '../../assets/fonts';
 import icons from '../../assets/icons';
 import {useSelector} from 'react-redux';
 import {SvgXml} from 'react-native-svg';
-import images from '../../assets/images';
+import OptionsMenu from '../../components/OptionsMenu';
+import CouponStatusModal from '../../components/CouponStatusModal';
+import ManualEntryModal from '../../components/ManualEntryModal';
 
 const Home = () => {
   const {userType} = useSelector(state => state?.authReducer);
@@ -33,6 +34,7 @@ const Home = () => {
   const nav = useNavigation();
   const [catId, setCatId] = useState(0);
   const [visible, setVisible] = useState(false);
+  const [manualCode, setManualCode] = useState(false);
 
   const renderCategories = () => {
     return (
@@ -57,6 +59,14 @@ const Home = () => {
   };
 
   const ListHeaderComponent = () => {
+    const handleSelect = index => {
+      if (index == 0) {
+        nav.navigate(ROUTES.QRCode);
+      } else {
+        setManualCode(true);
+      }
+    };
+
     return (
       <View
         style={{
@@ -66,9 +76,13 @@ const Home = () => {
         }}>
         <Text style={styles.headerText}>Available Coupons</Text>
         {userType === 'customer' && (
-          <TouchableOpacity activeOpacity={0.9} onPress={() => nav.navigate('QRCode')}>
-            <Image source={images.qr_code} style={styles.iconStyle} />
-          </TouchableOpacity>
+          <>
+            <OptionsMenu
+              data={OptionsData}
+              onSelect={index => handleSelect(index)}
+            />
+            <ManualEntryModal visible={manualCode} setVisible={setManualCode} />
+          </>
         )}
       </View>
     );

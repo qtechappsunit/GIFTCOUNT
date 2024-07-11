@@ -141,6 +141,19 @@ export const multipleImages = [
   },
 ];
 
+export const OptionsData = [
+  {
+    id: 1,
+    text: 'Scan QR Code',
+    icon: images.qr_code,
+  },
+  {
+    id: 2,
+    text: 'Input Coupon Code',
+    icon: ''
+  }
+]
+
 export const getUserType = async key => {
   return await AsyncStorage.getItem(key);
 };

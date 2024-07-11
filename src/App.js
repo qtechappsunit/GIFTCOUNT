@@ -4,6 +4,7 @@ import { KeyboardAvoidingView, LogBox, Platform, SafeAreaView } from 'react-nati
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './Store/store';
+import { MenuProvider } from 'react-native-popup-menu';
 
 const App = () => {
   useEffect(() => {
@@ -12,10 +13,12 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
+      <PersistGate loading={null} persistor={persistor}> 
         <SafeAreaView style={{ flex: 1 }}>
           <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <MenuProvider>
             <Routes />
+            </MenuProvider>
           </KeyboardAvoidingView>
         </SafeAreaView>
       </PersistGate>
