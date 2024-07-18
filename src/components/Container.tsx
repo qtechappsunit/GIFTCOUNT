@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import {
   Image,
   ImageBackground,
@@ -6,6 +6,7 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
+  ViewStyle,
 } from 'react-native';
 import images from '../assets/images';
 import {
@@ -13,7 +14,13 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 
-const Container = ({children, logo, style}) => {
+interface ContainerProps {
+  children: ReactNode,
+  logo: boolean,
+  style: ViewStyle
+}
+
+const Container = (props: ContainerProps) => {
   return (
     <ImageBackground
       source={images.bgImage}
@@ -24,10 +31,10 @@ const Container = ({children, logo, style}) => {
         behavior={Platform.OS === 'android' ? 'height' : 'padding'}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          style={[styles.inner, style]}
+          style={[styles.inner, props.style]}
           automaticallyAdjustKeyboardInsets={true}>
-          {logo ? <Image source={images.logo} style={styles.logo} /> : null}
-          {children}
+          {props.logo ? <Image source={images.logo} style={styles.logo} /> : null}
+          {props.children}
         </ScrollView>
       </KeyboardAvoidingView>
     </ImageBackground>

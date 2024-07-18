@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 import CouponHistoryScreen from '../screen/main/CouponHistoryScreen';
 import SearchCouponScreen from '../screen/main/SearchCouponScreen';
 import CreateCouponScreen from '../screen/main/CreateCouponScreen';
+import { RootState } from '../Store/Reducer';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -27,7 +28,7 @@ const TabBarHeight = Platform.select({
 });
 
 const MainStack = () => {
-  const { userType } = useSelector(state => state?.authReducer);
+  const { userType } = useSelector((state: RootState) => state?.authReducer);
 
   return (
     <Tab.Navigator

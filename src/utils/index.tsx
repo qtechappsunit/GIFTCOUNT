@@ -1,6 +1,7 @@
 import { Linking } from 'react-native';
-import images from '../assets/images';
+import images from '../assets/images'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export const slides = [
   {
@@ -145,24 +146,22 @@ export const OptionsData = [
   {
     id: 1,
     text: 'Scan QR Code',
-    icon: images.qr_code,
   },
   {
     id: 2,
     text: 'Input Coupon Code',
-    icon: ''
   }
 ]
 
-export const getUserType = async key => {
+export const getUserType = async (key: string) => {
   return await AsyncStorage.getItem(key);
 };
 
-export const setUserType = (key, type) => {
+export const setUserType = (key: string, type: string) => {
   AsyncStorage.setItem(key, type);
 };
 
-export const linking = async url => {
+export const linking = async (url: string) => {
   await Linking.openURL(url);
 };
 

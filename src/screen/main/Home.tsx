@@ -25,7 +25,6 @@ import icons from '../../assets/icons';
 import {useSelector} from 'react-redux';
 import {SvgXml} from 'react-native-svg';
 import OptionsMenu from '../../components/OptionsMenu';
-import CouponStatusModal from '../../components/CouponStatusModal';
 import ManualEntryModal from '../../components/ManualEntryModal';
 
 const Home = () => {

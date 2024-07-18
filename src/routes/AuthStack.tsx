@@ -6,6 +6,7 @@ import Login from '../screen/auth/Login'
 import ROUTES from '../utils'
 import Register from '../screen/auth/Register'
 
+
 const Stack = createNativeStackNavigator()
 
 const AuthStack = () => {

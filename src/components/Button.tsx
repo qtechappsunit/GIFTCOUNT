@@ -1,20 +1,27 @@
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native';
 import React from 'react';
 import themes from '../assets/themes';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import fonts from '../assets/fonts';
 import SVGIcons from './SVGIcons';
 
-const Button = ({ onPress, buttonText, style, leftIcon }) => {
+interface ButtonProps {
+  onPress: () => void,
+  buttonText: string,
+  style: ViewStyle,
+  leftIcon: string
+}
+
+const Button = (props: ButtonProps) => {
   return (
     <TouchableOpacity
-      style={[styles.buttonStyle, style]}
-      onPress={onPress}
+      style={[styles.buttonStyle, props.style]}
+      onPress={props.onPress}
       activeOpacity={0.9}>
-      {leftIcon ? (
-        <SVGIcons image={leftIcon} style={styles.leftIcon} />
+      {props.leftIcon ? (
+        <SVGIcons image={props.leftIcon} style={styles.leftIcon} />
       ) : null}
-      <Text style={styles.textStyle}>{buttonText}</Text>
+      <Text style={styles.textStyle}>{props.buttonText}</Text>
     </TouchableOpacity>
   );
 };

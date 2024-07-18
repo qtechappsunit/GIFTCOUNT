@@ -1,7 +1,7 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AuthStack from './AuthStack';
-import {NavigationContainer} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import AppStatusBar from '../components/AppStatusBar';
 import ROUTES from '../utils';
 import MainStack from './MainStack';
@@ -10,8 +10,18 @@ import OTPScreen from '../screen/auth/OTPScreen';
 import ResetPasswordScreen from '../screen/auth/ResetPasswordScreen';
 import ForgetPassword from '../screen/auth/ForgetPassword';
 
-const Stack = createNativeStackNavigator();
+export type AuthParams = {
+  AuthStack: undefined,
+  MainStack: undefined,
+  OTPScreen: {
+    type: string
+  }
+  ForgetPassword: undefined,
+  ResetPasswordScreen: undefined,
+  Points: undefined
+}
 
+const Stack = createNativeStackNavigator<AuthParams>();
 
 
 const Routes = () => {

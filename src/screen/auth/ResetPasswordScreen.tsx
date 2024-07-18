@@ -8,12 +8,19 @@ import InputField from '../../components/InputField';
 import icons from '../../assets/icons';
 import Button from '../../components/Button';
 import ROUTES from '../../utils';
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation} from '@react-navigation/native';
+import { AuthParams } from '../../routes';
 
-const ResetPasswordScreen = ({route}) => {
+interface ResetPasswordProps {
+  route: RouteProp<AuthParams,'ResetPasswordScreen'>
+}
+
+const ResetPasswordScreen = (props: ResetPasswordProps) => {
   const nav = useNavigation();
 
-  const screenType = route?.params?.type;
+  const screenType = props.route?.params?.type;
+
+  console.log(screenType)
 
   return (
     <Container logo={true}>

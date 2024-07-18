@@ -7,11 +7,16 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import InputField from '../../components/InputField';
 import icons from '../../assets/icons';
 import Button from '../../components/Button';
-import { useNavigation } from '@react-navigation/native';
 import ROUTES from '../../utils';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { AuthParams } from '../../routes';
 
-const OTPScreen = () => {
-    const nav = useNavigation();
+
+interface OTPScreenProps {
+    navigation: StackNavigationProp<AuthParams, 'OTPScreen'>
+}
+
+const OTPScreen = (props: OTPScreenProps) => {
 
     return (
         <Container logo={true}>
@@ -30,7 +35,7 @@ const OTPScreen = () => {
                 <Button
                     buttonText={'Submit'}
                     style={styles.btn}
-                    onPress={() => nav.navigate(ROUTES.ResetPasswordScreen,{type: 'reset'})}
+                    onPress={() => props.navigation.navigate(ROUTES.ResetPasswordScreen, { type: 'reset' })}
                 />
             </View>
         </Container>

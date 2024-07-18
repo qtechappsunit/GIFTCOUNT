@@ -6,7 +6,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './Store/store';
 import { MenuProvider } from 'react-native-popup-menu';
 
-const App = () => {
+const App: React.FC = () => {
   useEffect(() => {
     LogBox.ignoreAllLogs();
   }, []);

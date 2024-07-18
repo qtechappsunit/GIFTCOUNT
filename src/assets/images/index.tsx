@@ -1,4 +1,43 @@
-export default {
+interface ImagesType {
+  background: number,
+  logo: number,
+  driver: number,
+  customer: number,
+  facebook: number,
+  gmail: number,
+  apple: number,
+  cat1: number,
+  cat2: number,
+  cat3: number,
+  cat4: number,
+  cat5: number,
+  restaurant1: number,
+  restaurant2: number,
+  detail: number,
+  food: number,
+  splashBg: number,
+  redCorner: number,
+  congratsModalBg: number,
+  giftSparkles: number,
+  giftLid: number,
+  giftBox: number,
+  restaurantOwner: number,
+  bgImage: number,
+  uploadImage: number,
+  userImage: number,
+  restaurant3: number,
+  burger: number,
+  qrCode: number,
+  star: number,
+  back: number,
+  profileCreatedImage: number,
+  QRimage: number,
+  cross: number,
+  qr_code: number,
+  moreOptions: number,
+}
+
+const images: ImagesType = {
   background: require('../images/backgroundimage.png'),
   logo: require('../images/logo.png'),
   driver: require('../images/driverimage.png'),
@@ -36,3 +75,5 @@ export default {
   qr_code: require('../images/qrcode_icon.png'),
   moreOptions: require('../images/verticaldot.png')
 };
+
+export default images
