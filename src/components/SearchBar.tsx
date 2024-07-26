@@ -1,4 +1,4 @@
-import {Platform, StyleSheet, TextInput, View} from 'react-native';
+import {Platform, StyleSheet, TextInput, View, ViewStyle} from 'react-native';
 import React from 'react';
 import themes from '../assets/themes';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -6,16 +6,23 @@ import SVGIcons from './SVGIcons';
 import icons from '../assets/icons';
 import fonts from '../assets/fonts';
 
-const SearchBar = ({value, onChangeText, placeholder,style}) => {
+interface SearchBarProps {
+  value: string,
+  onChangeText: (param: string) => void,
+  placeholder: string,
+  style: ViewStyle
+}
+
+const SearchBar = (props: SearchBarProps) => {
   return (
-    <View style={[styles.searchView, style]}>
+    <View style={[styles.searchView, props.style]}>
       <SVGIcons image={icons.search} />
       <TextInput
-        placeholder={placeholder}
+        placeholder={props.placeholder}
         placeholderTextColor={themes.light_black}
         style={styles.input}
-        value={value}
-        onChangeText={onChangeText}
+        value={props.value}
+        onChangeText={props.onChangeText}
       />
     </View>
   );

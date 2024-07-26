@@ -19,7 +19,15 @@ import SearchCouponScreen from '../screen/main/SearchCouponScreen';
 import CreateCouponScreen from '../screen/main/CreateCouponScreen';
 import { RootState } from '../Store/Reducer';
 
-const Tab = createBottomTabNavigator();
+export type tabBarParams = {
+  EditProfileScreen: {
+    type: string
+  },
+  HomeStack: undefined,
+  AnalyticStack: undefined
+}
+
+const Tab = createBottomTabNavigator<tabBarParams>();
 const Stack = createNativeStackNavigator();
 
 const TabBarHeight = Platform.select({

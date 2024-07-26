@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, { useState } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Container from '../../components/Container';
 import images from '../../assets/images';
 import {
@@ -11,14 +11,78 @@ import fonts from '../../assets/fonts';
 import InputField from '../../components/InputField';
 import icons from '../../assets/icons';
 import Button from '../../components/Button';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import CuisineTypeModal from '../../components/CuisineTypeModal';
 import ProfileCreatedModal from '../../components/ProfileCreatedModal';
+import { launchImageLibrary } from 'react-native-image-picker';
+
+interface InputField {
+  username: string,
+  restaurant_name: string,
+  restaurant_web: string,
+  cuisine_type: string,
+  first_name: string,
+  last_name: string,
+  email: string,
+  phone: string,
+  street: string,
+  city: string,
+  state: string,
+  zip_code: string,
+  bank_iban: number,
+  profile_pic: string,
+  password: any,
+  cpassword: any
+}
+
 
 const Register = () => {
-  const {userType} = useSelector(state => state?.authReducer);
+  const { userType } = useSelector(state => state?.authReducer);
   const [open, setOpen] = useState(false);
   const [openProfileModal, setOpenProfileModal] = useState(false);
+  const [state, setState] = useState<InputField>({
+    username: '',
+    first_name: '',
+    last_name: '',
+    restaurant_name: '',
+    restaurant_web: '',
+    cuisine_type: '',
+    phone: '',
+    bank_iban: '',
+    street: '',
+    city: '',
+    state: '',
+    zip_code: '',
+    email: '',
+    profile_pic: '',
+    password: '',
+    cpassword: '',
+
+  })
+
+  console.log('stateee profile', state.cuisine_type)
+
+  const onSelectPhoto = async () => {
+    const options = {
+      title: 'Select Image',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+        quality: 0.5,
+      },
+    };
+
+    await launchImageLibrary(options, async response => {
+      if (response.didCancel) {
+        console.log('cancelled', response.didCancel);
+      } else {
+        setState({
+          ...state,
+          profile_pic: response.assets[0].uri
+        })
+      }
+    });
+  }
 
   return (
     <Container logo={true}>
@@ -33,16 +97,27 @@ const Register = () => {
       <Text style={styles.forgot}>
         Please enter your registered email {`\n`}and password
       </Text>
-      <View style={styles.uploadImageView}>
-        <Image source={images.uploadImage} style={styles.uploadImage} />
-        <Text style={styles.upText}>upload image</Text>
-      </View>
+      <TouchableOpacity activeOpacity={0.8} onPress={() => onSelectPhoto()}>
+        {state.profile_pic ?
+          <Image
+            source={{ uri: state.profile_pic }}
+            style={styles.userImage}
+            borderRadius={20}
+          />
+          :
+          <View style={styles.uploadImageView}>
+            <Image source={images.uploadImage} style={styles.uploadImage} />
+            <Text style={styles.upText}>upload image</Text>
+          </View>
+        }
+      </TouchableOpacity>
       <View style={styles.inputView}>
         {userType == 'rider' || userType == 'customer' ? (
           <>
             <InputField
               placeholder={'First Name'}
               textColor={themes.placeholder_color}
+              value={state.first_name}
               style={styles.input}
               icon={icons.userIcon}
             />
@@ -50,6 +125,7 @@ const Register = () => {
               placeholder={'Last Name'}
               textColor={themes.placeholder_color}
               style={styles.input}
+              value={state.last_name}
               icon={icons.userIcon}
             />
             {/* {userType === 'customer' && ( */}
@@ -60,6 +136,7 @@ const Register = () => {
               textColor={themes.placeholder_color}
               style={styles.input}
               keyboardType={'numeric'}
+              value={state.phone}
               icon={icons.telePhone}
             />
           </>
@@ -69,12 +146,15 @@ const Register = () => {
               placeholder={'Restaurant Name'}
               style={styles.input}
               textColor={themes.placeholder_color}
+              value={state.restaurant_name}
               icon={icons.grayHomeIcon}
             />
             <InputField
               placeholder={'Owner Name'}
               style={styles.input}
+              value={state.username}
               textColor={themes.placeholder_color}
+
               icon={icons.userIcon}
             />
             {/* <InputField
@@ -87,6 +167,7 @@ const Register = () => {
               placeholder={'Restaurant Phone'}
               style={styles.input}
               keyboardType={'numeric'}
+              value={state.phone}
               textColor={themes.placeholder_color}
               icon={icons.telePhone}
             />
@@ -94,6 +175,7 @@ const Register = () => {
               placeholder={'Restaurant Website'}
               style={styles.input}
               textColor={themes.placeholder_color}
+              value={state.restaurant_web}
               icon={icons.websiteIcon}
             />
             <TouchableOpacity onPress={() => setOpen(!open)}>
@@ -101,6 +183,7 @@ const Register = () => {
                 placeholder={'Select Cuisine Types'}
                 style={styles.input}
                 icon={icons.cuisineIcon}
+                value={state.cuisine_type}
                 textColor={themes.placeholder_color}
                 editable={false}
                 rightIcon={icons.downArrow}
@@ -133,7 +216,7 @@ const Register = () => {
           style={styles.input}
           icon={icons.locIcon}
         />
-         <InputField
+        <InputField
           placeholder={'Email'}
           style={styles.input}
           textColor={themes.placeholder_color}
@@ -176,7 +259,14 @@ const Register = () => {
         style={styles.btn}
         onPress={() => setOpenProfileModal(!openProfileModal)}
       />
-      <CuisineTypeModal modalVisible={open} setModalVisible={setOpen} />
+      <CuisineTypeModal
+        modalVisible={open}
+        setModalVisible={setOpen}
+        setValue={(type) => setState({
+          ...state,
+          cuisine_type: type
+        })}
+      />
       <ProfileCreatedModal
         modalVisible={openProfileModal}
         setModalVisible={setOpenProfileModal}
@@ -228,4 +318,9 @@ const styles = StyleSheet.create({
     fontSize: hp(2.3),
     fontFamily: fonts.lexendBold,
   },
+  userImage: {
+    height: hp(15),
+    alignSelf: 'center',
+    width: hp(15)
+  }
 });

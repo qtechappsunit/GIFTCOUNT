@@ -26,9 +26,10 @@ import {useSelector} from 'react-redux';
 import DiscountCodeModal from '../../components/DiscountCodeModal';
 import DropDownPicker from 'react-native-dropdown-picker';
 import CouponStatusModal from '../../components/CouponStatusModal';
+import { RootState } from '../../Store/Reducer';
 
 const RestaurantDetail = () => {
-  const {userType} = useSelector(state => state?.authReducer);
+  const {userType} = useSelector((state: RootState) => state?.authReducer);
   const nav = useNavigation();
   const [visible, setVisible] = useState(false);
   const [confirmationModal, setConfirmationModal] = useState(false);
@@ -171,7 +172,7 @@ const RestaurantDetail = () => {
             <CouponStatusModal
               visible={confirmationModal}
               setVisible={setConfirmationModal}
-              onStatusChange={value => {
+              onStatusChange={(value: string) => {
                 if (value === 'yes') {
                   setOpen(true);
                 }

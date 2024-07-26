@@ -101,7 +101,7 @@ const CreateCouponScreen = () => {
   });
   const nav = useNavigation();
 
-  const onChangeText = (value, text) => {
+  const onChangeText = (value: string, text: string) => {
     setState({
       ...state,
       [value]: text,

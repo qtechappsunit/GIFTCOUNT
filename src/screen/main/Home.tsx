@@ -26,9 +26,10 @@ import {useSelector} from 'react-redux';
 import {SvgXml} from 'react-native-svg';
 import OptionsMenu from '../../components/OptionsMenu';
 import ManualEntryModal from '../../components/ManualEntryModal';
+import { RootState } from '../../Store/Reducer';
 
 const Home = () => {
-  const {userType} = useSelector(state => state?.authReducer);
+  const {userType} = useSelector((state: RootState) => state?.authReducer);
   const navigation = useNavigation();
   const nav = useNavigation();
   const [catId, setCatId] = useState(0);
@@ -58,7 +59,7 @@ const Home = () => {
   };
 
   const ListHeaderComponent = () => {
-    const handleSelect = index => {
+    const handleSelect = (index: number) => {
       if (index == 0) {
         nav.navigate(ROUTES.QRCode);
       } else {
@@ -112,7 +113,7 @@ const Home = () => {
   return (
     <Wrapper>
       <ScrollView
-        contentContainerStyle={styles.screen}
+        // contentContainerStyle={styles.screen}
         showsVerticalScrollIndicator={false}>
         <Header />
         {userType == 'owner' ? (

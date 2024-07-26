@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Container from '../../components/Container';
 import themes from '../../assets/themes';
 import {
@@ -8,17 +8,22 @@ import {
 } from 'react-native-responsive-screen';
 import fonts from '../../assets/fonts';
 import images from '../../assets/images';
-import {SvgXml} from 'react-native-svg';
+import { SvgXml } from 'react-native-svg';
 import icons from '../../assets/icons';
 import InputField from '../../components/InputField';
-import {useNavigation} from '@react-navigation/native';
 import ROUTES from '../../utils';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import Button from '../../components/Button';
+import { RootState } from '../../Store/Reducer';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { tabBarParams } from '../../routes/MainStack';
 
-const EditProfileScreen = () => {
-  const {userType} = useSelector(state => state?.authReducer);
-  const nav = useNavigation();
+interface EditProfileProps {
+  navigation: BottomTabNavigationProp<tabBarParams, 'EditProfileScreen'>
+}
+
+const EditProfileScreen = (props: EditProfileProps) => {
+  const { userType } = useSelector((state: RootState) => state?.authReducer);
 
   return (
     <Container logo={true}>
@@ -154,14 +159,14 @@ const EditProfileScreen = () => {
           </View>
         </>
       )}
-      <TouchableOpacity onPress={() => nav.navigate(ROUTES.Login)}>
+      <TouchableOpacity onPress={() => props.navigation.navigate(ROUTES.Login)}>
         <Text style={[styles.heading, styles.border]}>Logout</Text>
       </TouchableOpacity>
       <Button
         buttonText={'Change Password'}
-        style={{alignSelf: 'center', marginVertical: hp(4)}}
+        style={{ alignSelf: 'center', marginVertical: hp(4) }}
         onPress={() =>
-          nav.navigate(ROUTES.ResetPasswordScreen, {type: 'change'})
+          props.navigation.navigate(ROUTES.ResetPasswordScreen, { type: 'change' })
         }
       />
       <View style={styles.view} />

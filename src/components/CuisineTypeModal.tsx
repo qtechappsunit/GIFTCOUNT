@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, StyleSheet, Text, View } from 'react-native';
 import themes from '../assets/themes';
 import fonts from '../assets/fonts';
@@ -33,13 +33,28 @@ const data = [
     },
 ];
 
-const CuisineTypeModal = ({ modalVisible, setModalVisible }) => {
+interface ModalProps {
+    modalVisible: boolean,
+    setModalVisible: () => void,
+    setValue: () => void
+}
+
+const CuisineTypeModal = (props: ModalProps) => {
+    const [selectedCheckbox, setSelectedCheckbox] = useState(null)
+
+    const handleCheckPress = (isChecked, val) => {
+        if (isChecked) {
+            props.setValue(val?.title)
+        }
+        setSelectedCheckbox(selectedCheckbox === val?.id ? null : val?.id)
+    }
+
     return (
         <Modal
             animationType="slide"
             transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => setModalVisible(!modalVisible)}>
+            visible={props.modalVisible}
+            onRequestClose={() => props.setModalVisible(!props.modalVisible)}>
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                     <Text style={styles.modalText}>Select{`\n`}Cuisine Type</Text>
@@ -50,17 +65,18 @@ const CuisineTypeModal = ({ modalVisible, setModalVisible }) => {
                             fillColor={themes.navy_blue}
                             unFillColor="#FFFFFF"
                             text={val?.title}
+                            isChecked={val?.id == selectedCheckbox}
                             iconStyle={{ borderColor: themes.navy_blue, borderRadius: 5 }}
                             innerIconStyle={{ borderWidth: 2, borderRadius: 5 }}
                             textStyle={{ textDecorationLine: 'none' }}
                             style={{ marginBottom: wp(3) }}
-                        // onPress={(isChecked) => { console.log(isChecked) }}
+                            onPress={(isChecked) => handleCheckPress(isChecked, val)}
                         />
                     ))}
                     <Button
                         buttonText={'Submit'}
                         style={styles.btn}
-                        onPress={() => setModalVisible(!modalVisible)}
+                        onPress={() => props.setModalVisible(!props.modalVisible)}
                     />
                 </View>
             </View>

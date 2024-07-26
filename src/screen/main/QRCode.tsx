@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  Linking,
 } from 'react-native';
 import React from 'react';
 import images from '../../assets/images';
@@ -18,20 +19,21 @@ import SVGIcons from '../../components/SVGIcons';
 import icons from '../../assets/icons';
 import {useNavigation} from '@react-navigation/native';
 import themes from '../../assets/themes';
-import fonts from '../../assets/fonts';
+import fonts from '../../assets/fonts'
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
 import {useSelector} from 'react-redux';
+import { RootState } from '../../Store/Reducer';
 
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('window').height;
 
 const QRCode = () => {
-  const {userType} = useSelector(state => state.authReducer);
+  const {userType} = useSelector((state: RootState) => state.authReducer);
 
   const nav = useNavigation();
 
-  const onSuccess = e => {
+  const onSuccess = (e: any) => {
     console.log('onSuccess e', e);
     Linking.openURL(e.data).catch(err =>
       console.error('An error occured', err),
