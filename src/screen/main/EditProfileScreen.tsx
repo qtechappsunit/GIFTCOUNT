@@ -11,12 +11,13 @@ import images from '../../assets/images';
 import { SvgXml } from 'react-native-svg';
 import icons from '../../assets/icons';
 import InputField from '../../components/InputField';
-import ROUTES from '../../utils';
-import { useSelector } from 'react-redux';
+import ROUTES, { ShowMessage } from '../../utils';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../components/Button';
 import { RootState } from '../../Store/Reducer';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { tabBarParams } from '../../routes/MainStack';
+import { Logout } from '../../Store/Reducer/AuthReducer';
 
 interface EditProfileProps {
   navigation: BottomTabNavigationProp<tabBarParams, 'EditProfileScreen'>
@@ -24,6 +25,14 @@ interface EditProfileProps {
 
 const EditProfileScreen = (props: EditProfileProps) => {
   const { userType } = useSelector((state: RootState) => state?.authReducer);
+
+  const dispatch = useDispatch()
+
+
+  const onLogoutPress = () => {
+    dispatch(Logout())
+    return ShowMessage('Signout', 'Logout Successfully','success')
+  }
 
   return (
     <Container logo={true}>
@@ -159,7 +168,7 @@ const EditProfileScreen = (props: EditProfileProps) => {
           </View>
         </>
       )}
-      <TouchableOpacity onPress={() => props.navigation.navigate(ROUTES.Login)}>
+      <TouchableOpacity onPress={() => onLogoutPress()}>
         <Text style={[styles.heading, styles.border]}>Logout</Text>
       </TouchableOpacity>
       <Button

@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistStore, persistReducer, PersistConfig } from 'redux-persist';
 import { configureStore } from '@reduxjs/toolkit';
 import Reducer, { RootState } from './Reducer';
+import { authApi } from './services';
 
 const persistConfig: PersistConfig<RootState> = {
   key: 'root',
@@ -20,7 +21,7 @@ const store = configureStore({
     getDefaultMiddleware({
       immutableCheck: { warnAfter: 128 },
       serializableCheck: false,
-    }),
+    }).concat(authApi.middleware)
 });
 
 const persistor = persistStore(store);

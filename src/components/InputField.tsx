@@ -15,6 +15,7 @@ interface InputProps {
   secureTextEntry: boolean,
   rightIcon: string,
   editable: boolean,
+  length: number,
   textColor: string
 }
 
@@ -25,6 +26,7 @@ const InputField = (props: InputProps) => {
       <TextInput
         placeholder={props.placeholder}
         secureTextEntry={props.secureTextEntry}
+        maxLength={props.length}
         placeholderTextColor={props.textColor ? props.textColor : themes.placeholder_color}
         style={[styles.input, { color: props.textColor }]}
         value={props.value}

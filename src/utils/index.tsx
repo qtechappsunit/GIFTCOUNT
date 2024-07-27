@@ -1,6 +1,8 @@
 import { Linking } from 'react-native';
 import images from '../assets/images'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { showMessage } from 'react-native-flash-message';
+import themes from '../assets/themes';
 
 
 export const slides = [
@@ -164,6 +166,47 @@ export const setUserType = (key: string, type: string) => {
 export const linking = async (url: string) => {
   await Linking.openURL(url);
 };
+
+export const ShowMessage = (message, description, type) => {
+  return showMessage({
+    message: message,
+    description: description,
+    type: type,
+    duration: 3000,
+    backgroundColor: themes.red,
+    color: themes.white,
+    icon: "auto",
+    animated: true,
+
+  });
+}
+
+
+export const getRequiredFields = (userType: string) => {
+  const commonFields = ['phone', 'street', 'city', 'state', 'zip_code', 'email', 'password', 'profile_pic'];
+  const userFields = {
+    rider: ['first_name', 'last_name', 'bank_iban'],
+    customer: ['first_name', 'last_name'],
+    owner: ['restaurant_name', 'owner_name', 'restaurant_web', 'cuisine_type'],
+  };
+
+  return [...userFields[userType], ...commonFields]
+};
+
+export const validateFields = (state: any, userType: string) => {
+  const requiredFields = getRequiredFields(userType)
+
+  for (let field of requiredFields) {
+    if (!state[field]) {
+        return `Please enter your ${field.replace('_', ' ')}`
+    }
+  }
+
+  if (state.password !== state.cpassword) {
+    return 'Password does not match'
+  }
+};
+
 
 
 export default ROUTES;

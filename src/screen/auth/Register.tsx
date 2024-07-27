@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Container from '../../components/Container';
 import images from '../../assets/images';
 import {
@@ -15,9 +15,14 @@ import { useSelector } from 'react-redux';
 import CuisineTypeModal from '../../components/CuisineTypeModal';
 import ProfileCreatedModal from '../../components/ProfileCreatedModal';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { useCreateUserMutation } from '../../Store/services';
+import { RootState } from '../../Store/Reducer';
+import { ShowMessage, validateFields } from '../../utils';
+import FormData from 'form-data';
 
 interface InputField {
-  username: string,
+  type: string,
+  owner_name: string,
   restaurant_name: string,
   restaurant_web: string,
   cuisine_type: string,
@@ -29,7 +34,7 @@ interface InputField {
   city: string,
   state: string,
   zip_code: string,
-  bank_iban: number,
+  bank_iban: string,
   profile_pic: string,
   password: any,
   cpassword: any
@@ -37,11 +42,12 @@ interface InputField {
 
 
 const Register = () => {
-  const { userType } = useSelector(state => state?.authReducer);
+  const { userType } = useSelector((state: RootState) => state?.authReducer);
   const [open, setOpen] = useState(false);
   const [openProfileModal, setOpenProfileModal] = useState(false);
   const [state, setState] = useState<InputField>({
-    username: '',
+    type: userType,
+    owner_name: '',
     first_name: '',
     last_name: '',
     restaurant_name: '',
@@ -60,7 +66,8 @@ const Register = () => {
 
   })
 
-  console.log('stateee profile', state.cuisine_type)
+  const [createUser, { isLoading }] = useCreateUserMutation()
+
 
   const onSelectPhoto = async () => {
     const options = {
@@ -82,6 +89,65 @@ const Register = () => {
         })
       }
     });
+  }
+
+  const onChange = (value: string, text: string) => {
+    setState({
+      ...state,
+      [value]: text
+    })
+  }
+
+  const onSubmitPress = async () => {
+    const errors = validateFields(state, userType);
+    if (errors) {
+      return ShowMessage(
+        'Signup',
+        errors,
+        'warning',
+      );
+    }
+
+    const formData = new FormData();
+
+    formData.append('type', userType)
+    formData.append('first_name', state.first_name)
+    formData.append('last_name', state.last_name)
+    formData.append('email', state.email)
+    formData.append('phone_number', state.phone)
+    formData.append('bank_IBAN', state.bank_iban)
+    formData.append('street', state.street)
+    formData.append('city', state.city)
+    formData.append('state', state.state)
+    formData.append('zip_code', state.zip_code)
+    formData.append('password', state.password)
+    formData.append('restaurant_name', state.restaurant_name)
+    formData.append('owner_name', state.owner_name)
+    formData.append('restaurant_web', state.restaurant_web)
+    formData.append('cuisine_type', state.cuisine_type)
+    if (state.profile_pic) {
+      formData.append('profile_pic', {
+        name: 'image.jpg',
+        type: 'image/jpeg',
+        uri:
+          Platform.OS === 'android'
+            ? state.profile_pic
+            : state.profile_pic.replace('file://', ''),
+      });
+    }
+
+    await createUser(formData).unwrap().then(data => {
+      console.log('signup response ===>',data)
+      if (data.success) {
+        setOpenProfileModal(!openProfileModal)
+      } else {
+        ShowMessage('Signup', data.message, 'danger');
+      }
+    }).catch((error) => {
+      console.log('signup error ====>', error)
+    })
+
+
   }
 
   return (
@@ -117,6 +183,7 @@ const Register = () => {
             <InputField
               placeholder={'First Name'}
               textColor={themes.placeholder_color}
+              onChangeText={(text) => onChange('first_name', text)}
               value={state.first_name}
               style={styles.input}
               icon={icons.userIcon}
@@ -125,6 +192,7 @@ const Register = () => {
               placeholder={'Last Name'}
               textColor={themes.placeholder_color}
               style={styles.input}
+              onChangeText={(text) => onChange('last_name', text)}
               value={state.last_name}
               icon={icons.userIcon}
             />
@@ -135,6 +203,7 @@ const Register = () => {
               placeholder={'Phone number'}
               textColor={themes.placeholder_color}
               style={styles.input}
+              onChangeText={(text) => onChange('phone', text)}
               keyboardType={'numeric'}
               value={state.phone}
               icon={icons.telePhone}
@@ -146,13 +215,15 @@ const Register = () => {
               placeholder={'Restaurant Name'}
               style={styles.input}
               textColor={themes.placeholder_color}
+              onChangeText={(text) => onChange('restaurant_name', text)}
               value={state.restaurant_name}
               icon={icons.grayHomeIcon}
             />
             <InputField
               placeholder={'Owner Name'}
               style={styles.input}
-              value={state.username}
+              value={state.owner_name}
+              onChangeText={(text) => onChange('owner_name', text)}
               textColor={themes.placeholder_color}
 
               icon={icons.userIcon}
@@ -168,6 +239,7 @@ const Register = () => {
               style={styles.input}
               keyboardType={'numeric'}
               value={state.phone}
+              onChangeText={(text) => onChange('phone', text)}
               textColor={themes.placeholder_color}
               icon={icons.telePhone}
             />
@@ -176,6 +248,7 @@ const Register = () => {
               style={styles.input}
               textColor={themes.placeholder_color}
               value={state.restaurant_web}
+              onChangeText={(text) => onChange('restaurant_web', text)}
               icon={icons.websiteIcon}
             />
             <TouchableOpacity onPress={() => setOpen(!open)}>
@@ -195,24 +268,33 @@ const Register = () => {
           placeholder={'Street'}
           textColor={themes.placeholder_color}
           style={styles.input}
+          value={state.street}
+          onChangeText={(text) => onChange('street', text)}
           icon={icons.locIcon}
         />
         <InputField
           placeholder={'City'}
           textColor={themes.placeholder_color}
           style={styles.input}
+          value={state.city}
+          onChangeText={(text) => onChange('city', text)}
           icon={icons.locIcon}
         />
         <InputField
           placeholder={'State'}
           textColor={themes.placeholder_color}
           style={styles.input}
+          value={state.state}
+          onChangeText={(text) => onChange('state', text)}
           icon={icons.locIcon}
         />
         <InputField
           placeholder={'Zip-code'}
           textColor={themes.placeholder_color}
           keyboardType={'numeric'}
+          length={6}
+          value={state.zip_code}
+          onChangeText={(text) => onChange('zip_code', text)}
           style={styles.input}
           icon={icons.locIcon}
         />
@@ -221,6 +303,8 @@ const Register = () => {
           style={styles.input}
           textColor={themes.placeholder_color}
           keyboardType={'email-address'}
+          value={state.email}
+          onChangeText={(text) => onChange('email', text)}
           icon={icons.emailIcon}
         />
         {userType == 'rider' ? (
@@ -228,7 +312,9 @@ const Register = () => {
             <InputField
               placeholder={'Bank IBAN'}
               style={styles.input}
+              value={state.bank_iban}
               textColor={themes.placeholder_color}
+              onChangeText={(text) => onChange('bank_iban', text)}
               icon={icons.bankIcon}
             />
             {/* <InputField
@@ -243,6 +329,8 @@ const Register = () => {
           placeholder={'Password'}
           style={styles.input}
           icon={icons.password}
+          value={state.password}
+          onChangeText={(text) => onChange('password', text)}
           textColor={themes.placeholder_color}
           secureTextEntry={true}
         />
@@ -250,6 +338,8 @@ const Register = () => {
           placeholder={'Confirm Password'}
           style={styles.input}
           icon={icons.password}
+          value={state.cpassword}
+          onChangeText={(text) => onChange('cpassword', text)}
           textColor={themes.placeholder_color}
           secureTextEntry={true}
         />
@@ -257,7 +347,8 @@ const Register = () => {
       <Button
         buttonText={'Submit'}
         style={styles.btn}
-        onPress={() => setOpenProfileModal(!openProfileModal)}
+        indicator={isLoading}
+        onPress={() => onSubmitPress()}
       />
       <CuisineTypeModal
         modalVisible={open}

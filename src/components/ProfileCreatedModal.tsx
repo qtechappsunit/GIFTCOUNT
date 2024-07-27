@@ -7,9 +7,16 @@ import fonts from '../assets/fonts';
 import Button from './Button';
 import { useNavigation } from '@react-navigation/native';
 import ROUTES from '../utils';
+import { useSelector } from 'react-redux';
+import { RootState } from '../Store/Reducer';
 
 const ProfileCreatedModal = ({ modalVisible, setModalVisible }) => {
+
+    const { user } = useSelector((state: RootState) => state?.authReducer)
+
     const nav = useNavigation();
+
+
     return (
         <Modal
             animationType="slide"
@@ -18,7 +25,7 @@ const ProfileCreatedModal = ({ modalVisible, setModalVisible }) => {
             onRequestClose={() => setModalVisible(!modalVisible)}>
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <Image source={images.profileCreatedImage} style={styles.profileCreatedImage} />
+                    <Image source={user?.profile_pic && {uri: user?.profile_pic}} style={styles.profileCreatedImage} />
                     <Text style={styles.modalText}>Profile Successfully{`\n`}Created!</Text>
                     <Text style={styles.bodyText}>Congratulations! Your profile has been{`\n`}successfully created</Text>
                     <Button
@@ -55,7 +62,6 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     profileCreatedImage: {
-        resizeMode: 'contain',
         width: wp(40),
         height: wp(40),
         borderRadius: 100,

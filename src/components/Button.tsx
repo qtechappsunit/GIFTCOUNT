@@ -4,12 +4,14 @@ import themes from '../assets/themes';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import fonts from '../assets/fonts';
 import SVGIcons from './SVGIcons';
+import Loader from './Loader';
 
 interface ButtonProps {
   onPress: () => void,
   buttonText: string,
   style: ViewStyle,
-  leftIcon: string
+  leftIcon: string,
+  indicator: boolean
 }
 
 const Button = (props: ButtonProps) => {
@@ -21,7 +23,11 @@ const Button = (props: ButtonProps) => {
       {props.leftIcon ? (
         <SVGIcons image={props.leftIcon} style={styles.leftIcon} />
       ) : null}
+      {props.indicator ?
+        <Loader size={'small'} color={themes.white} />
+      :
       <Text style={styles.textStyle}>{props.buttonText}</Text>
+    }
     </TouchableOpacity>
   );
 };

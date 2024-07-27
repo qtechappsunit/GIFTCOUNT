@@ -1,5 +1,5 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -8,19 +8,55 @@ import themes from '../../assets/themes';
 import InputField from '../../components/InputField';
 import icons from '../../assets/icons';
 import Button from '../../components/Button';
-import ROUTES, {socialIcons} from '../../utils';
-import {useNavigation} from '@react-navigation/native';
+import ROUTES, { ShowMessage, socialIcons } from '../../utils';
+import { useNavigation } from '@react-navigation/native';
 import AuthContainer from '../../components/AuthContainer';
 import fonts from '../../assets/fonts';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useLoginMutation } from '../../Store/services';
+import { RootState } from '../../Store/Reducer';
+
+interface InputField {
+  email: string,
+  password: string
+}
 
 const Login = () => {
-  const {userType} = useSelector(state => state?.authReducer);
+  const { userType } = useSelector((state: RootState) => state?.authReducer);
   const navigation = useNavigation();
+
+  const [state, setState] = useState<InputField>({
+    email: '',
+    password: ''
+  })
+
+  const [login, { isLoading }] = useLoginMutation()
+
+  const onLoginPress = async () => {
+    if (!state.email) {
+      return ShowMessage('Signin', 'Please enter your email', 'warning')
+    } else if (!state.password) {
+      return ShowMessage('Signin', 'Please enter your password', 'warning')
+    } else {
+      const data = new FormData()
+      data.append('email', state.email)
+      data.append('password', state.password)
+      await login(data).unwrap().then((res) => {
+        console.log('login response =====>', res)
+        if (res.success) {
+          return ShowMessage('Signin', res.message, 'success')
+        } else {
+          return ShowMessage('Signin', res.message, 'danger')
+        }
+      }).catch((error) => {
+        console.log('login error =====>', error)
+      })
+    }
+  }
 
   return (
     <AuthContainer
-      logoImageStyle={{marginVertical: hp('-5%')}}
+      logoImageStyle={{ marginVertical: hp('-5%') }}
       scrollEnabled={false}>
       <View style={styles.screen}>
         {userType == 'rider' ? (
@@ -37,12 +73,22 @@ const Login = () => {
           placeholder={'Email'}
           style={styles.input}
           keyboardType={'email-address'}
+          value={state.email}
+          onChangeText={(text) => setState({
+            ...state,
+            email: text
+          })}
           textColor={themes.placeholder_color}
           icon={icons.emailIcon}
         />
         <InputField
           placeholder={'Password'}
           style={styles.input}
+          value={state.password}
+          onChangeText={(text) => setState({
+            ...state,
+            password: text
+          })}
           icon={icons.password}
           textColor={themes.placeholder_color}
           secureTextEntry={true}
@@ -54,14 +100,15 @@ const Login = () => {
         </TouchableOpacity>
         <Button
           buttonText={'Submit'}
-          onPress={() => navigation.navigate(ROUTES.MainStack)}
+          indicator={isLoading}
+          onPress={() => onLoginPress()}
         />
         <TouchableOpacity
           activeOpacity={0.9}
           style={styles.dontTouch}
           onPress={() => navigation.navigate(ROUTES.Register)}>
           <Text
-            style={[styles.text, {marginRight: wp(1), color: themes.white}]}>
+            style={[styles.text, { marginRight: wp(1), color: themes.white }]}>
             Don't have an account?
           </Text>
           <Text style={styles.text}>Sign Up</Text>
@@ -91,10 +138,10 @@ const Login = () => {
               key={ind}
               style={
                 ind == 1
-                  ? {height: hp(6), width: hp(6)}
+                  ? { height: hp(6), width: hp(6) }
                   : ind == 2
-                  ? {tintColor: themes.white, height: hp(2.7), width: hp(2.7)}
-                  : styles.imageStyle
+                    ? { tintColor: themes.white, height: hp(2.7), width: hp(2.7) }
+                    : styles.imageStyle
               }
             />
           </View>

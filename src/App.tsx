@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './Store/store';
 import { MenuProvider } from 'react-native-popup-menu';
+import FlashMessage from 'react-native-flash-message';
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -17,6 +18,7 @@ const App: React.FC = () => {
         <SafeAreaView style={{ flex: 1 }}>
           <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <MenuProvider>
+              <FlashMessage position={'top'}/>
             <Routes />
             </MenuProvider>
           </KeyboardAvoidingView>

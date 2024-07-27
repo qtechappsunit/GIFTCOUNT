@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { authApi } from '../../services';
 
 interface AuthTypes {
@@ -22,17 +22,21 @@ export const AuthSlice = createSlice({
     },
     Logout: (state) => {
       state.user = null,
-        state.token = null;
+      state.token = null;
     }
   },
   extraReducers: (builder) => {
     builder.addMatcher(authApi.endpoints.createUser.matchFulfilled, (state, action) => {
       state.user = action.payload.user
       state.token = action.payload.token
+    }),
+    builder.addMatcher(authApi.endpoints.login.matchFulfilled, (state,action) => {
+      state.user = action.payload.user,
+      state.token = action.payload.token
     })
   }
 });
 
-export const { UserType } = AuthSlice.actions;
+export const { UserType, Logout } = AuthSlice.actions;
 
 export default AuthSlice.reducer;

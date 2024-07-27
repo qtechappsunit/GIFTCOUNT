@@ -1,4 +1,4 @@
-import { ActivityIndicator, StyleSheet, Text, View, ViewStyle } from 'react-native'
+import { ActivityIndicator, StyleSheet,  ViewStyle } from 'react-native'
 import React from 'react'
 
 interface LoaderProps {

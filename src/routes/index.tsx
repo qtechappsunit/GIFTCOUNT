@@ -9,6 +9,8 @@ import Points from '../screen/main/Points';
 import OTPScreen from '../screen/auth/OTPScreen';
 import ResetPasswordScreen from '../screen/auth/ResetPasswordScreen';
 import ForgetPassword from '../screen/auth/ForgetPassword';
+import { useSelector } from 'react-redux';
+import { RootState } from '../Store/Reducer';
 
 export type AuthParams = {
   AuthStack: undefined,
@@ -25,6 +27,9 @@ const Stack = createNativeStackNavigator<AuthParams>();
 
 
 const Routes = () => {
+
+  const { token } = useSelector((state: RootState) => state.authReducer)
+
   return (
     <>
       <AppStatusBar />
@@ -34,18 +39,13 @@ const Routes = () => {
             headerShown: false,
             animation: 'fade_from_bottom',
           }}>
-          <Stack.Screen name={ROUTES.AuthStack} component={AuthStack} />
-          <Stack.Screen name={ROUTES.MainStack} component={MainStack} />
-          <Stack.Screen name={ROUTES.Points} component={Points} />
-          <Stack.Screen
-            name={ROUTES.ForgetPassword}
-            component={ForgetPassword}
-          />
-          <Stack.Screen name={ROUTES.OTPScreen} component={OTPScreen} />
-          <Stack.Screen
-            name={ROUTES.ResetPasswordScreen}
-            component={ResetPasswordScreen}
-          />
+          {token ?
+            <Stack.Screen name={ROUTES.MainStack} component={MainStack} />
+            :
+            <Stack.Screen name={ROUTES.AuthStack} component={AuthStack} />
+          }
+          {/* <Stack.Screen name={ROUTES.Points} component={Points} /> */}
+
         </Stack.Navigator>
       </NavigationContainer>
     </>
