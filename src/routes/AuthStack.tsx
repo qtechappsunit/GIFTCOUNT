@@ -9,12 +9,15 @@ import ForgetPassword from '../screen/auth/ForgetPassword'
 import OTPScreen from '../screen/auth/OTPScreen'
 import ResetPasswordScreen from '../screen/auth/ResetPasswordScreen'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import AuthContainer from '../components/AuthContainer'
+import Loader from '../components/Loader'
+import themes from '../assets/themes'
 
 
 const Stack = createNativeStackNavigator()
 
 const AuthStack = () => {
-    const [isFirstTimeLoad, setIsFirstTimeLoad] = useState(false)
+    const [isFirstTimeLoad, setIsFirstTimeLoad] = useState(null)
 
     const checkFirstTimeLaunch = async () => {
         const result = await AsyncStorage.getItem('isFirstTime')
@@ -32,6 +35,14 @@ const AuthStack = () => {
         checkFirstTimeLaunch()
 
     }, [])
+
+    if(isFirstTimeLoad == null) {
+        return (
+            <AuthContainer>
+                <Loader size={'large'} color={themes.primary}  />
+            </AuthContainer>
+        )
+    }
 
 
     return (
