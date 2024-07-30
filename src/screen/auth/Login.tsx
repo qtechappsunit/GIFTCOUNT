@@ -42,7 +42,7 @@ const Login = () => {
       data.append('email', state.email)
       data.append('password', state.password)
       await login(data).unwrap().then((res) => {
-        console.log('login response =====>', res)
+        // console.log('login response =====>', res)
         if (res.success) {
           return ShowMessage('Signin', res.message, 'success')
         } else {
@@ -156,6 +156,7 @@ export default Login;
 const styles = StyleSheet.create({
   forgotTouch: {
     alignSelf: 'flex-end',
+    marginRight: hp(4)
   },
   dontTouch: {
     flexDirection: 'row',
@@ -167,7 +168,6 @@ const styles = StyleSheet.create({
     marginBottom: hp(1.5),
     fontSize: hp(2.1),
     fontFamily: fonts.lexendBold,
-    alignSelf: 'flex-end',
   },
   scrollContainer: {
     flex: 1,

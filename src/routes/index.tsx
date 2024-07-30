@@ -5,10 +5,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import AppStatusBar from '../components/AppStatusBar';
 import ROUTES from '../utils';
 import MainStack from './MainStack';
-import Points from '../screen/main/Points';
-import OTPScreen from '../screen/auth/OTPScreen';
-import ResetPasswordScreen from '../screen/auth/ResetPasswordScreen';
-import ForgetPassword from '../screen/auth/ForgetPassword';
 import { useSelector } from 'react-redux';
 import { RootState } from '../Store/Reducer';
 
@@ -16,9 +12,13 @@ export type AuthParams = {
   AuthStack: undefined,
   MainStack: undefined,
   OTPScreen: {
-    type: string
-  }
-  ForgetPassword: undefined,
+    type: string,
+    id: number,
+  },
+  ForgetPassword: {
+    id: number,
+    code: number,
+  },
   ResetPasswordScreen: undefined,
   Points: undefined
 }
@@ -44,7 +44,6 @@ const Routes = () => {
             :
             <Stack.Screen name={ROUTES.AuthStack} component={AuthStack} />
           }
-          {/* <Stack.Screen name={ROUTES.Points} component={Points} /> */}
 
         </Stack.Navigator>
       </NavigationContainer>

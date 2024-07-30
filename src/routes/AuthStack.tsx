@@ -20,6 +20,7 @@ const AuthStack = () => {
     const [isFirstTimeLoad, setIsFirstTimeLoad] = useState(null)
 
     const checkFirstTimeLaunch = async () => {
+        // AsyncStorage.clear()
         const result = await AsyncStorage.getItem('isFirstTime')
         if (result == null) {
             console.log('first time launch')
@@ -111,9 +112,6 @@ const LoginStack = () => {
         </Stack.Navigator>
     )
 }
-
-
-
 
 
 export default AuthStack

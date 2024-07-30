@@ -7,7 +7,8 @@ const endpoints = {
     FORGET_PASSWORD: '/forget-password-email',
     OTP: '/check-forget-password-code',
     RESET_PASSWORD: '/update-forget-password',
-    CHANGE_PASSWORD: '/change-password'
+    CHANGE_PASSWORD: '/change-password',
+    CUISINE_TYPES: '/get-cuisine-types'
 }
 
 export default endpoints

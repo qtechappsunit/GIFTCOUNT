@@ -70,6 +70,7 @@ const ROUTES = {
   ResetPasswordScreen: 'ResetPasswordScreen',
   EditProfileScreen: 'EditProfileScreen',
   AnalyticStack: 'AnalyticStack',
+  ProfileStack: 'ProfileStack',
   HomeStack: 'HomeStack',
   AnalyticsScreen: 'AnalyticsScreen',
   PayrollScreen: 'PayrollScreen',

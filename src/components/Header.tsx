@@ -1,13 +1,15 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import React from 'react';
-import SVGIcons from './SVGIcons';
-import icons from '../assets/icons';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import themes from '../assets/themes';
 import images from '../assets/images';
 import fonts from '../assets/fonts';
+import { useSelector } from 'react-redux';
+import { RootState } from '../Store/Reducer';
 
 const Header = () => {
+  const { user } = useSelector((state: RootState) => state?.authReducer)
+
   return (
     <View style={styles.headerView}>
       <View style={styles.wrapper}>
@@ -18,8 +20,8 @@ const Header = () => {
         >
           <SVGIcons image={icons.Menu} />
         </TouchableOpacity> */}
-        <Image source={images.userImage} style={styles.userImage} />
-        <Text style={styles.userNameStyle}>Mark</Text>
+        <Image source={user?.profile_pic ? { uri: user?.profile_pic } : images.user} style={styles.userImage} />
+        <Text style={styles.userNameStyle}>{user?.type === 'owner' ? user?.owner_name : user?.first_name + user?.last_name}</Text>
       </View>
       <Image source={images.logo} style={styles.logoStyle} />
     </View>
@@ -33,7 +35,7 @@ const styles = StyleSheet.create({
     width: wp(15),
     height: wp(15),
     borderRadius: 100,
-    resizeMode: 'contain'
+    // resizeMode: 'contain'
   },
   headerView: {
     flexDirection: 'row',

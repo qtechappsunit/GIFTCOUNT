@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Modal, StyleSheet, Text, View } from 'react-native';
+import { Image, Modal, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import themes from '../assets/themes';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import images from '../assets/images';
@@ -16,25 +16,26 @@ const ProfileCreatedModal = ({ modalVisible, setModalVisible }) => {
 
     const nav = useNavigation();
 
-
     return (
         <Modal
             animationType="slide"
             transparent={true}
             visible={modalVisible}
             onRequestClose={() => setModalVisible(!modalVisible)}>
-            <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                    <Image source={user?.profile_pic && {uri: user?.profile_pic}} style={styles.profileCreatedImage} />
-                    <Text style={styles.modalText}>Profile Successfully{`\n`}Created!</Text>
-                    <Text style={styles.bodyText}>Congratulations! Your profile has been{`\n`}successfully created</Text>
-                    <Button
-                        buttonText={'My Dashboard'}
-                        style={styles.btn}
-                        onPress={() => nav.navigate(ROUTES.MainStack)}
-                    />
+            <TouchableWithoutFeedback onPress={() => setModalVisible(!modalVisible)}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Image source={user?.profile_pic && { uri: user?.profile_pic }} style={styles.profileCreatedImage} />
+                        <Text style={styles.modalText}>Profile Successfully{`\n`}Created!</Text>
+                        <Text style={styles.bodyText}>Congratulations! Your profile has been{`\n`}successfully created</Text>
+                        <Button
+                            buttonText={'My Dashboard'}
+                            style={styles.btn}
+                            onPress={() => nav.navigate(ROUTES.MainStack)}
+                        />
+                    </View>
                 </View>
-            </View>
+            </TouchableWithoutFeedback>
         </Modal>
     );
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Container from '../../components/Container';
 import themes from '../../assets/themes';
@@ -18,44 +18,102 @@ import { RootState } from '../../Store/Reducer';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { tabBarParams } from '../../routes/MainStack';
 import { Logout } from '../../Store/Reducer/AuthReducer';
+import { launchImageLibrary } from 'react-native-image-picker';
+import CuisineTypeModal from '../../components/CuisineTypeModal';
 
 interface EditProfileProps {
   navigation: BottomTabNavigationProp<tabBarParams, 'EditProfileScreen'>
 }
 
+interface InputFields {
+  username: string,
+  email: string,
+  phone_number: string,
+  bank_IBAN: string,
+  street: string,
+  city: string,
+  state: string,
+  zip_code: string,
+  profile_pic: string,
+  restaurant_name: string,
+  restaurant_web: string,
+  cuisine_types: []
+}
+
 const EditProfileScreen = (props: EditProfileProps) => {
-  const { userType } = useSelector((state: RootState) => state?.authReducer);
+  const { user } = useSelector((state: RootState) => state?.authReducer);
+
+  const [state, setState] = useState<InputFields>({
+    username: user?.type === 'owner' ? user?.owner_name : user?.first_name + user?.last_name,
+    email: user?.email,
+    phone_number: user?.phone_number,
+    bank_IBAN: user?.bank_IBAN,
+    street: user?.street,
+    city: user?.city,
+    state: user?.state,
+    zip_code: user?.zip_code,
+    profile_pic: user?.profile_pic ,
+    restaurant_name: user?.restaurant_name,
+    restaurant_web: user?.restaurant_web,
+    cuisine_types: []
+  })
+  const [open, setOpen] = useState<boolean>(false)
+
+
 
   const dispatch = useDispatch()
 
 
   const onLogoutPress = () => {
     dispatch(Logout())
-    return ShowMessage('Signout', 'Logout Successfully','success')
+    return ShowMessage('Signout', 'Logout Successfully', 'success')
+  }
+
+  const onSelectImage = async () => {
+    const options = {
+      title: 'Select Image',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+        quality: 0.5,
+      },
+    };
+
+    await launchImageLibrary(options, async response => {
+      if (response.didCancel) {
+        console.log('cancelled', response.didCancel);
+      } else {
+        setState({
+          ...state,
+          profile_pic: response.assets[0].uri
+        })
+      }
+    });
   }
 
   return (
     <Container logo={true}>
-      {userType == 'rider' ? (
+      {user?.type == 'rider' ? (
         <Text style={styles.text}>Driver</Text>
-      ) : userType == 'customer' ? (
+      ) : user?.type == 'customer' ? (
         <Text style={styles.text}>Customer</Text>
       ) : (
         <Text style={styles.text}>Restaurant Owner</Text>
       )}
-      <Text style={styles.heading}>Hi Mark,</Text>
+      <Text style={styles.heading}>Hi {user?.type === 'owner' ? user?.owner_name : user?.first_name + user?.last_name}</Text>
       <Text style={styles.text}>
         Please enter your registered email {`\n`} and password.
       </Text>
       <View style={styles.userImageView}>
-        <Image source={images.userImage} style={styles.userImage} />
-        <SvgXml xml={icons.redPencilIcon} style={styles.pencilIcon} />
+        <Image source={state.profile_pic ? {uri: state.profile_pic} : images.user} style={styles.userImage} />
+        <SvgXml xml={icons.redPencilIcon} style={styles.pencilIcon} onPress={() => onSelectImage()} />
       </View>
       <View style={styles.fieldRow}>
         <InputField
           placeholder={'Mark Ventura'}
           textColor={themes.placeholder_color}
           style={styles.input}
+          value={state.username}
           icon={icons.userIcon}
         />
         <SvgXml xml={icons.yellowPencilIcon} />
@@ -64,6 +122,7 @@ const EditProfileScreen = (props: EditProfileProps) => {
         <InputField
           placeholder={'m.ventura@gmail.com'}
           textColor={themes.placeholder_color}
+          value={state.email}
           keyboardType={'email-address'}
           style={styles.input}
           icon={icons.emailIcon}
@@ -74,6 +133,7 @@ const EditProfileScreen = (props: EditProfileProps) => {
         <InputField
           placeholder={'+1 234 678 3125'}
           style={styles.input}
+          value={state.phone_number}
           textColor={themes.placeholder_color}
           keyboardType={'numeric'}
           icon={icons.telePhone}
@@ -85,6 +145,7 @@ const EditProfileScreen = (props: EditProfileProps) => {
           placeholder={'Street'}
           textColor={themes.placeholder_color}
           style={styles.input}
+          value={state.street}
           icon={icons.locIcon}
         />
         <SvgXml xml={icons.yellowPencilIcon} />
@@ -93,6 +154,7 @@ const EditProfileScreen = (props: EditProfileProps) => {
         <InputField
           placeholder={'City'}
           textColor={themes.placeholder_color}
+          value={state.city}
           style={styles.input}
           icon={icons.locIcon}
         />
@@ -103,6 +165,7 @@ const EditProfileScreen = (props: EditProfileProps) => {
           placeholder={'State'}
           textColor={themes.placeholder_color}
           style={styles.input}
+          value={state.state}
           icon={icons.locIcon}
         />
         <SvgXml xml={icons.yellowPencilIcon} />
@@ -112,23 +175,25 @@ const EditProfileScreen = (props: EditProfileProps) => {
           placeholder={'Zip-code'}
           textColor={themes.placeholder_color}
           style={styles.input}
+          value={state.zip_code}
           keyboardType={'numeric'}
           icon={icons.locIcon}
         />
         <SvgXml xml={icons.yellowPencilIcon} />
       </View>
-      {userType == 'rider' ? (
+      {user?.type == 'rider' ? (
         <View style={styles.fieldRow}>
           <InputField
             placeholder={'Bank IBAN'}
             style={styles.input}
+            value={state.bank_IBAN}
             textColor={themes.placeholder_color}
             icon={icons.bankIcon}
           />
           <SvgXml xml={icons.yellowPencilIcon} />
         </View>
       ) : null}
-      {userType == 'owner' && (
+      {user?.type == 'owner' && (
         // <View style={styles.fieldRow}>
         //   <InputField
         //     placeholder={'Physical Address'}
@@ -153,6 +218,7 @@ const EditProfileScreen = (props: EditProfileProps) => {
               placeholder={'Restaurant Name'}
               textColor={themes.placeholder_color}
               style={styles.input}
+              value={state.restaurant_name}
               icon={icons.grayHomeIcon}
             />
             <SvgXml xml={icons.yellowPencilIcon} />
@@ -162,10 +228,23 @@ const EditProfileScreen = (props: EditProfileProps) => {
               placeholder={'Restaurant Website'}
               style={styles.input}
               icon={icons.websiteIcon}
+              value={state.restaurant_web}
               textColor={themes.placeholder_color}
             />
+
             <SvgXml xml={icons.yellowPencilIcon} />
           </View>
+          <TouchableOpacity onPress={() => setOpen(!open)} style={styles.fieldRow}>
+            <InputField
+              placeholder={'Select Cuisine Types'}
+              style={styles.input}
+              icon={icons.cuisineIcon}
+              // value={state.cuisine_types}
+              textColor={themes.placeholder_color}
+              editable={false}
+            />
+            <SvgXml xml={icons.yellowPencilIcon} />
+          </TouchableOpacity>
         </>
       )}
       <TouchableOpacity onPress={() => onLogoutPress()}>
@@ -177,6 +256,15 @@ const EditProfileScreen = (props: EditProfileProps) => {
         onPress={() =>
           props.navigation.navigate(ROUTES.ResetPasswordScreen, { type: 'change' })
         }
+      />
+       <CuisineTypeModal
+        modalVisible={open}
+        cuisine_types={user?.cuisines}
+        setModalVisible={setOpen}
+        setValue={(type) => setState({
+          ...state,
+          cuisine_type: type
+        })}
       />
       <View style={styles.view} />
     </Container>
@@ -209,7 +297,7 @@ const styles = StyleSheet.create({
     right: 10,
   },
   userImage: {
-    resizeMode: 'contain',
+    // resizeMode: 'contain',
     width: wp(30),
     height: wp(30),
   },

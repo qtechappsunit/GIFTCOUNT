@@ -4,7 +4,17 @@ import endpoints, { BASE_URL } from '../constants'
 
 export const authApi = createApi({
     reducerPath: 'authApi',
-    baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+    baseQuery: fetchBaseQuery({ 
+        baseUrl: BASE_URL,
+        prepareHeaders: (headers, {getState}) => {
+            const token = getState().authReducer.token
+            // console.log('state ===>', state)
+            if(token){
+                headers.set("authorization",`Bearer ${token}`)
+            } 
+            return headers
+        }
+     }),
     endpoints: (builder) => ({
         createUser: builder.mutation({
             query: (userData) => ({
@@ -16,6 +26,12 @@ export const authApi = createApi({
                 }
             })
         }),
+        getCuisineTypes: builder.query({
+            query: () => ({
+                url: endpoints.CUISINE_TYPES,
+                method: 'GET',
+            })
+        }),
         login: builder.mutation({
             query: (credentials) => ({
                 url: endpoints.LOGIN,
@@ -25,8 +41,37 @@ export const authApi = createApi({
                     'Content-Type': 'multipart/form-data'
                 }
             })
+        }),
+        sendCodeEmail: builder.mutation({
+            query: (email) => ({
+                url: endpoints.FORGET_PASSWORD,
+                method: 'POST',
+                body: email
+            })
+        }),
+        verifyOTP: builder.mutation({
+            query: (data) => ({
+                url: endpoints.OTP,
+                method: 'POST',
+                body: data
+            })
+        }),
+        resetPassword: builder.mutation({
+            query: (data) => ({
+                url: endpoints.RESET_PASSWORD,
+                method: 'POST',
+                body: data
+
+            })
+        }),
+        changePassword: builder.mutation({
+            query: (data) => ({
+                url: endpoints.CHANGE_PASSWORD,
+                method: 'POST',
+                body: data
+            })
         })
     }),
 })
 
-export const { useCreateUserMutation, useLoginMutation } = authApi;
+export const { useCreateUserMutation, useLoginMutation, useGetCuisineTypesQuery, useSendCodeEmailMutation, useVerifyOTPMutation, useResetPasswordMutation, useChangePasswordMutation } = authApi;

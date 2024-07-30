@@ -18,6 +18,7 @@ import CouponHistoryScreen from '../screen/main/CouponHistoryScreen';
 import SearchCouponScreen from '../screen/main/SearchCouponScreen';
 import CreateCouponScreen from '../screen/main/CreateCouponScreen';
 import { RootState } from '../Store/Reducer';
+import ResetPasswordScreen from '../screen/auth/ResetPasswordScreen';
 
 export type tabBarParams = {
   EditProfileScreen: {
@@ -40,6 +41,7 @@ const MainStack = () => {
 
   return (
     <Tab.Navigator
+      initialRouteName={ROUTES.HomeStack}
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
@@ -51,8 +53,8 @@ const MainStack = () => {
         },
       }}>
       <Tab.Screen
-        name={ROUTES.EditProfileScreen}
-        component={EditProfileScreen}
+        name={ROUTES.ProfileStack}
+        component={ProfileStack}
         options={{
           tabBarIcon: ({ focused }) =>
             focused ? (
@@ -118,7 +120,7 @@ const HomeStack = () => {
         headerShown: false,
         animation: 'fade_from_bottom',
       }}
-      initialRouteName={ROUTES.Home}
+    // initialRouteName={ROUTES.Home}
     >
       <Stack.Screen name={ROUTES.Home} component={Home} />
       <Stack.Screen name={ROUTES.RestaurantDetail} component={RestaurantDetail} />
@@ -127,6 +129,26 @@ const HomeStack = () => {
     </Stack.Navigator>
   );
 };
+
+const ProfileStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        animation: 'fade_from_bottom',
+      }}
+    >
+      <Stack.Screen
+        name={ROUTES.EditProfileScreen}
+        component={EditProfileScreen}
+      />
+      <Stack.Screen
+        name={ROUTES.ResetPasswordScreen}
+        component={ResetPasswordScreen}
+      />
+    </Stack.Navigator>
+  )
+}
 
 export default MainStack;
 

@@ -29,7 +29,7 @@ import ManualEntryModal from '../../components/ManualEntryModal';
 import { RootState } from '../../Store/Reducer';
 
 const Home = () => {
-  const {userType} = useSelector((state: RootState) => state?.authReducer);
+  const {user} = useSelector((state: RootState) => state?.authReducer);
   const navigation = useNavigation();
   const nav = useNavigation();
   const [catId, setCatId] = useState(0);
@@ -75,7 +75,7 @@ const Home = () => {
           marginBottom: hp(4),
         }}>
         <Text style={styles.headerText}>Available Coupons</Text>
-        {userType === 'customer' && (
+        {user?.type === 'customer' && (
           <>
             <OptionsMenu
               data={OptionsData}
@@ -116,7 +116,7 @@ const Home = () => {
         // contentContainerStyle={styles.screen}
         showsVerticalScrollIndicator={false}>
         <Header />
-        {userType == 'owner' ? (
+        {user?.type == 'owner' ? (
           <TouchableOpacity
             onPress={() => nav.navigate(ROUTES.CreateCouponScreen)}
             style={styles.addCouponView}>
