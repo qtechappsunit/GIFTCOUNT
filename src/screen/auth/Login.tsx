@@ -46,10 +46,11 @@ const Login = () => {
         if (res.success) {
           return ShowMessage('Signin', res.message, 'success')
         } else {
-          return ShowMessage('Signin', res.message, 'danger')
+          return ShowMessage('Signin', res.message, 'warning')
         }
       }).catch((error) => {
         console.log('login error =====>', error)
+        return ShowMessage('Signin','Some problem occured','danger')
       })
     }
   }

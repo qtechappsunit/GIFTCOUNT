@@ -25,7 +25,7 @@ interface InputField {
   owner_name: string,
   restaurant_name: string,
   restaurant_web: string,
-  cuisine_type: string,
+  cuisine_type: number[],
   first_name: string,
   last_name: string,
   email: string,
@@ -52,7 +52,7 @@ const Register = () => {
     last_name: '',
     restaurant_name: '',
     restaurant_web: '',
-    cuisine_type: '',
+    cuisine_type: [],
     phone: '',
     bank_iban: '',
     street: '',
@@ -66,7 +66,6 @@ const Register = () => {
 
   })
 
-  // console.log('types id',state.cuisine_type)
 
   const [createUser, { isLoading: isCreateUserLoading}] = useCreateUserMutation()
     const { data, isLoading } = useGetCuisineTypesQuery()
@@ -128,7 +127,7 @@ const Register = () => {
     formData.append('restaurant_name', state.restaurant_name)
     formData.append('owner_name', state.owner_name)
     formData.append('restaurant_web', state.restaurant_web)
-    formData.append('cuisine_type', state.cuisine_type)
+    formData.append('cuisine_type_ids', JSON.stringify(state.cuisine_type))
     if (state.profile_pic) {
       formData.append('profile_pic', {
         name: 'image.jpg',

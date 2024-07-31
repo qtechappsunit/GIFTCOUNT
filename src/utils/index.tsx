@@ -203,6 +203,10 @@ export const validateFields = (state: any, userType: string) => {
     }
   }
 
+  if(state.password.length < 6) {
+    return 'Password is too short'
+  }
+
   if (state.password !== state.cpassword) {
     return 'Password does not match'
   }

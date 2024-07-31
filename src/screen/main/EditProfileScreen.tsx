@@ -26,7 +26,9 @@ interface EditProfileProps {
 }
 
 interface InputFields {
-  username: string,
+  owner_name: string,
+  first_name: string,
+  last_name: string,
   email: string,
   phone_number: string,
   bank_IBAN: string,
@@ -44,7 +46,9 @@ const EditProfileScreen = (props: EditProfileProps) => {
   const { user } = useSelector((state: RootState) => state?.authReducer);
 
   const [state, setState] = useState<InputFields>({
-    username: user?.type === 'owner' ? user?.owner_name : user?.first_name + user?.last_name,
+    owner_name: user?.owner_name ,
+    first_name: user?.first_name,
+    last_name: user?.last_name,
     email: user?.email,
     phone_number: user?.phone_number,
     bank_IBAN: user?.bank_IBAN,
@@ -52,14 +56,15 @@ const EditProfileScreen = (props: EditProfileProps) => {
     city: user?.city,
     state: user?.state,
     zip_code: user?.zip_code,
-    profile_pic: user?.profile_pic ,
+    profile_pic: user?.profile_pic,
     restaurant_name: user?.restaurant_name,
     restaurant_web: user?.restaurant_web,
-    cuisine_types: []
+    cuisine_types: user?.cuisines
   })
   const [open, setOpen] = useState<boolean>(false)
 
 
+  // console.log('user details',user)
 
   const dispatch = useDispatch()
 
@@ -91,6 +96,24 @@ const EditProfileScreen = (props: EditProfileProps) => {
     });
   }
 
+  const onEditProfile = () => {
+    const formData = new FormData();
+
+    formData.append('first_name', state.first_name)
+    formData.append('last_name', state.last_name)
+    formData.append('phone_number', state.phone)
+    formData.append('bank_IBAN', state.bank_iban)
+    formData.append('street', state.street)
+    formData.append('city', state.city)
+    formData.append('state', state.state)
+    formData.append('zip_code', state.zip_code)
+    formData.append('password', state.password)
+    formData.append('restaurant_name', state.restaurant_name)
+    formData.append('owner_name', state.owner_name)
+    formData.append('restaurant_web', state.restaurant_web)
+    formData.append('cuisine_type_ids', JSON.stringify(state.cuisine_type))
+  }
+
   return (
     <Container logo={true}>
       {user?.type == 'rider' ? (
@@ -105,29 +128,55 @@ const EditProfileScreen = (props: EditProfileProps) => {
         Please enter your registered email {`\n`} and password.
       </Text>
       <View style={styles.userImageView}>
-        <Image source={state.profile_pic ? {uri: state.profile_pic} : images.user} style={styles.userImage} />
+        <Image source={state.profile_pic ? { uri: state.profile_pic } : images.user} style={styles.userImage} />
         <SvgXml xml={icons.redPencilIcon} style={styles.pencilIcon} onPress={() => onSelectImage()} />
       </View>
+     {user?.type === 'owner' ?
       <View style={styles.fieldRow}>
         <InputField
           placeholder={'Mark Ventura'}
           textColor={themes.placeholder_color}
           style={styles.input}
-          value={state.username}
+          value={state.owner_name}
           icon={icons.userIcon}
         />
-        <SvgXml xml={icons.yellowPencilIcon} />
+        {/* <SvgXml xml={icons.yellowPencilIcon} onPress={() => onHandleField()} /> */}
       </View>
+      :
+      <>
+      <View style={styles.fieldRow}>
+        <InputField
+          placeholder={'First Name'}
+          textColor={themes.placeholder_color}
+          style={styles.input}
+          value={state.first_name}
+          icon={icons.userIcon}
+        />
+        {/* <SvgXml xml={icons.yellowPencilIcon} onPress={() => onHandleField()} /> */}
+      </View>
+         <View style={styles.fieldRow}>
+         <InputField
+           placeholder={'Last Name'}
+           textColor={themes.placeholder_color}
+           style={styles.input}
+           value={state.last_name}
+           icon={icons.userIcon}
+         />
+         {/* <SvgXml xml={icons.yellowPencilIcon} onPress={() => onHandleField()} /> */}
+       </View>
+       </>
+      }
       <View style={styles.fieldRow}>
         <InputField
           placeholder={'m.ventura@gmail.com'}
           textColor={themes.placeholder_color}
           value={state.email}
+          editable={false}
           keyboardType={'email-address'}
           style={styles.input}
           icon={icons.emailIcon}
         />
-        <SvgXml xml={icons.yellowPencilIcon} />
+        {/* <SvgXml xml={icons.yellowPencilIcon} /> */}
       </View>
       <View style={styles.fieldRow}>
         <InputField
@@ -138,7 +187,7 @@ const EditProfileScreen = (props: EditProfileProps) => {
           keyboardType={'numeric'}
           icon={icons.telePhone}
         />
-        <SvgXml xml={icons.yellowPencilIcon} />
+        {/* <SvgXml xml={icons.yellowPencilIcon} onPress={() => onHandleField()} /> */}
       </View>
       <View style={styles.fieldRow}>
         <InputField
@@ -148,7 +197,7 @@ const EditProfileScreen = (props: EditProfileProps) => {
           value={state.street}
           icon={icons.locIcon}
         />
-        <SvgXml xml={icons.yellowPencilIcon} />
+        {/* <SvgXml xml={icons.yellowPencilIcon} onPress={() => onHandleField()} /> */}
       </View>
       <View style={styles.fieldRow}>
         <InputField
@@ -158,7 +207,7 @@ const EditProfileScreen = (props: EditProfileProps) => {
           style={styles.input}
           icon={icons.locIcon}
         />
-        <SvgXml xml={icons.yellowPencilIcon} />
+        {/* <SvgXml xml={icons.yellowPencilIcon} onPress={() => onHandleField()} /> */}
       </View>
       <View style={styles.fieldRow}>
         <InputField
@@ -168,7 +217,7 @@ const EditProfileScreen = (props: EditProfileProps) => {
           value={state.state}
           icon={icons.locIcon}
         />
-        <SvgXml xml={icons.yellowPencilIcon} />
+        {/* <SvgXml xml={icons.yellowPencilIcon} onPress={() => onHandleField()} /> */}
       </View>
       <View style={styles.fieldRow}>
         <InputField
@@ -179,7 +228,7 @@ const EditProfileScreen = (props: EditProfileProps) => {
           keyboardType={'numeric'}
           icon={icons.locIcon}
         />
-        <SvgXml xml={icons.yellowPencilIcon} />
+        {/* <SvgXml xml={icons.yellowPencilIcon} onPress={() => onHandleField()} /> */}
       </View>
       {user?.type == 'rider' ? (
         <View style={styles.fieldRow}>
@@ -190,7 +239,7 @@ const EditProfileScreen = (props: EditProfileProps) => {
             textColor={themes.placeholder_color}
             icon={icons.bankIcon}
           />
-          <SvgXml xml={icons.yellowPencilIcon} />
+          {/* <SvgXml xml={icons.yellowPencilIcon} onPress={() => onHandleField()} /> */}
         </View>
       ) : null}
       {user?.type == 'owner' && (
@@ -210,8 +259,9 @@ const EditProfileScreen = (props: EditProfileProps) => {
               textColor={themes.placeholder_color}
               style={styles.input}
               icon={icons.locIcon}
+              editable={editableField}
             />
-            <SvgXml xml={icons.yellowPencilIcon} />
+            <SvgXml xml={icons.yellowPencilIcon} onPress={() => onHandleField()} />
           </View> */}
           <View style={styles.fieldRow}>
             <InputField
@@ -221,7 +271,7 @@ const EditProfileScreen = (props: EditProfileProps) => {
               value={state.restaurant_name}
               icon={icons.grayHomeIcon}
             />
-            <SvgXml xml={icons.yellowPencilIcon} />
+            {/* <SvgXml xml={icons.yellowPencilIcon} onPress={() => onHandleField()} /> */}
           </View>
           <View style={styles.fieldRow}>
             <InputField
@@ -232,7 +282,7 @@ const EditProfileScreen = (props: EditProfileProps) => {
               textColor={themes.placeholder_color}
             />
 
-            <SvgXml xml={icons.yellowPencilIcon} />
+            {/* <SvgXml xml={icons.yellowPencilIcon} onPress={() => onHandleField()} /> */}
           </View>
           <TouchableOpacity onPress={() => setOpen(!open)} style={styles.fieldRow}>
             <InputField
@@ -240,26 +290,32 @@ const EditProfileScreen = (props: EditProfileProps) => {
               style={styles.input}
               icon={icons.cuisineIcon}
               // value={state.cuisine_types}
-              textColor={themes.placeholder_color}
               editable={false}
+              rightIcon={icons.downArrow}
+              textColor={themes.placeholder_color}
             />
-            <SvgXml xml={icons.yellowPencilIcon} />
+            {/* <SvgXml xml={icons.yellowPencilIcon}  onPress={() => setOpen(!open)}/> */}
           </TouchableOpacity>
         </>
       )}
-      <TouchableOpacity onPress={() => onLogoutPress()}>
-        <Text style={[styles.heading, styles.border]}>Logout</Text>
-      </TouchableOpacity>
+      <Button
+        buttonText={'Submit'}
+        style={{ alignSelf: 'center', marginTop: hp(4) }}
+        onPress={() => onEditProfile()}
+      />
       <Button
         buttonText={'Change Password'}
-        style={{ alignSelf: 'center', marginVertical: hp(4) }}
+        style={{ alignSelf: 'center', marginVertical: hp(3) }}
         onPress={() =>
           props.navigation.navigate(ROUTES.ResetPasswordScreen, { type: 'change' })
         }
       />
-       <CuisineTypeModal
+        <TouchableOpacity onPress={() => onLogoutPress()} style={{alignSelf: 'center'}}>
+        <Text style={[styles.heading,styles.border]}>Logout</Text>
+      </TouchableOpacity>
+      <CuisineTypeModal
         modalVisible={open}
-        cuisine_types={user?.cuisines}
+        cuisine_types={state.cuisine_types}
         setModalVisible={setOpen}
         setValue={(type) => setState({
           ...state,
@@ -274,22 +330,17 @@ const EditProfileScreen = (props: EditProfileProps) => {
 export default EditProfileScreen;
 
 const styles = StyleSheet.create({
-  border: {
-    borderBottomColor: themes.red,
-    borderBottomWidth: 2,
-    alignSelf: 'center',
-  },
   view: {
-    height: 80,
+    height: 90,
   },
   input: {
     width: wp(80),
     marginBottom: wp(2),
   },
   fieldRow: {
-    flexDirection: 'row',
+    // flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
   },
   pencilIcon: {
     position: 'absolute',
@@ -320,5 +371,10 @@ const styles = StyleSheet.create({
     color: themes.white,
     fontSize: hp('4%'),
     fontFamily: fonts.markRegular,
+
   },
+  border:{
+    borderBottomColor: themes.red,
+    borderBottomWidth: 2,
+  }
 });

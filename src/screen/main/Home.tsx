@@ -28,13 +28,16 @@ import OptionsMenu from '../../components/OptionsMenu';
 import ManualEntryModal from '../../components/ManualEntryModal';
 import { RootState } from '../../Store/Reducer';
 
+
 const Home = () => {
-  const {user} = useSelector((state: RootState) => state?.authReducer);
-  const navigation = useNavigation();
-  const nav = useNavigation();
   const [catId, setCatId] = useState(0);
   const [visible, setVisible] = useState(false);
   const [manualCode, setManualCode] = useState(false);
+  const {user} = useSelector((state: RootState) => state?.authReducer);
+  
+  const nav = useNavigation();
+
+  // console.log('route names ',nav.getState()?.routes)
 
   const renderCategories = () => {
     return (

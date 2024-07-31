@@ -16,7 +16,8 @@ interface InputProps {
   rightIcon: string,
   editable: boolean,
   length: number,
-  textColor: string
+  textColor: string,
+  onBlur: () => void
 }
 
 const InputField = (props: InputProps) => {
@@ -30,6 +31,7 @@ const InputField = (props: InputProps) => {
         placeholderTextColor={props.textColor ? props.textColor : themes.placeholder_color}
         style={[styles.input, { color: props.textColor }]}
         value={props.value}
+        onBlur={props.onBlur}
         onChangeText={props.onChangeText}
         keyboardType={props.keyboardType}
         editable={props.editable}

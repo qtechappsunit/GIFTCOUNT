@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import themes from '../assets/themes';
 import fonts from '../assets/fonts';
@@ -20,16 +20,23 @@ const CuisineTypeModal = (props: ModalProps) => {
     const [selectedIds, setSelectedIds] = useState([])
 
 
-    // console.log('dataa',selectedIds)
+    console.log('dataa',props.cuisine_types)
+
+    useEffect(() => {
+
+        props.setValue(selectedIds)
+
+    },[selectedIds])
 
 
     const handleCheckPress = (isChecked, val) => {
-        if (isChecked) {
-            setSelectedIds(prevIds => [...prevIds,val?.id])
-            props.setValue(selectedIds)
-        } else {
-            setSelectedIds(prevIds => prevIds?.filter(existingId => existingId != val?.id))
-        }
+        setSelectedIds(prevIds => {
+            if (isChecked) {
+              return prevIds.includes(val?.id) ? prevIds : [...prevIds, val?.id];
+            } else {
+              return prevIds.filter(existingId => existingId !== val?.id);
+            }
+          });
     }
 
 
@@ -43,7 +50,10 @@ const CuisineTypeModal = (props: ModalProps) => {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <Text style={styles.modalText}>Select{`\n`}Cuisine Type</Text>
-                        {props.indicator ?
+                        {props.cuisine_types?.length < 1 ?
+                                    <Text style={styles.message}>No Cuisine Types</Text>
+                            :
+                        props.indicator ?
                             <Loader size={'small'} color={themes.red} style={{alignSelf: 'center'}} />
                             :
                         props.cuisine_types?.map(val => (
@@ -51,9 +61,9 @@ const CuisineTypeModal = (props: ModalProps) => {
                                 key={val?.id}
                                 size={25}
                                 fillColor={themes.navy_blue}
-                                unFillColor="#FFFFFF"
+                                unFillColor="#FFFFFF"l
                                 text={val?.title}
-                                // isChecked={val?.id == selectedCheckbox}
+                                isChecked={val?.pivot ? val?.pivot?.cuisine_type_id : selectedIds.includes(val?.id)}
                                 iconStyle={{ borderColor: themes.navy_blue, borderRadius: 5 }}
                                 innerIconStyle={{ borderWidth: 2, borderRadius: 5 }}
                                 textStyle={{ textDecorationLine: 'none' }}
@@ -108,4 +118,11 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
     },
+    message: {
+        color: themes.light_black,
+        marginVertical: hp(1),
+        fontSize: hp(2),
+        fontFamily: fonts.markRegular,
+        alignSelf: 'center',
+    }
 });
