@@ -33,6 +33,9 @@ export const AuthSlice = createSlice({
     builder.addMatcher(authApi.endpoints.login.matchFulfilled, (state,action) => {
       state.user = action.payload.user,
       state.token = action.payload.token
+    }),
+    builder.addMatcher(authApi.endpoints.editProfile.matchFulfilled,(state,action) => {
+      state.user = action.payload.data
     })
   }
 });

@@ -8,7 +8,7 @@ export const authApi = createApi({
         baseUrl: BASE_URL,
         prepareHeaders: (headers, {getState}) => {
             const token = getState().authReducer.token
-            // console.log('state ===>', state)
+            // console.log('state ===>', token)
             if(token){
                 headers.set("authorization",`Bearer ${token}`)
             } 
@@ -70,8 +70,22 @@ export const authApi = createApi({
                 method: 'POST',
                 body: data
             })
+        }),
+        editProfile: builder.mutation({
+            query: (data) => ({
+                url: endpoints.EDIT_PROFILE,
+                method: 'POST',
+                body: data
+            })
+        }),
+        createDiscountCoupon: builder.mutation({
+            query: (data) => ({
+                url: endpoints.CREATE_COUPON,
+                method: 'POST',
+                body: data
+            })
         })
     }),
 })
 
-export const { useCreateUserMutation, useLoginMutation, useGetCuisineTypesQuery, useSendCodeEmailMutation, useVerifyOTPMutation, useResetPasswordMutation, useChangePasswordMutation } = authApi;
+export const { useCreateUserMutation, useLoginMutation, useGetCuisineTypesQuery, useSendCodeEmailMutation, useVerifyOTPMutation, useResetPasswordMutation, useChangePasswordMutation, useEditProfileMutation, useCreateDiscountCouponMutation } = authApi;

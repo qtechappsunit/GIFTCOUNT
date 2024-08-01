@@ -8,7 +8,8 @@ const endpoints = {
     OTP: '/check-forget-password-code',
     RESET_PASSWORD: '/update-forget-password',
     CHANGE_PASSWORD: '/change-password',
-    CUISINE_TYPES: '/get-cuisine-types'
+    CUISINE_TYPES: '/get-cuisine-types',
+    CREATE_COUPON: '/create-discount-coupon'
 }
 
 export default endpoints

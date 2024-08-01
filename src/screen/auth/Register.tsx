@@ -15,7 +15,7 @@ import { useSelector } from 'react-redux';
 import CuisineTypeModal from '../../components/CuisineTypeModal';
 import ProfileCreatedModal from '../../components/ProfileCreatedModal';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { useCreateUserMutation, useGetCuisineTypesQuery } from '../../Store/services';
+import { useCreateUserMutation } from '../../Store/services';
 import { RootState } from '../../Store/Reducer';
 import { ShowMessage, validateFields } from '../../utils';
 import FormData from 'form-data';
@@ -68,7 +68,6 @@ const Register = () => {
 
 
   const [createUser, { isLoading: isCreateUserLoading}] = useCreateUserMutation()
-    const { data, isLoading } = useGetCuisineTypesQuery()
 
 
 
@@ -145,10 +144,11 @@ const Register = () => {
         return ShowMessage('Signup',data.message,'success')
         // setOpenProfileModal(!openProfileModal)
       } else {
-        ShowMessage('Signup', data.message, 'danger');
+       return ShowMessage('Signup', data.message, 'warning');
       }
     }).catch((error) => {
       console.log('signup error ====>', error)
+      return ShowMessage('Signup','Some problem occured','danger')
     })
   }
 
@@ -354,8 +354,6 @@ const Register = () => {
       />
       <CuisineTypeModal
         modalVisible={open}
-        cuisine_types={data?.data}
-        indicator={isLoading}
         setModalVisible={setOpen}
         setValue={(type) => setState({
           ...state,

@@ -6,37 +6,51 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import Button from './Button';
 import Loader from './Loader';
+import { useSelector } from 'react-redux';
+import { RootState } from '../Store/Reducer';
+import { useGetCuisineTypesQuery } from '../Store/services';
 
 
 interface ModalProps {
     modalVisible: boolean,
     setModalVisible: () => void,
-    cuisine_types: [],
-    indicator: boolean,
     setValue: () => void
 }
 
 const CuisineTypeModal = (props: ModalProps) => {
     const [selectedIds, setSelectedIds] = useState([])
+    const { user } = useSelector((state: RootState) => state.authReducer)
+    const { data, isLoading } = useGetCuisineTypesQuery()
 
 
-    console.log('dataa',props.cuisine_types)
+    // console.log('dataa',props.cuisine_types)
 
     useEffect(() => {
 
         props.setValue(selectedIds)
 
-    },[selectedIds])
+    }, [selectedIds])
+
+    useEffect(() => {
+
+        selectedCuisines()
+
+    }, [user?.cuisines])
+
+    const selectedCuisines = () => {
+        const userCuisineIds = user?.cuisines.map(cuisine => parseInt(cuisine?.pivot?.cuisine_type_id, 10)) || [];
+        setSelectedIds(userCuisineIds)
+    }
 
 
     const handleCheckPress = (isChecked, val) => {
         setSelectedIds(prevIds => {
             if (isChecked) {
-              return prevIds.includes(val?.id) ? prevIds : [...prevIds, val?.id];
+                return prevIds.includes(val?.id) ? prevIds : [...prevIds, val?.id];
             } else {
-              return prevIds.filter(existingId => existingId !== val?.id);
+                return prevIds.filter(existingId => existingId !== val?.id);
             }
-          });
+        });
     }
 
 
@@ -50,27 +64,27 @@ const CuisineTypeModal = (props: ModalProps) => {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <Text style={styles.modalText}>Select{`\n`}Cuisine Type</Text>
-                        {props.cuisine_types?.length < 1 ?
-                                    <Text style={styles.message}>No Cuisine Types</Text>
+                        {data?.data.length < 1 ?
+                            <Text style={styles.message}>No Cuisine Types</Text>
                             :
-                        props.indicator ?
-                            <Loader size={'small'} color={themes.red} style={{alignSelf: 'center'}} />
-                            :
-                        props.cuisine_types?.map(val => (
-                            <BouncyCheckbox
-                                key={val?.id}
-                                size={25}
-                                fillColor={themes.navy_blue}
-                                unFillColor="#FFFFFF"l
-                                text={val?.title}
-                                isChecked={val?.pivot ? val?.pivot?.cuisine_type_id : selectedIds.includes(val?.id)}
-                                iconStyle={{ borderColor: themes.navy_blue, borderRadius: 5 }}
-                                innerIconStyle={{ borderWidth: 2, borderRadius: 5 }}
-                                textStyle={{ textDecorationLine: 'none' }}
-                                style={{ marginBottom: wp(3) }}
-                                onPress={(isChecked) => handleCheckPress(isChecked, val)}
-                            />
-                        ))}
+                            isLoading ?
+                                <Loader size={'small'} color={themes.red} style={{ alignSelf: 'center' }} />
+                                :
+                                data?.data.map(val => (
+                                    <BouncyCheckbox
+                                        key={val?.id}
+                                        size={25}
+                                        fillColor={themes.navy_blue}
+                                        unFillColor="#FFFFFF"
+                                        text={val?.title}
+                                        isChecked={selectedIds.includes(val?.id)}
+                                        iconStyle={{ borderColor: themes.navy_blue, borderRadius: 5 }}
+                                        innerIconStyle={{ borderWidth: 2, borderRadius: 5 }}
+                                        textStyle={{ textDecorationLine: 'none' }}
+                                        style={{ marginBottom: wp(3) }}
+                                        onPress={(isChecked) => handleCheckPress(isChecked, val)}
+                                    />
+                                ))}
                         <Button
                             buttonText={'Submit'}
                             style={styles.btn}
