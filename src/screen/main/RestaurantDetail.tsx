@@ -7,40 +7,46 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Wrapper from '../../components/Wrapper';
 import Swiper from 'react-native-swiper';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import ROUTES, {multipleImages} from '../../utils';
+import ROUTES from '../../utils';
 import themes from '../../assets/themes';
 import SVGIcons from '../../components/SVGIcons';
 import icons from '../../assets/icons';
 import images from '../../assets/images';
 import Button from '../../components/Button';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import fonts from '../../assets/fonts';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import DiscountCodeModal from '../../components/DiscountCodeModal';
 import DropDownPicker from 'react-native-dropdown-picker';
 import CouponStatusModal from '../../components/CouponStatusModal';
 import { RootState } from '../../Store/Reducer';
+import { useCouponStatusMutation } from '../../Store/services';
 
 const RestaurantDetail = () => {
-  const {userType} = useSelector((state: RootState) => state?.authReducer);
+  const { user } = useSelector((state: RootState) => state?.authReducer);
   const nav = useNavigation();
   const [visible, setVisible] = useState(false);
   const [confirmationModal, setConfirmationModal] = useState(false);
   const [open, setOpen] = useState(false);
+  const [modalValue, setModalValue] = useState('')
   const [value, setValue] = useState(null);
+  const [tempValue,setTempValue] = useState('')
   const [items, setItems] = useState([
-    {label: 'Active', value: 'Active'},
-    {label: 'Inactive', value: 'Inactive'},
-    {label: 'Delete', value: 'Delete'},
-    {label: 'Edit', value: 'Edit'},
+    { label: 'Active', value: 'Active' },
+    { label: 'Inactive', value: 'Inactive' },
   ]);
+
+  const [couponStatus, { isLoading }] = useCouponStatusMutation()
+
+  console.log('set value state',value)
+  // console.log('set temp value state',tempValue)
 
   const renderImages = () => {
     return (
@@ -48,22 +54,21 @@ const RestaurantDetail = () => {
         <TouchableOpacity onPress={() => nav.goBack()} style={styles.backArrow}>
           <SVGIcons
             image={icons.arrowNext}
-            style={{transform: [{rotate: '180deg'}]}}
+            style={{ transform: [{ rotate: '180deg' }] }}
           />
         </TouchableOpacity>
         <Swiper
           activeDotStyle={styles.activeStyle}
           dotColor={themes.secondary}
           dotStyle={styles.inactiveStyle}>
-          {multipleImages.map((item, ind) => (
-            <Image
-              key={ind}
-              source={item.image}
-              style={styles.imageStyle}
-              borderBottomLeftRadius={30}
-              borderBottomRightRadius={30}
-            />
-          ))}
+          {/* {multipleImages.map((item, ind) => ( */}
+          <Image
+            source={images.restaurant3}
+            style={styles.imageStyle}
+            borderBottomLeftRadius={30}
+            borderBottomRightRadius={30}
+          />
+          {/* ))} */}
         </Swiper>
       </View>
     );
@@ -106,10 +111,10 @@ const RestaurantDetail = () => {
         <View style={styles.wrapper}>
           <Image source={images.burger} style={styles.foodStyle} />
           <View style={styles.discountView}>
-            {userType == 'rider' ? (
+            {user?.type == 'rider' ? (
               <>
                 <TouchableOpacity
-                  style={[styles.btn, {marginBottom: hp(2)}]}
+                  style={[styles.btn, { marginBottom: hp(2) }]}
                   onPress={() => nav.navigate(ROUTES.QRCode)}>
                   <Text style={styles.btnText}>Get QR code</Text>
                 </TouchableOpacity>
@@ -128,14 +133,14 @@ const RestaurantDetail = () => {
             )}
           </View>
         </View>
-        {userType == 'customer' ? (
+        {user?.type == 'customer' ? (
           <Button
             buttonText={'Get Discount Code'}
             style={styles.button}
             onPress={() => setVisible(!visible)}
           />
         ) : null}
-        <View style={{height: hp(2)}} />
+        <View style={{ height: hp(2) }} />
         <DiscountCodeModal
           modalVisible={visible}
           setModalVisible={setVisible}
@@ -150,21 +155,26 @@ const RestaurantDetail = () => {
         {renderImages()}
         {renderContent()}
         {renderDiscountCard()}
-        {userType == 'owner' ? (
+        {user?.type == 'owner' ? (
           <>
             <DropDownPicker
               open={open}
               value={value}
               items={items}
-              setOpen={setConfirmationModal}
+              setOpen={setOpen}
               setValue={val => {
-                setValue(val);
-                setOpen(false);
+                if (modalValue === 'yes') {
+                  setValue(val); // Set temporary value
+                } else {
+                  setValue(val); // Directly set the value if no confirmation needed
+                }
+                setOpen(!open);
               }}
               setItems={setItems}
-              placeholder={'Active'}
+              placeholder={'Status'}
               style={styles.dropView}
               textStyle={styles.dropText}
+              onSelectItem={() => setConfirmationModal(!confirmationModal)}
               dropDownContainerStyle={styles.dropdownStyle}
               showArrowIcon={true}
               showTickIcon={false}
@@ -173,12 +183,11 @@ const RestaurantDetail = () => {
               visible={confirmationModal}
               setVisible={setConfirmationModal}
               onStatusChange={(value: string) => {
-                if (value === 'yes') {
-                  setOpen(true);
-                }
-                setConfirmationModal(!confirmationModal);
+                setModalValue(value);
+                setConfirmationModal(false); // Hide the modal
               }}
             />
+            {/* /> */}
           </>
         ) : null}
       </ScrollView>

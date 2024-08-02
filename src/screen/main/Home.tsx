@@ -100,7 +100,7 @@ const Home = () => {
           <RestaurantCard
             key={index}
             name={item.name}
-            onPress={() => navigation.navigate(ROUTES.RestaurantDetail)}
+            onPress={() => nav.navigate(ROUTES.RestaurantDetail)}
             discount={item.discount}
             date={item.validity}
             image={item?.image}

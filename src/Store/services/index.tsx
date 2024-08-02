@@ -84,8 +84,15 @@ export const authApi = createApi({
                 method: 'POST',
                 body: data
             })
+        }),
+        couponStatus: builder.mutation({
+            query: (status,coupon_id) => ({
+                url: endpoints.SET_COUPON_STATUS(coupon_id),
+                method: 'POST',
+                body: status
+            })
         })
     }),
 })
 
-export const { useCreateUserMutation, useLoginMutation, useGetCuisineTypesQuery, useSendCodeEmailMutation, useVerifyOTPMutation, useResetPasswordMutation, useChangePasswordMutation, useEditProfileMutation, useCreateDiscountCouponMutation } = authApi;
+export const { useCreateUserMutation, useLoginMutation, useGetCuisineTypesQuery, useSendCodeEmailMutation, useVerifyOTPMutation, useResetPasswordMutation, useChangePasswordMutation, useEditProfileMutation, useCreateDiscountCouponMutation, useCouponStatusMutation } = authApi;

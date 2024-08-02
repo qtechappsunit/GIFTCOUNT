@@ -17,19 +17,20 @@ import {
 } from 'react-native-responsive-screen';
 import SVGIcons from '../../components/SVGIcons';
 import icons from '../../assets/icons';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import themes from '../../assets/themes';
 import fonts from '../../assets/fonts'
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import {RNCamera} from 'react-native-camera';
-import {useSelector} from 'react-redux';
+import { RNCamera } from 'react-native-camera';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../Store/Reducer';
+import QRCodeGenerator from 'react-native-qrcode-svg';
 
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('window').height;
 
 const QRCode = () => {
-  const {userType} = useSelector((state: RootState) => state.authReducer);
+  const { user } = useSelector((state: RootState) => state.authReducer);
 
   const nav = useNavigation();
 
@@ -59,7 +60,7 @@ const QRCode = () => {
               style={styles.backView}>
               <SVGIcons
                 image={icons.arrowNext}
-                style={{transform: [{rotate: '180deg'}]}}
+                style={{ transform: [{ rotate: '180deg' }] }}
               />
             </TouchableOpacity>
             <Text style={styles.headText}>Scan QR Code</Text>
@@ -70,7 +71,12 @@ const QRCode = () => {
               Scan the QR Code to {'\n'} Collect your Points
             </Text>
             <TouchableOpacity style={styles.redCorners}>
-              <Image source={images.QRimage} style={styles.qrImage} />
+              <QRCodeGenerator
+                value="http://www.google.com"
+                backgroundColor='transparent'
+                size={220}
+              />
+              {/* <Image source={images.QRimage} style={styles.qrImage} /> */}
               <Image
                 source={images.redCorner}
                 style={[styles.redcorner1, styles.redImg]}
@@ -115,29 +121,29 @@ const QRCode = () => {
             ]}>
             <SVGIcons
               image={icons.arrowNext}
-              style={{transform: [{rotate: '180deg'}]}}
+              style={{ transform: [{ rotate: '180deg' }] }}
             />
           </TouchableOpacity>
         </View>
         <QRCodeScanner
           cameraType="back"
           onRead={onSuccess}
-          flashMode={RNCamera.Constants.FlashMode.torch} 
+          flashMode={RNCamera.Constants.FlashMode.torch}
           cameraStyle={styles.cameraCont}
         />
         <Image
           source={images.redCorner}
-          style={[styles.redcorner1, {top: hp(5), left: hp(5)}, styles.redImg]}
+          style={[styles.redcorner1, { top: hp(5), left: hp(5) }, styles.redImg]}
         />
         <Image
           source={images.redCorner}
-          style={[styles.redcorner2, {top: hp(5), right: hp(5)}, styles.redImg]}
+          style={[styles.redcorner2, { top: hp(5), right: hp(5) }, styles.redImg]}
         />
         <Image
           source={images.redCorner}
           style={[
             styles.redcorner3,
-            {bottom: -hp(85), left: hp(5)},
+            { bottom: -hp(85), left: hp(5) },
             styles.redImg,
           ]}
         />
@@ -145,7 +151,7 @@ const QRCode = () => {
           source={images.redCorner}
           style={[
             styles.redcorner4,
-            {bottom: -hp(85), right: hp(5)},
+            { bottom: -hp(85), right: hp(5) },
             styles.redImg,
           ]}
         />
@@ -153,7 +159,7 @@ const QRCode = () => {
     );
   };
 
-  return userType === 'rider' ? QRCodeImage() : QRCodeCamera();
+  return user?.type === 'rider' ? QRCodeImage() : QRCodeCamera();
 };
 
 export default QRCode;
@@ -168,19 +174,19 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -hp(14),
     right: 0,
-    transform: [{rotate: '180deg'}],
+    transform: [{ rotate: '180deg' }],
   },
   redcorner3: {
     position: 'absolute',
     bottom: -hp(14),
     left: 0,
-    transform: [{rotateX: '180deg'}],
+    transform: [{ rotateX: '180deg' }],
   },
   redcorner2: {
     position: 'absolute',
     top: -hp(17),
     right: 0,
-    transform: [{rotateY: '180deg'}],
+    transform: [{ rotateY: '180deg' }],
   },
   redcorner1: {
     position: 'absolute',

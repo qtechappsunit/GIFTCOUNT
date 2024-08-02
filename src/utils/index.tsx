@@ -122,28 +122,28 @@ export const restaurants = [
   },
 ];
 
-export const multipleImages = [
-  {
-    id: 1,
-    image: images.restaurant3,
-  },
-  {
-    id: 2,
-    image: images.restaurant3,
-  },
-  {
-    id: 3,
-    image: images.restaurant3,
-  },
-  {
-    id: 4,
-    image: images.restaurant3,
-  },
-  {
-    id: 5,
-    image: images.restaurant3,
-  },
-];
+// export const multipleImages = [
+//   {
+//     id: 1,
+//     image: images.restaurant3,
+//   },
+//   {
+//     id: 2,
+//     image: images.restaurant3,
+//   },
+//   {
+//     id: 3,
+//     image: images.restaurant3,
+//   },
+//   {
+//     id: 4,
+//     image: images.restaurant3,
+//   },
+//   {
+//     id: 5,
+//     image: images.restaurant3,
+//   },
+// ];
 
 export const OptionsData = [
   {
