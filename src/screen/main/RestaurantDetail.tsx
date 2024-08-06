@@ -41,6 +41,8 @@ const RestaurantDetail = ({ route }) => {
   const [items, setItems] = useState([
     { label: 'Active', value: 'Active' },
     { label: 'Inactive', value: 'Inactive' },
+    { label: 'Edit', value: 'Edit' },
+    { label: 'Delete', value: 'Delete' },
   ]);
 
   const coupon_id = route?.params?.id
@@ -49,9 +51,9 @@ const RestaurantDetail = ({ route }) => {
   const { data, isLoading } = useGetCouponDetailsQuery(coupon_id)
 
   // console.log('set value state',value)
-  // console.log('coupon details =====>', data)
+  // console.log('coupon details =====>', data?.data)
 
-  const renderImages = () => {
+  const renderImages = (restaurant_image) => {
     return (
       <View style={styles.swiperWrapper}>
         <TouchableOpacity onPress={() => nav.goBack()} style={styles.backArrow}>
@@ -66,7 +68,7 @@ const RestaurantDetail = ({ route }) => {
           dotStyle={styles.inactiveStyle}>
           {/* {multipleImages.map((item, ind) => ( */}
           <Image
-            source={images.restaurant3}
+            source={restaurant_image ? {uri: restaurant_image} : images.dummy}
             style={styles.imageStyle}
             borderBottomLeftRadius={30}
             borderBottomRightRadius={30}
@@ -86,7 +88,7 @@ const RestaurantDetail = ({ route }) => {
           <Text style={styles.validityText}>Validity</Text>
           <Text style={styles.dateText}>{'24-04-2024'}</Text>
         </View> */}
-        <Text style={styles.name}>{details?.coupon_name}</Text>
+        <Text style={styles.name}>{details?.coupon_name || ''}</Text>
         <Text style={styles.descStyle}>{details?.description || ''}</Text>
         <View style={styles.row}>
           <Text style={styles.subHead}>Min order value</Text>
@@ -94,27 +96,27 @@ const RestaurantDetail = ({ route }) => {
         </View>
         <View style={styles.row}>
           <Text style={styles.subHead}>Validity</Text>
-          <Text style={styles.subVal}>{details?.date_validation != '0000-00-00' ? details?.date_validation : details?.week_validation != '[]' ? JSON.parse(details?.week_validation).join(',') : details?.time_validation}</Text>
+          <Text style={styles.subVal}>{details?.date_validation != '0000-00-00' ? details?.date_validation : details?.week_validation != '[]' ? JSON.parse(details?.week_validation).join(',') : details?.time_validation || '0000-00-00'}</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.subHead}>Code Validation</Text>
-          <Text style={styles.subVal}>{details?.no_of_coupons}</Text>
+          <Text style={styles.subVal}>{details?.no_of_coupons || ''}</Text>
         </View>
       </View>
     );
   };
 
-  const renderDiscountCard = (coupon_image, discount) => {
+  const renderDiscountCard = (coupon_image,discount,id) => {
     return (
       <>
         <View style={styles.wrapper}>
-          <Image source={coupon_image ? { uri: coupon_image } : images.dummy} style={styles.foodStyle} />
+          <Image source={coupon_image  ? {uri: coupon_image} : images.dummy} style={styles.foodStyle} />
           <View style={styles.discountView}>
             {user?.type == 'rider' ? (
               <>
                 <TouchableOpacity
                   style={[styles.btn, { marginBottom: hp(2) }]}
-                  onPress={() => nav.navigate(ROUTES.QRCode)}>
+                  onPress={() => nav.navigate(ROUTES.QRCode,{driver_id: user?.id, coupon_id: id})}>
                   <Text style={styles.btnText}>Get QR code</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -148,24 +150,24 @@ const RestaurantDetail = ({ route }) => {
     );
   };
 
-  const renderLoader = () => {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Loader size={'large'} color={themes.primary} />
-      </View>
-    )
-  }
+  // const renderLoader = () => {
+  //   return (
+  //     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+  //       <Loader size={'large'} color={themes.primary} />
+  //     </View>
+  //   )
+  // }
 
   return (
     <Wrapper>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {isLoading ?
+        {/* {isLoading ?
           renderLoader()
-          :
+          : */}
           <>
-            {renderImages()}
+            {renderImages(data?.data?.user?.profile_pic)}
             {renderContent(data?.data)}
-            {renderDiscountCard(data?.data?.coupon_image, data?.data?.discount)}
+            {renderDiscountCard(data?.data?.coupon_image, data?.data?.discount,data?.data?.id)}
             {user?.type == 'owner' ? (
               <>
                 <DropDownPicker
@@ -202,7 +204,7 @@ const RestaurantDetail = ({ route }) => {
               </>
             ) : null}
           </>
-        }
+        {/* } */}
       </ScrollView>
 
     </Wrapper>

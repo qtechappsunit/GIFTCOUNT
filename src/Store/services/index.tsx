@@ -109,8 +109,15 @@ export const authApi = createApi({
                 method: 'POST',
                 body: status
             })
+        }),
+        qrCodeScan: builder.mutation({
+            query: (data) => ({
+                url: endpoints.QRCODE_SCAN,
+                method: 'POST',
+                body: data
+            })
         })
     }),
 })
 
-export const { useCreateUserMutation, useLoginMutation, useGetCuisineTypesQuery, useSendCodeEmailMutation, useVerifyOTPMutation, useResetPasswordMutation, useChangePasswordMutation, useEditProfileMutation, useCreateDiscountCouponMutation, useCouponStatusMutation, useGetAllCouponsQuery, useGetCouponDetailsQuery, useGetOwnerCouponsQuery } = authApi;
+export const { useCreateUserMutation, useLoginMutation, useGetCuisineTypesQuery, useSendCodeEmailMutation, useVerifyOTPMutation, useResetPasswordMutation, useChangePasswordMutation, useEditProfileMutation, useCreateDiscountCouponMutation, useCouponStatusMutation, useGetAllCouponsQuery, useGetCouponDetailsQuery, useGetOwnerCouponsQuery, useQrCodeScanMutation } = authApi;

@@ -29,6 +29,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { useCreateDiscountCouponMutation, useGetCuisineTypesQuery } from '../../Store/services';
 import Loader from '../../components/Loader';
 import { ShowMessage } from '../../utils';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const Weekdays = [
   {
@@ -62,6 +63,15 @@ const Weekdays = [
 ];
 
 const CreateCouponScreen = () => {
+
+  const { data } = useGetCuisineTypesQuery()
+
+  const pickerItems = data?.data?.map(item => ({
+    label: item.title,  
+    value: item.id,    
+  }));
+
+
   const [state, setState] = useState({
     coupon_name: '',
     discount: '',
@@ -72,17 +82,18 @@ const CreateCouponScreen = () => {
     desc: '',
     // isPickerVisible: false,
     coupon_image: '',
-    cuisine_types: [],
     time_val: false,
     date_val: false,
     week_val: false,
     week_days: []
   });
+  const [open,setOpen] = useState(false)
+  const [value,setValue] = useState('')
+  const [items, setItems] = useState(pickerItems)
   const nav = useNavigation();
 
-  console.log('state ======>', typeof state.date)
+  // console.log('state ======>', value)
 
-  const { data } = useGetCuisineTypesQuery()
   const [createDiscountCoupon, { isLoading }] = useCreateDiscountCouponMutation()
 
   const onChange = (value: string, text: string) => {
@@ -112,11 +123,24 @@ const CreateCouponScreen = () => {
     />
   );
 
-  const listEmptyComponent = () => (
-    <Loader size={'small'} color={themes.red} style={{ alignSelf: 'center' }} />
+  const renderPickerItems = () => (
+    <DropDownPicker
+      open={open}
+      value={value}
+      items={items}
+      setOpen={setOpen}
+      setValue={(val) => setValue(val)}
+      setItems={setItems}
+      placeholder={'Select Cuisines'}
+      style={styles.dropView}
+      textStyle={styles.dropText}
+      dropDownContainerStyle={styles.dropdownStyle}
+    />
   )
+ 
 
   const onSelectCuisines = (isChecked, val) => {
+
     if (val?.status === '1') {
       setState(prevState => {
         const updatedCuisineTypes = [...prevState.cuisine_types];
@@ -205,10 +229,10 @@ const CreateCouponScreen = () => {
     } else if (state.time_val && !state.hours) {
       return ShowMessage('Create Discount Coupon', 'Please enter the valid timing', 'warning')
     } else if (!state.time_val && state.hours) {
-      return ShowMessage('Create Discount Coupon', 'Please Check the Time Box to apply the timing','warning')
+      return ShowMessage('Create Discount Coupon', 'Please Check the Time Box to apply the timing', 'warning')
     } else if (!state.desc) {
       return ShowMessage('Create Discount Coupon', 'Please enter the coupon description', 'warning')
-    } else if (state.cuisine_types.length < 1) {
+    } else if (value.length < 1) {
       return ShowMessage('Create Discount Coupon', 'Please select the cuisine', 'warning')
     } else if (!state.coupon_image) {
       return ShowMessage('Create Discount Coupon', 'Please select the coupon image', 'warning')
@@ -222,7 +246,7 @@ const CreateCouponScreen = () => {
       data.append('week_validation', JSON.stringify(state.week_days))
       data.append('time_validation', state.hours)
       data.append('description', state.desc)
-      data.append('cuisine_type_ids', JSON.stringify(state.cuisine_types))
+      data.append('cuisine_type_id', value)
       if (state.coupon_image) {
         data.append('coupon_image', {
           name: 'image.jpg',
@@ -396,10 +420,11 @@ const CreateCouponScreen = () => {
         <Text style={[styles.couponText, { marginBottom: hp(2) }]}>
           Select Cuisine
         </Text>
-        <FlatList
+        {renderPickerItems()}
+        {/* <FlatList
           data={data?.data}
           keyExtractor={item => item?.id}
-          renderItem={renderItem}
+          renderItem={renderPickerItems}
           numColumns={3}
           ListEmptyComponent={listEmptyComponent}
           showsVerticalScrollIndicator={false}
@@ -409,7 +434,7 @@ const CreateCouponScreen = () => {
           style={{
             marginVertical: wp(3),
           }}
-        />
+        /> */}
         <Text style={[styles.couponText, { marginBottom: hp(2) }]}>
           Add Image
         </Text>
@@ -556,5 +581,26 @@ const styles = StyleSheet.create({
     height: hp(15),
     resizeMode: 'cover',
     aspectRatio: 3
-  }
+  },
+  dropdownStyle: {
+    width: wp(90),
+    alignSelf: 'center',
+    backgroundColor: themes.navy_blue,
+    borderWidth: 2,
+    borderColor: themes.red,
+  },
+  dropText: {
+    color: themes.white,
+    textAlign: 'center',
+  },
+  dropView: {
+    width: wp(90),
+    backgroundColor: themes.navy_blue,
+    alignSelf: 'center',
+    borderRadius: 50,
+    marginTop: hp(1),
+    marginBottom: hp(3),
+    borderColor: themes.red,
+    borderWidth: 2,
+  },
 });

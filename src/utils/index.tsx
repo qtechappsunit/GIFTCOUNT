@@ -105,22 +105,22 @@ const ROUTES = {
 //   },
 // ];
 
-export const restaurants = [
-  {
-    id: 1,
-    image: images.restaurant3,
-    name: 'Burger Den - Coupon 1',
-    validity: '24-04-2024',
-  },
-  {
-    id: 2,
-    image: images.restaurant3,
-    name: 'Burger Den - Coupon 2',
-    discount: '50%',
-    validity: 'Mon, Tue, Wed, Thu, Fri, Sat & Sun',
-    hours: '(22:00 - 23:59)',
-  },
-];
+// export const restaurants = [
+//   {
+//     id: 1,
+//     image: images.restaurant3,
+//     name: 'Burger Den - Coupon 1',
+//     validity: '24-04-2024',
+//   },
+//   {
+//     id: 2,
+//     image: images.restaurant3,
+//     name: 'Burger Den - Coupon 2',
+//     discount: '50%',
+//     validity: 'Mon, Tue, Wed, Thu, Fri, Sat & Sun',
+//     hours: '(22:00 - 23:59)',
+//   },
+// ];
 
 // export const multipleImages = [
 //   {
@@ -199,11 +199,11 @@ export const validateFields = (state: any, userType: string) => {
 
   for (let field of requiredFields) {
     if (!state[field]) {
-        return `Please enter your ${field.replace('_', ' ')}`
+      return `Please enter your ${field.replace('_', ' ')}`
     }
   }
 
-  if(state.password.length < 6) {
+  if (state.password.length < 6) {
     return 'Password is too short'
   }
 
@@ -211,6 +211,30 @@ export const validateFields = (state: any, userType: string) => {
     return 'Password does not match'
   }
 };
+
+export const validateQRCodeFormat = (data) => {
+  const parts = data.split(':');
+  return parts.length === 2 && parts.every(part => part.trim().length > 0);
+};
+
+export const parseQRCodeData = (data) => {
+
+  try {
+    const [couponId, driverId] = data.split(':');
+    if (!isValidId(couponId) || !isValidId(driverId)) {
+      console.log('Invalid IDs');
+    }
+    return { couponId, driverId };
+  } catch (error) {
+    return null;
+  }
+};
+
+const isValidId = (id) => /^[a-zA-Z0-9]+$/.test(id);
+
+
+
+
 
 
 

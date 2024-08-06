@@ -16,7 +16,7 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import FoodCategories from '../../components/FoodCategories';
-import ROUTES, { OptionsData } from '../../utils';
+import ROUTES, {  OptionsData  } from '../../utils';
 import themes from '../../assets/themes';
 import RestaurantCard from '../../components/RestaurantCard';
 import { useNavigation } from '@react-navigation/native';
@@ -30,7 +30,6 @@ import ManualEntryModal from '../../components/ManualEntryModal';
 import { RootState } from '../../Store/Reducer';
 import { useGetAllCouponsQuery, useGetCuisineTypesQuery, useGetOwnerCouponsQuery } from '../../Store/services';
 import Loader from '../../components/Loader';
-import images from '../../assets/images';
 
 
 const Home = () => {
@@ -46,7 +45,7 @@ const Home = () => {
   const { refetch: refetchCuisineTypes, data: cuisineTypes, isLoading } = useGetCuisineTypesQuery()
   const { refetch: refetchOwnerCoupons, data: ownerCoupons } = useGetOwnerCouponsQuery()
 
-  // console.log('dataaaa ',data?.data)
+  // console.log('dataaaa ',ownerCoupons)
 
   const allTypes = [{ id: 0, title: 'All', image: '' }, ...(cuisineTypes?.data || [])]
 
@@ -117,8 +116,7 @@ const Home = () => {
             onPress={() => nav.navigate(ROUTES.RestaurantDetail, { id: item?.id })}
             discount={`${item.discount}%`}
             validity={item.date_validation != '0000-00-00' ? item.date_validation : item.week_validation != '[]' ? JSON.parse(item.week_validation).join(',') : item.time_validation}
-            image={item?.coupon_image ? { uri: item.coupon_image } : images.dummy}
-            hour={item.hours}
+            image={item?.user?.profile_pic ? { uri: item?.user?.profile_pic } : images.dummy}
           />
         )}
         contentContainerStyle={styles.cardWrapper}
