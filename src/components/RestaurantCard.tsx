@@ -7,7 +7,7 @@ import SVGIcons from './SVGIcons';
 import icons from '../assets/icons';
 import fonts from '../assets/fonts';
 
-const RestaurantCard = ({ onPress, name, discount, date, image, hour }) => {
+const RestaurantCard = ({ onPress, name, discount, validity, image, hour }) => {
   return (
     <TouchableOpacity
       style={styles.cardStyle}
@@ -29,7 +29,7 @@ const RestaurantCard = ({ onPress, name, discount, date, image, hour }) => {
       <Text style={styles.name}>{name}</Text>
       <View style={styles.textWrapper}>
         <Text style={styles.validityText}>Validity</Text>
-        <Text style={styles.dateText}>{date}</Text>
+        <Text style={styles.dateText}>{validity}</Text>
       </View>
       {hour ? (
         <View style={styles.textWrapper}>

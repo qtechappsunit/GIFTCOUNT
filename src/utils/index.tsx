@@ -77,33 +77,33 @@ const ROUTES = {
   CreateCouponScreen: 'CreateCouponScreen',
 };
 
-export const categories = [
-  {
-    id: 1,
-    cat: images.cat3,
-    text: 'All',
-  },
-  {
-    id: 2,
-    cat: images.cat1,
-    text: 'Pizza',
-  },
-  {
-    id: 3,
-    cat: images.cat2,
-    text: 'Burger',
-  },
-  {
-    id: 4,
-    cat: images.cat5,
-    text: 'Mexican',
-  },
-  {
-    id: 5,
-    cat: images.cat4,
-    text: 'Asian',
-  },
-];
+// export const categories = [
+//   {
+//     id: 1,
+//     cat: images.cat3,
+//     text: 'All',
+//   },
+//   {
+//     id: 2,
+//     cat: images.cat1,
+//     text: 'Pizza',
+//   },
+//   {
+//     id: 3,
+//     cat: images.cat2,
+//     text: 'Burger',
+//   },
+//   {
+//     id: 4,
+//     cat: images.cat5,
+//     text: 'Mexican',
+//   },
+//   {
+//     id: 5,
+//     cat: images.cat4,
+//     text: 'Asian',
+//   },
+// ];
 
 export const restaurants = [
   {

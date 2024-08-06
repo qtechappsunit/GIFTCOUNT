@@ -35,7 +35,8 @@ interface ImagesType {
   cross: number,
   qr_code: number,
   moreOptions: number,
-  user: number
+  user: number,
+  dummy: string,
 }
 
 const images: ImagesType = {
@@ -75,7 +76,8 @@ const images: ImagesType = {
   cross: require('../images/cross.png'),
   qr_code: require('../images/qrcode_icon.png'),
   moreOptions: require('../images/verticaldot.png'),
-  user: require('../images/userProfile.jpeg')
+  user: require('../images/userProfile.jpeg'),
+  dummy: require('../images/dummy.png')
 };
 
 export default images

@@ -27,9 +27,10 @@ import DiscountCodeModal from '../../components/DiscountCodeModal';
 import DropDownPicker from 'react-native-dropdown-picker';
 import CouponStatusModal from '../../components/CouponStatusModal';
 import { RootState } from '../../Store/Reducer';
-import { useCouponStatusMutation } from '../../Store/services';
+import { useCouponStatusMutation, useGetCouponDetailsQuery } from '../../Store/services';
+import Loader from '../../components/Loader';
 
-const RestaurantDetail = () => {
+const RestaurantDetail = ({ route }) => {
   const { user } = useSelector((state: RootState) => state?.authReducer);
   const nav = useNavigation();
   const [visible, setVisible] = useState(false);
@@ -37,16 +38,18 @@ const RestaurantDetail = () => {
   const [open, setOpen] = useState(false);
   const [modalValue, setModalValue] = useState('')
   const [value, setValue] = useState(null);
-  const [tempValue,setTempValue] = useState('')
   const [items, setItems] = useState([
     { label: 'Active', value: 'Active' },
     { label: 'Inactive', value: 'Inactive' },
   ]);
 
-  const [couponStatus, { isLoading }] = useCouponStatusMutation()
+  const coupon_id = route?.params?.id
 
-  console.log('set value state',value)
-  // console.log('set temp value state',tempValue)
+  const [couponStatus, { isLoading: statusLoading }] = useCouponStatusMutation()
+  const { data, isLoading } = useGetCouponDetailsQuery(coupon_id)
+
+  // console.log('set value state',value)
+  // console.log('coupon details =====>', data)
 
   const renderImages = () => {
     return (
@@ -74,7 +77,7 @@ const RestaurantDetail = () => {
     );
   };
 
-  const renderContent = () => {
+  const renderContent = (details) => {
     return (
       <View style={styles.contentWrapper}>
         {/* <View style={styles.textWrapper}>
@@ -83,33 +86,29 @@ const RestaurantDetail = () => {
           <Text style={styles.validityText}>Validity</Text>
           <Text style={styles.dateText}>{'24-04-2024'}</Text>
         </View> */}
-        <Text style={styles.name}>Burger Den - Coupon 1</Text>
-        <Text style={styles.descStyle}>
-          Garden Restaurant is the perfect spot for an evening out. The historic
-          white-columned Merritt House, restored and renovated to its gleaming
-          splendor, is home to Galley and Garden.
-        </Text>
+        <Text style={styles.name}>{details?.coupon_name}</Text>
+        <Text style={styles.descStyle}>{details?.description || ''}</Text>
         <View style={styles.row}>
           <Text style={styles.subHead}>Min order value</Text>
-          <Text style={styles.subVal}>$20</Text>
+          <Text style={styles.subVal}>${details?.min_order_value || ''}</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.subHead}>Validity</Text>
-          <Text style={styles.subVal}>24-04-2024</Text>
+          <Text style={styles.subVal}>{details?.date_validation != '0000-00-00' ? details?.date_validation : details?.week_validation != '[]' ? JSON.parse(details?.week_validation).join(',') : details?.time_validation}</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.subHead}>Code Validation</Text>
-          <Text style={styles.subVal}>1</Text>
+          <Text style={styles.subVal}>{details?.no_of_coupons}</Text>
         </View>
       </View>
     );
   };
 
-  const renderDiscountCard = () => {
+  const renderDiscountCard = (coupon_image, discount) => {
     return (
       <>
         <View style={styles.wrapper}>
-          <Image source={images.burger} style={styles.foodStyle} />
+          <Image source={coupon_image ? { uri: coupon_image } : images.dummy} style={styles.foodStyle} />
           <View style={styles.discountView}>
             {user?.type == 'rider' ? (
               <>
@@ -127,7 +126,7 @@ const RestaurantDetail = () => {
             ) : (
               <>
                 <Text style={styles.discountText}>Flat</Text>
-                <Text style={styles.percentage}>50%</Text>
+                <Text style={styles.percentage}>{discount}%</Text>
                 <Text style={styles.discountText}>Discount</Text>
               </>
             )}
@@ -149,48 +148,63 @@ const RestaurantDetail = () => {
     );
   };
 
+  const renderLoader = () => {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Loader size={'large'} color={themes.primary} />
+      </View>
+    )
+  }
+
   return (
     <Wrapper>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {renderImages()}
-        {renderContent()}
-        {renderDiscountCard()}
-        {user?.type == 'owner' ? (
+        {isLoading ?
+          renderLoader()
+          :
           <>
-            <DropDownPicker
-              open={open}
-              value={value}
-              items={items}
-              setOpen={setOpen}
-              setValue={val => {
-                if (modalValue === 'yes') {
-                  setValue(val); // Set temporary value
-                } else {
-                  setValue(val); // Directly set the value if no confirmation needed
-                }
-                setOpen(!open);
-              }}
-              setItems={setItems}
-              placeholder={'Status'}
-              style={styles.dropView}
-              textStyle={styles.dropText}
-              onSelectItem={() => setConfirmationModal(!confirmationModal)}
-              dropDownContainerStyle={styles.dropdownStyle}
-              showArrowIcon={true}
-              showTickIcon={false}
-            />
-            <CouponStatusModal
-              visible={confirmationModal}
-              setVisible={setConfirmationModal}
-              onStatusChange={(value: string) => {
-                setModalValue(value);
-                setConfirmationModal(false); // Hide the modal
-              }}
-            />
-            {/* /> */}
+            {renderImages()}
+            {renderContent(data?.data)}
+            {renderDiscountCard(data?.data?.coupon_image, data?.data?.discount)}
+            {user?.type == 'owner' ? (
+              <>
+                <DropDownPicker
+                  open={open}
+                  value={value}
+                  items={items}
+                  setOpen={setOpen}
+                  setValue={val => {
+                    if (modalValue === 'yes') {
+                      setValue(val);
+                    } else {
+                      setValue(val);
+                    }
+                    setOpen(!open);
+                  }}
+                  setItems={setItems}
+                  placeholder={'Status'}
+                  style={styles.dropView}
+                  textStyle={styles.dropText}
+                  onSelectItem={() => setConfirmationModal(!confirmationModal)}
+                  dropDownContainerStyle={styles.dropdownStyle}
+                  showArrowIcon={true}
+                  showTickIcon={false}
+                />
+                <CouponStatusModal
+                  visible={confirmationModal}
+                  setVisible={setConfirmationModal}
+                  onStatusChange={(value: string) => {
+                    setModalValue(value);
+                    setConfirmationModal(false);
+                  }}
+                />
+                {/* /> */}
+              </>
+            ) : null}
           </>
-        ) : null}
+        }
       </ScrollView>
+
     </Wrapper>
   );
 };

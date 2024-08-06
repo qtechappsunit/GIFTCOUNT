@@ -10,7 +10,10 @@ const endpoints = {
     CHANGE_PASSWORD: '/change-password',
     CUISINE_TYPES: '/get-cuisine-types',
     CREATE_COUPON: '/create-discount-coupon',
-    SET_COUPON_STATUS: (id) => `/coupon/${id}/status`
+    GET_COUPONS: '/get-all-coupons',
+    COUPON_DETAIL: (id) => `/coupon/${id}/detail`,
+    SET_COUPON_STATUS: (id) => `/coupon/${id}/status`,
+    GET_OWNER_COUPONS: 'owner-coupons'
 }
 
 export default endpoints;

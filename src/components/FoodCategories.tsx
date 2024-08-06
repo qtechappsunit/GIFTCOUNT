@@ -20,9 +20,10 @@ export default FoodCategories;
 
 const styles = StyleSheet.create({
   categoryStyle: {
-    padding: hp('1%'),
+    padding: hp('1.1%'),
     alignItems: 'center',
     borderRadius: 100,
+    width: hp('10.5%'),
     marginRight: hp('2%'),
   },
   imageStyle: {

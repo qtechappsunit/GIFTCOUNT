@@ -5,8 +5,9 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useCallback, useState } from 'react';
 import Wrapper from '../../components/Wrapper';
 import Header from '../../components/Header';
 import SearchBar from '../../components/SearchBar';
@@ -15,53 +16,65 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import FoodCategories from '../../components/FoodCategories';
-import ROUTES, {categories, OptionsData, restaurants} from '../../utils';
+import ROUTES, { OptionsData } from '../../utils';
 import themes from '../../assets/themes';
 import RestaurantCard from '../../components/RestaurantCard';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import CongratsModal from '../../components/CongratsModal';
 import fonts from '../../assets/fonts';
 import icons from '../../assets/icons';
-import {useSelector} from 'react-redux';
-import {SvgXml} from 'react-native-svg';
+import { useSelector } from 'react-redux';
+import { SvgXml } from 'react-native-svg';
 import OptionsMenu from '../../components/OptionsMenu';
 import ManualEntryModal from '../../components/ManualEntryModal';
 import { RootState } from '../../Store/Reducer';
+import { useGetAllCouponsQuery, useGetCuisineTypesQuery, useGetOwnerCouponsQuery } from '../../Store/services';
+import Loader from '../../components/Loader';
+import images from '../../assets/images';
 
 
 const Home = () => {
   const [catId, setCatId] = useState(0);
   const [visible, setVisible] = useState(false);
   const [manualCode, setManualCode] = useState(false);
-  const {user} = useSelector((state: RootState) => state?.authReducer);
-  
+  const [refreshing, setRefreshing] = useState(false)
+  const { user } = useSelector((state: RootState) => state?.authReducer);
+
   const nav = useNavigation();
 
-  // console.log('route names ',nav.getState()?.routes)
+  const { refetch: refetchAllCoupons, data: getAllCoupons } = useGetAllCouponsQuery()
+  const { refetch: refetchCuisineTypes, data: cuisineTypes, isLoading } = useGetCuisineTypesQuery()
+  const { refetch: refetchOwnerCoupons, data: ownerCoupons } = useGetOwnerCouponsQuery()
+
+  // console.log('dataaaa ',data?.data)
+
+  const allTypes = [{ id: 0, title: 'All', image: '' }, ...(cuisineTypes?.data || [])]
 
   const renderCategories = () => {
     return (
-      <ScrollView
+      <FlatList
         horizontal
         style={styles.categoriesWrapper}
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.contentWrapper}>
-        {categories.map((item, i) => (
+        contentContainerStyle={styles.contentWrapper}
+        data={allTypes}
+        renderItem={({ item }) => (
           <FoodCategories
-            key={i}
-            catImage={item.cat}
-            catName={item.text}
-            onCatPress={() => setCatId(i)}
+            key={item.id}
+            catImage={{ uri: item.image }}
+            catName={item.title}
+            onCatPress={() => setCatId(item.id)}
             catStyle={{
-              backgroundColor: catId == i ? themes.primary : themes.white,
+              backgroundColor: catId == item.id ? themes.primary : themes.white,
             }}
           />
-        ))}
-      </ScrollView>
+        )}
+      />
     );
   };
 
   const ListHeaderComponent = () => {
+
     const handleSelect = (index: number) => {
       if (index == 0) {
         nav.navigate(ROUTES.QRCode);
@@ -77,7 +90,7 @@ const Home = () => {
           justifyContent: 'space-between',
           marginBottom: hp(4),
         }}>
-        <Text style={styles.headerText}>Available Coupons</Text>
+        <Text style={styles.headerText}>{user?.type === 'owner' ? 'My Offers' : 'Available Coupons'}</Text>
         {user?.type === 'customer' && (
           <>
             <OptionsMenu
@@ -91,20 +104,21 @@ const Home = () => {
     );
   };
 
+
   const renderCards = () => {
     return (
       <FlatList
-        data={restaurants}
+        data={user?.type === 'owner' ? ownerCoupons?.data : getAllCoupons?.data}
         scrollEnabled={false}
-        renderItem={({item, index}) => (
+        renderItem={({ item, index }) => (
           <RestaurantCard
             key={index}
-            name={item.name}
-            onPress={() => nav.navigate(ROUTES.RestaurantDetail)}
-            discount={item.discount}
-            date={item.validity}
-            image={item?.image}
-            hour={item?.hours}
+            name={item.coupon_name}
+            onPress={() => nav.navigate(ROUTES.RestaurantDetail, { id: item?.id })}
+            discount={`${item.discount}%`}
+            validity={item.date_validation != '0000-00-00' ? item.date_validation : item.week_validation != '[]' ? JSON.parse(item.week_validation).join(',') : item.time_validation}
+            image={item?.coupon_image ? { uri: item.coupon_image } : images.dummy}
+            hour={item.hours}
           />
         )}
         contentContainerStyle={styles.cardWrapper}
@@ -113,26 +127,57 @@ const Home = () => {
     );
   };
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      refetchCuisineTypes().then(() => {
+        if (user?.type === 'owner') {
+          refetchOwnerCoupons()
+        } else {
+          refetchAllCoupons()
+        }
+      }).finally(() => setRefreshing(false))
+    }, 2000);
+  }, []);
+
   return (
     <Wrapper>
-      <ScrollView
-        // contentContainerStyle={styles.screen}
-        showsVerticalScrollIndicator={false}>
-        <Header />
-        {user?.type == 'owner' ? (
-          <TouchableOpacity
-            onPress={() => nav.navigate(ROUTES.CreateCouponScreen)}
-            style={styles.addCouponView}>
-            <View style={styles.addIconView}>
-              <SvgXml xml={icons.addOutlineWhiteIcon} />
-            </View>
-            <Text style={styles.addText}>Add Discount Coupon</Text>
-          </TouchableOpacity>
-        ) : null}
-        <SearchBar placeholder={'Search dishes, restaurants'} />
-        {renderCategories()}
-        {renderCards()}
-      </ScrollView>
+      {isLoading ?
+        <View style={styles.loaderView}>
+          <Loader
+            size={'large'}
+            color={themes.primary}
+            style={{ alignSelf: 'center' }}
+          />
+        </View>
+        :
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              onRefresh={() => onRefresh()}
+              refreshing={refreshing}
+              colors={[themes.red]}
+              tintColor={themes.white}
+            />
+          }
+          // contentContainerStyle={styles.screen}
+          showsVerticalScrollIndicator={false}>
+          <Header />
+          {user?.type == 'owner' ? (
+            <TouchableOpacity
+              onPress={() => nav.navigate(ROUTES.CreateCouponScreen)}
+              style={styles.addCouponView}>
+              <View style={styles.addIconView}>
+                <SvgXml xml={icons.addOutlineWhiteIcon} />
+              </View>
+              <Text style={styles.addText}>Add Discount Coupon</Text>
+            </TouchableOpacity>
+          ) : null}
+          <SearchBar placeholder={'Search dishes, restaurants'} />
+          {renderCategories()}
+          {renderCards()}
+        </ScrollView>
+      }
       <CongratsModal modalVisible={visible} setModalVisible={setVisible} />
     </Wrapper>
   );
@@ -171,7 +216,7 @@ const styles = StyleSheet.create({
   categoriesWrapper: {
     paddingTop: hp('4%'),
     marginHorizontal: hp('-1%'),
-    flexDirection: 'row',
+    // flexDirection: 'row',
   },
   contentWrapper: {
     paddingHorizontal: hp('3%'),
@@ -193,4 +238,13 @@ const styles = StyleSheet.create({
     tintColor: themes.heading,
     width: hp('3.7%'),
   },
+  loaderView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1
+  }
+  // screen: {
+  //   flexGrow: 1,
+  //   backgroundColor: 'red'
+  // }
 });

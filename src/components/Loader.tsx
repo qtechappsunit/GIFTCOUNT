@@ -13,7 +13,6 @@ const Loader = (props: LoaderProps) => {
             size={props.size}
             color={props.color}
             style={[styles.loaderStyle, props.style]}
-
         />
     )
 }

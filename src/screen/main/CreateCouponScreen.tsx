@@ -80,7 +80,7 @@ const CreateCouponScreen = () => {
   });
   const nav = useNavigation();
 
-  // console.log('state ======>', state)
+  console.log('state ======>', typeof state.date)
 
   const { data } = useGetCuisineTypesQuery()
   const [createDiscountCoupon, { isLoading }] = useCreateDiscountCouponMutation()
@@ -234,6 +234,7 @@ const CreateCouponScreen = () => {
         });
       }
       await createDiscountCoupon(data).unwrap().then((res) => {
+        // console.log('success create coupon ====>',res)
         if (res.success) {
           nav.goBack()
           return ShowMessage('Create Discount Coupon', res.message, 'success')
@@ -314,7 +315,7 @@ const CreateCouponScreen = () => {
             onConfirm={date => {
               setState({
                 ...state,
-                date: moment(date).format('MM/DD/YYYY'),
+                date: moment(date).format('YYYY-MM-DD'),
               });
             }}
             mode={'date'}

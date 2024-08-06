@@ -85,6 +85,24 @@ export const authApi = createApi({
                 body: data
             })
         }),
+        getOwnerCoupons: builder.query({
+            query: () => ({
+                url: endpoints.GET_OWNER_COUPONS,
+                method: 'GET'
+            })
+        }),
+        getAllCoupons: builder.query({
+            query: () => ({
+                url: endpoints.GET_COUPONS,
+                method: 'GET',
+            })
+        }),
+        getCouponDetails: builder.query({
+            query: (id) => ({
+                url: endpoints.COUPON_DETAIL(id),
+                method: 'GET'
+            })
+        }),
         couponStatus: builder.mutation({
             query: (status,coupon_id) => ({
                 url: endpoints.SET_COUPON_STATUS(coupon_id),
@@ -95,4 +113,4 @@ export const authApi = createApi({
     }),
 })
 
-export const { useCreateUserMutation, useLoginMutation, useGetCuisineTypesQuery, useSendCodeEmailMutation, useVerifyOTPMutation, useResetPasswordMutation, useChangePasswordMutation, useEditProfileMutation, useCreateDiscountCouponMutation, useCouponStatusMutation } = authApi;
+export const { useCreateUserMutation, useLoginMutation, useGetCuisineTypesQuery, useSendCodeEmailMutation, useVerifyOTPMutation, useResetPasswordMutation, useChangePasswordMutation, useEditProfileMutation, useCreateDiscountCouponMutation, useCouponStatusMutation, useGetAllCouponsQuery, useGetCouponDetailsQuery, useGetOwnerCouponsQuery } = authApi;
