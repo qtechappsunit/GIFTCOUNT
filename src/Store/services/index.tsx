@@ -104,11 +104,14 @@ export const authApi = createApi({
             })
         }),
         couponStatus: builder.mutation({
-            query: (status,coupon_id) => ({
+            query: ({status,coupon_id}) => {
+                // console.log('statuts',status)
+               return { 
                 url: endpoints.SET_COUPON_STATUS(coupon_id),
                 method: 'POST',
-                body: status
-            })
+                body: status,
+                }
+            }
         }),
         qrCodeScan: builder.mutation({
             query: (data) => ({

@@ -11,7 +11,8 @@ interface ButtonProps {
   buttonText: string,
   style: ViewStyle,
   leftIcon: string,
-  indicator: boolean
+  indicator: boolean,
+  textStyle: ViewStyle
 }
 
 const Button = (props: ButtonProps) => {
@@ -26,7 +27,7 @@ const Button = (props: ButtonProps) => {
       {props.indicator ?
         <Loader size={'small'} color={themes.white} />
       :
-      <Text style={styles.textStyle}>{props.buttonText}</Text>
+      <Text style={[styles.textStyle,props.textStyle]}>{props.buttonText}</Text>
     }
     </TouchableOpacity>
   );

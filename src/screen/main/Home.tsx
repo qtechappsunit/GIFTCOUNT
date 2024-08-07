@@ -16,7 +16,7 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import FoodCategories from '../../components/FoodCategories';
-import ROUTES, {  OptionsData  } from '../../utils';
+import ROUTES from '../../utils';
 import themes from '../../assets/themes';
 import RestaurantCard from '../../components/RestaurantCard';
 import { useNavigation } from '@react-navigation/native';
@@ -25,11 +25,11 @@ import fonts from '../../assets/fonts';
 import icons from '../../assets/icons';
 import { useSelector } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
-import OptionsMenu from '../../components/OptionsMenu';
 import ManualEntryModal from '../../components/ManualEntryModal';
 import { RootState } from '../../Store/Reducer';
 import { useGetAllCouponsQuery, useGetCuisineTypesQuery, useGetOwnerCouponsQuery } from '../../Store/services';
 import Loader from '../../components/Loader';
+import Button from '../../components/Button';
 
 
 const Home = () => {
@@ -74,14 +74,6 @@ const Home = () => {
 
   const ListHeaderComponent = () => {
 
-    const handleSelect = (index: number) => {
-      if (index == 0) {
-        nav.navigate(ROUTES.QRCode);
-      } else {
-        setManualCode(true);
-      }
-    };
-
     return (
       <View
         style={{
@@ -90,19 +82,17 @@ const Home = () => {
           marginBottom: hp(4),
         }}>
         <Text style={styles.headerText}>{user?.type === 'owner' ? 'My Offers' : 'Available Coupons'}</Text>
-        {user?.type === 'customer' && (
-          <>
-            <OptionsMenu
-              data={OptionsData}
-              onSelect={index => handleSelect(index)}
-            />
-            <ManualEntryModal visible={manualCode} setVisible={setManualCode} />
-          </>
-        )}
       </View>
     );
   };
 
+  const listEmptyComponent = () => {
+    <Loader
+      size={'large'}
+      color={themes.primary}
+      style={{ alignSelf: 'center' }}
+    />
+  }
 
   const renderCards = () => {
     return (
@@ -120,6 +110,7 @@ const Home = () => {
           />
         )}
         contentContainerStyle={styles.cardWrapper}
+        ListEmptyComponent={listEmptyComponent}
         ListHeaderComponent={ListHeaderComponent}
       />
     );
@@ -158,7 +149,6 @@ const Home = () => {
               tintColor={themes.white}
             />
           }
-          // contentContainerStyle={styles.screen}
           showsVerticalScrollIndicator={false}>
           <Header />
           {user?.type == 'owner' ? (
@@ -172,6 +162,15 @@ const Home = () => {
             </TouchableOpacity>
           ) : null}
           <SearchBar placeholder={'Search dishes, restaurants'} />
+          {user?.type === 'customer' &&
+            <>
+              <View style={styles.buttonView}>
+                <Button buttonText='Scan Code' style={styles.buttonStyle} textStyle={styles.buttonText} onPress={() => nav.navigate(ROUTES.QRCode)} />
+                <Button buttonText='Input Code' style={[styles.buttonStyle, { backgroundColor: 'white' }]} textStyle={{ color: themes.black }} onPress={() => setManualCode(true)} />
+              </View>
+              <ManualEntryModal visible={manualCode} setVisible={setManualCode} />
+            </>
+          }
           {renderCategories()}
           {renderCards()}
         </ScrollView>
@@ -212,9 +211,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.regular,
   },
   categoriesWrapper: {
-    paddingTop: hp('4%'),
+    paddingTop: hp('2%'),
     marginHorizontal: hp('-1%'),
-    // flexDirection: 'row',
   },
   contentWrapper: {
     paddingHorizontal: hp('3%'),
@@ -240,9 +238,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1
-  }
-  // screen: {
-  //   flexGrow: 1,
-  //   backgroundColor: 'red'
-  // }
+  },
+  buttonView: {
+    flexDirection: 'row',
+    padding: hp(2.3),
+    marginTop: hp(1),
+    gap: 12,
+  },
+  buttonStyle: {
+    width: '48.5%',
+    borderRadius: 50,
+    padding: hp(1)
+  },
 });
