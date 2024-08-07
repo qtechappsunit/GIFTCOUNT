@@ -89,13 +89,13 @@ export const authApi = createApi({
             query: () => ({
                 url: endpoints.GET_OWNER_COUPONS,
                 method: 'GET'
-            })
+            }),
         }),
         getAllCoupons: builder.query({
             query: () => ({
                 url: endpoints.GET_COUPONS,
                 method: 'GET',
-            })
+            }),
         }),
         getCouponDetails: builder.query({
             query: (id) => ({
@@ -111,7 +111,7 @@ export const authApi = createApi({
                 method: 'POST',
                 body: status,
                 }
-            }
+            },
         }),
         qrCodeScan: builder.mutation({
             query: (data) => ({

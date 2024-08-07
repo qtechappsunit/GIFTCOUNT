@@ -49,9 +49,11 @@ const RestaurantDetail = ({ route }) => {
   const coupon_id = route?.params?.id
 
   const [couponStatus, { isLoading: statusLoading }] = useCouponStatusMutation()
-  const { data, isLoading } = useGetCouponDetailsQuery(coupon_id)
+  const { data, isLoading } = useGetCouponDetailsQuery(coupon_id, {
+    refetchOnMountOrArgChange: true,
+  })
 
-  console.log('set value state', pendingValue)
+  console.log('set value state', data?.data?.status)
   useEffect(() => {
     if (data) {
       setValue(data?.data?.status)
