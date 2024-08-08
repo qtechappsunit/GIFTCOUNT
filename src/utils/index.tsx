@@ -1,8 +1,9 @@
-import { Linking } from 'react-native';
+import { Linking, Platform } from 'react-native';
 import images from '../assets/images'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { showMessage } from 'react-native-flash-message';
 import themes from '../assets/themes';
+import { PERMISSIONS, request } from 'react-native-permissions';
 
 
 export const slides = [
@@ -24,7 +25,7 @@ export const typeImages = [
   {
     id: 1,
     image: images.driver,
-    type: 'rider',
+    type: 'driver',
   },
   {
     id: 2,
@@ -96,6 +97,7 @@ export const ShowMessage = (message, description, type) => {
     description: description,
     type: type,
     duration: 3000,
+    statusBarHeight: 0,
     backgroundColor: themes.red,
     color: themes.white,
     icon: "auto",
@@ -155,9 +157,42 @@ export const parseQRCodeData = (data) => {
 const isValidId = (id) => /^[a-zA-Z0-9]+$/.test(id);
 
 
+export const requestPermission = async permissionType => {
+  let permissionSet;
+  const apiLevel = Platform.constants.Release;
+  // console.log('hello world', apiLevel);
+  if (Platform.OS === 'ios') {
+    switch (permissionType) {
+      case 'media':
+        permissionSet = Platform.select({
+          ios: PERMISSIONS.IOS.PHOTO_LIBRARY,
+        });
+        break;
 
+      default:
+        console.log('unknown permission type');
+    }
+  } else if (Platform.OS === 'android') {
+    switch (permissionType) {
+      case 'media':
+        if (apiLevel < 10) {
+          permissionSet = Platform.select({
+            android: PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+          });
+        } else {
+          return 'granted';
+        }
+        break;
 
-
+      default:
+        console.log('unknown permission type');
+    }
+  }
+  if (permissionSet) {
+    const status = await request(permissionSet);
+    return status;
+  }
+};
 
 
 export default ROUTES;

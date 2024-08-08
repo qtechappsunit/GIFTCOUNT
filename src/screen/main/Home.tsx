@@ -30,6 +30,7 @@ import { RootState } from '../../Store/Reducer';
 import { useGetAllCouponsQuery, useGetCuisineTypesQuery, useGetOwnerCouponsQuery } from '../../Store/services';
 import Loader from '../../components/Loader';
 import Button from '../../components/Button';
+import images from '../../assets/images';
 
 
 const Home = () => {
@@ -47,7 +48,7 @@ const Home = () => {
 
   // console.log('dataaaa ',ownerCoupons)
 
-  const allTypes = [{ id: 0, title: 'All', image: '' }, ...(cuisineTypes?.data || [])]
+  const allTypes = [{ id: 0, title: 'All' }, ...(cuisineTypes?.data || [])]
 
   const renderCategories = () => {
     return (
@@ -60,7 +61,7 @@ const Home = () => {
         renderItem={({ item }) => (
           <FoodCategories
             key={item.id}
-            catImage={{ uri: item.image }}
+            catImage={item.id == 0 ? images.cat1 : { uri: item.image }}
             catName={item.title}
             onCatPress={() => setCatId(item.id)}
             catStyle={{
@@ -105,8 +106,9 @@ const Home = () => {
             name={item.coupon_name}
             onPress={() => nav.navigate(ROUTES.RestaurantDetail, { id: item?.id })}
             discount={`${item.discount}%`}
-            validity={item.date_validation != '0000-00-00' ? item.date_validation : item.week_validation != '[]' ? JSON.parse(item.week_validation).join(',') : item.time_validation}
+            validity={item.date_validation != '0000-00-00' || item.date_validation ? item.date_validation : item.week_validation ? JSON.parse(item.week_validation).join(',') : '0000-00-00'}
             image={item?.user?.profile_pic ? { uri: item?.user?.profile_pic } : images.dummy}
+            hour={item?.time_validation && `(${item.time_validation})`}
           />
         )}
         contentContainerStyle={styles.cardWrapper}

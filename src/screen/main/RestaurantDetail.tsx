@@ -53,7 +53,7 @@ const RestaurantDetail = ({ route }) => {
     refetchOnMountOrArgChange: true,
   })
 
-  console.log('set value state', data?.data?.status)
+  // console.log('set value state', data?.data?.status)
   useEffect(() => {
     if (data) {
       setValue(data?.data?.status)
@@ -71,6 +71,12 @@ const RestaurantDetail = ({ route }) => {
             style={{ transform: [{ rotate: '180deg' }] }}
           />
         </TouchableOpacity>
+        {/* <TouchableOpacity onPress={() => nav.goBack()} style={[styles.backArrow,{backgroundColor: 'red'}]}>
+          <SVGIcons
+            image={icons.Menu}
+            style={{ transform: [{ rotate: '180deg' }] }}
+          />
+        </TouchableOpacity> */}
         <Swiper
           activeDotStyle={styles.activeStyle}
           dotColor={themes.secondary}
@@ -105,12 +111,18 @@ const RestaurantDetail = ({ route }) => {
         </View>
         <View style={styles.row}>
           <Text style={styles.subHead}>Validity</Text>
-          <Text style={styles.subVal}>{details?.date_validation != '0000-00-00' ? details?.date_validation : details?.week_validation != '[]' ? JSON.parse(details?.week_validation).join(',') : details?.time_validation || '0000-00-00'}</Text>
+          <Text style={styles.subVal}>{details?.date_validation != '0000-00-00' ? details?.date_validation : details?.week_validation != '[]' ? JSON.parse(details?.week_validation).join(',') : '0000-00-00'}</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.subHead}>Code Validation</Text>
           <Text style={styles.subVal}>{details?.no_of_coupons || ''}</Text>
         </View>
+       {details?.time_validation &&
+        <View style={styles.row}>
+          <Text style={styles.subHead}>Hours</Text>
+          <Text style={styles.subVal}>({details?.time_validation})</Text>
+        </View>
+      }
       </View>
     );
   };
@@ -121,7 +133,7 @@ const RestaurantDetail = ({ route }) => {
         <View style={styles.wrapper}>
           <Image source={coupon_image ? { uri: coupon_image } : images.dummy} style={styles.foodStyle} />
           <View style={styles.discountView}>
-            {user?.type == 'rider' ? (
+            {user?.type == 'driver' ? (
               <>
                 <TouchableOpacity
                   style={[styles.btn, { marginBottom: hp(2) }]}
@@ -252,7 +264,7 @@ const styles = StyleSheet.create({
     width: wp(70),
     backgroundColor: themes.navy_blue,
     alignSelf: 'center',
-    borderRadius: 50,
+    borderRadius: 30,
     marginBottom: hp(3),
     borderColor: themes.green1,
     borderWidth: 2,

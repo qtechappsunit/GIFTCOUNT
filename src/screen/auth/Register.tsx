@@ -17,7 +17,7 @@ import ProfileCreatedModal from '../../components/ProfileCreatedModal';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useCreateUserMutation } from '../../Store/services';
 import { RootState } from '../../Store/Reducer';
-import { ShowMessage, validateFields } from '../../utils';
+import { requestPermission, ShowMessage, validateFields } from '../../utils';
 import FormData from 'form-data';
 
 interface InputField {
@@ -72,6 +72,8 @@ const Register = () => {
 
 
   const onSelectPhoto = async () => {
+   const status = await requestPermission('media')
+   if(status === 'granted') { 
     const options = {
       title: 'Select Image',
       storageOptions: {
@@ -91,6 +93,9 @@ const Register = () => {
         })
       }
     });
+  } else {
+    return ShowMessage('Media Access','Permission Denied','warning')
+  }
   }
 
   const onChange = (value: string, text: string) => {
@@ -154,7 +159,7 @@ const Register = () => {
 
   return (
     <Container logo={true}>
-      {userType == 'rider' ? (
+      {userType == 'driver' ? (
         <Text style={styles.forgot}>Driver</Text>
       ) : userType == 'customer' ? (
         <Text style={styles.forgot}>Customer</Text>
@@ -180,7 +185,7 @@ const Register = () => {
         }
       </TouchableOpacity>
       <View style={styles.inputView}>
-        {userType == 'rider' || userType == 'customer' ? (
+        {userType == 'driver' || userType == 'customer' ? (
           <>
             <InputField
               placeholder={'First Name'}
@@ -309,7 +314,7 @@ const Register = () => {
           onChangeText={(text) => onChange('email', text)}
           icon={icons.emailIcon}
         />
-        {userType == 'rider' ? (
+        {userType == 'driver' ? (
           <>
             <InputField
               placeholder={'Bank IBAN'}

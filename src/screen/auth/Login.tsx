@@ -60,7 +60,7 @@ const Login = () => {
       logoImageStyle={{ marginVertical: hp('-5%') }}
       scrollEnabled={false}>
       <View style={styles.screen}>
-        {userType == 'rider' ? (
+        {userType == 'driver' ? (
           <Text style={styles.heading}>Driver Login</Text>
         ) : userType == 'customer' ? (
           <Text style={styles.heading}>Customer Login</Text>

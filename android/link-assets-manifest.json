@@ -2,10 +2,6 @@
   "migIndex": 1,
   "data": [
     {
-      "path": "src/assets/fonts/index.js",
-      "sha1": "8ae7f4e13885361980044000113561e4636b51a2"
-    },
-    {
       "path": "src/assets/fonts/Lexend-Black.ttf",
       "sha1": "e7ce003e94ca32c8be251e4cd3ee6dd7dc3fae28"
     },
@@ -64,6 +60,10 @@
     {
       "path": "src/assets/fonts/Sen-SemiBold.ttf",
       "sha1": "3caeec745e383674fce250b325e485e89b0c0e98"
+    },
+    {
+      "path": "src/assets/fonts/index.tsx",
+      "sha1": "41629e760f9b0df7b317be5b0cab1b67cc9500dc"
     }
   ]
 }

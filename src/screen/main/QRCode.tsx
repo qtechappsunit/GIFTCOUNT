@@ -27,7 +27,6 @@ import { RootState } from '../../Store/Reducer';
 import QRCodeGenerator from 'react-native-qrcode-svg';
 import { useQrCodeScanMutation } from '../../Store/services';
 import { parseQRCodeData, ShowMessage, validateQRCodeFormat } from '../../utils';
-import Spinner from 'react-native-loading-spinner-overlay';
 import ROUTES from '../../utils';
 import SpinnerLoader from '../../components/SpinnerLoader';
 
@@ -231,7 +230,7 @@ const QRCode = ({ route }) => {
     );
   };
 
-  return user?.type === 'rider' ? QRCodeImage() : QRCodeCamera();
+  return user?.type === 'driver' ? QRCodeImage() : QRCodeCamera();
 };
 
 export default QRCode;

@@ -65,7 +65,7 @@ const EditProfileScreen = (props: EditProfileProps) => {
   const [open, setOpen] = useState<boolean>(false)
 
 
-  console.log('user details', state.cuisine_types)
+  // console.log('user details', state.cuisine_types)
   const [editProfile, { isLoading: editProfileLoading }] = useEditProfileMutation()
 
   const dispatch = useDispatch()
@@ -145,7 +145,7 @@ const EditProfileScreen = (props: EditProfileProps) => {
 
   return (
     <Container logo={true}>
-      {user?.type == 'rider' ? (
+      {user?.type == 'driver' ? (
         <Text style={styles.text}>Driver</Text>
       ) : user?.type == 'customer' ? (
         <Text style={styles.text}>Customer</Text>
@@ -267,7 +267,7 @@ const EditProfileScreen = (props: EditProfileProps) => {
         />
         {/* <SvgXml xml={icons.yellowPencilIcon} onPress={() => onHandleField()} /> */}
       </View>
-      {user?.type == 'rider' ? (
+      {user?.type == 'driver' ? (
         <View style={styles.fieldRow}>
           <InputField
             placeholder={'Bank IBAN'}
@@ -351,8 +351,11 @@ const EditProfileScreen = (props: EditProfileProps) => {
           props.navigation.navigate(ROUTES.ResetPasswordScreen, { type: 'change' })
         }
       />
-      <TouchableOpacity onPress={() => onLogoutPress()} style={{ alignSelf: 'center' }}>
-        <Text style={[styles.heading, styles.border]}>Logout</Text>
+      <TouchableOpacity onPress={() => onLogoutPress()} style={{
+        alignSelf: 'center', borderBottomColor: themes.red,
+        borderBottomWidth: 3,
+      }}>
+        <Text style={styles.heading}>Logout</Text>
       </TouchableOpacity>
       <CuisineTypeModal
         modalVisible={open}
@@ -371,7 +374,7 @@ export default EditProfileScreen;
 
 const styles = StyleSheet.create({
   view: {
-    height: 90,
+    height: hp(24),
   },
   input: {
     width: wp(80),
