@@ -12,7 +12,20 @@
           "package_name": "com.giftscount"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "408144936156-vk309rss44s1uhgn5nmni68gbko4le55.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.giftscount",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "408144936156-69om6j1vrkt3eqshupscks8r84kjgdlr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBu_StejMUm1t4JCmXL_5igz9BOovNVF7o"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "408144936156-69om6j1vrkt3eqshupscks8r84kjgdlr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "408144936156-5ck1lc8baf0bumuealn2kkvlg1uluo6h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.giftscount"
+              }
+            }
+          ]
         }
       }
     }

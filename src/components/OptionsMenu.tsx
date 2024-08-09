@@ -1,4 +1,4 @@
-import {Image, StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import React from 'react';
 import {
   Menu,
@@ -6,16 +6,20 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import images from '../assets/images';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import themes from '../assets/themes';
+import icons from '../assets/icons';
+import SVGIcons from './SVGIcons';
 
-const OptionsMenu = ({data, onSelect}) => {
+const OptionsMenu = ({ data, onSelect }) => {
   return (
     <>
       <Menu>
         <MenuTrigger>
-          <Image source={images.moreOptions} style={styles.moreIconStyle} />
+          <SVGIcons
+            image={icons.Menu}
+            style={{ transform: [{ rotate: '180deg' }] }}
+          />
         </MenuTrigger>
         <MenuOptions
           optionsContainerStyle={styles.container}
@@ -35,7 +39,7 @@ const OptionsMenu = ({data, onSelect}) => {
               style={styles.innerContainer}
               key={ind}
               onSelect={() => onSelect(ind)}
-              text={item.text}
+              text={item.option}
               customStyles={{
                 optionText: {
                   fontSize: hp(2),

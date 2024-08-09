@@ -15,6 +15,7 @@ import fonts from '../../assets/fonts';
 import { useSelector } from 'react-redux';
 import { useLoginMutation } from '../../Store/services';
 import { RootState } from '../../Store/Reducer';
+import { signinWithGoogle } from './socialauth';
 
 interface InputField {
   email: string,
@@ -50,8 +51,18 @@ const Login = () => {
         }
       }).catch((error) => {
         console.log('login error =====>', error)
-        return ShowMessage('Signin','Some problem occured','danger')
+        return ShowMessage('Signin', 'Some problem occured', 'danger')
       })
+    }
+  }
+
+  const onSocialLogin = (index) => {
+    if (index == 1) {
+      signinWithGoogle().then(data => {
+        console.log('google signin user data ===>', data)
+      })
+    } else {
+      alert('work in progress')
     }
   }
 
@@ -122,7 +133,7 @@ const Login = () => {
       <Text style={styles.socialMediatext}>Login using</Text>
       <View style={styles.socialWrapper}>
         {socialIcons.map((item, ind) => (
-          <View
+          <TouchableOpacity
             style={
               ind == 2 && {
                 height: hp(5),
@@ -133,7 +144,9 @@ const Login = () => {
                 backgroundColor: themes.black,
                 borderRadius: 100,
               }
-            }>
+            }
+            onPress={() => onSocialLogin(ind)}
+          >
             <Image
               source={item.icon}
               key={ind}
@@ -145,7 +158,7 @@ const Login = () => {
                     : styles.imageStyle
               }
             />
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
     </AuthContainer>

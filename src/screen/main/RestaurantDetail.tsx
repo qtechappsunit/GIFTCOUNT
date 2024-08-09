@@ -9,12 +9,11 @@ import {
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Wrapper from '../../components/Wrapper';
-import Swiper from 'react-native-swiper';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import ROUTES, { ShowMessage } from '../../utils';
+import ROUTES, { couponOptions, ShowMessage } from '../../utils';
 import themes from '../../assets/themes';
 import SVGIcons from '../../components/SVGIcons';
 import icons from '../../assets/icons';
@@ -30,6 +29,7 @@ import { RootState } from '../../Store/Reducer';
 import { useCouponStatusMutation, useGetCouponDetailsQuery } from '../../Store/services';
 import Loader from '../../components/Loader';
 import SpinnerLoader from '../../components/SpinnerLoader';
+import OptionsMenu from '../../components/OptionsMenu';
 
 const RestaurantDetail = ({ route }) => {
   const { user } = useSelector((state: RootState) => state?.authReducer);
@@ -71,25 +71,25 @@ const RestaurantDetail = ({ route }) => {
             style={{ transform: [{ rotate: '180deg' }] }}
           />
         </TouchableOpacity>
-        {/* <TouchableOpacity onPress={() => nav.goBack()} style={[styles.backArrow,{backgroundColor: 'red'}]}>
-          <SVGIcons
-            image={icons.Menu}
-            style={{ transform: [{ rotate: '180deg' }] }}
-          />
-        </TouchableOpacity> */}
-        <Swiper
+        {user?.type === 'owner' &&
+          <View style={styles.OptionStyle}>
+            <OptionsMenu data={couponOptions} />
+          </View>
+        }
+        {/* <Swiper
           activeDotStyle={styles.activeStyle}
           dotColor={themes.secondary}
-          dotStyle={styles.inactiveStyle}>
-          {/* {multipleImages.map((item, ind) => ( */}
-          <Image
-            source={restaurant_image ? { uri: restaurant_image } : images.dummy}
-            style={styles.imageStyle}
-            borderBottomLeftRadius={30}
-            borderBottomRightRadius={30}
-          />
-          {/* ))} */}
-        </Swiper>
+          dotStyle={styles.inactiveStyle}> */}
+        {/* {multipleImages.map((item, ind) => ( */}
+        <Image
+          source={restaurant_image ? { uri: restaurant_image } : images.dummy}
+          style={styles.imageStyle}
+          borderBottomLeftRadius={30}
+          borderBottomRightRadius={30}
+        />
+        {/* ))} */}
+        {/* </Swiper> */}
+
       </View>
     );
   };
@@ -117,12 +117,12 @@ const RestaurantDetail = ({ route }) => {
           <Text style={styles.subHead}>Code Validation</Text>
           <Text style={styles.subVal}>{details?.no_of_coupons || ''}</Text>
         </View>
-       {details?.time_validation &&
-        <View style={styles.row}>
-          <Text style={styles.subHead}>Hours</Text>
-          <Text style={styles.subVal}>({details?.time_validation})</Text>
-        </View>
-      }
+        {details?.time_validation &&
+          <View style={styles.row}>
+            <Text style={styles.subHead}>Hours</Text>
+            <Text style={styles.subVal}>({details?.time_validation})</Text>
+          </View>
+        }
       </View>
     );
   };
@@ -391,4 +391,16 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: hp('4%'),
   },
+  OptionStyle: {
+    position: 'absolute',
+    backgroundColor: themes.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 100,
+    height: hp(5),
+    width: hp(5),
+    zIndex: 1,
+    right: hp(2.5),
+    top: hp(1.7)
+  }
 });

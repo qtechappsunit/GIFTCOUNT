@@ -40,7 +40,6 @@ interface InputField {
   cpassword: any
 }
 
-
 const Register = () => {
   const { userType } = useSelector((state: RootState) => state?.authReducer);
   const [open, setOpen] = useState(false);
@@ -66,10 +65,7 @@ const Register = () => {
 
   })
 
-
   const [createUser, { isLoading: isCreateUserLoading}] = useCreateUserMutation()
-
-
 
   const onSelectPhoto = async () => {
    const status = await requestPermission('media')

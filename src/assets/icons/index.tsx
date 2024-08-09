@@ -40,9 +40,9 @@ const qrcode_active: string = `<svg width="19" height="19" viewBox="0 0 19 19" f
 </svg>`;
 
 const Menu: string = `<svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M1 13H11" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1 7L17 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1 1L7 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1 13H11" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1 7L17 7" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1 1L7 1" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>`;
 
 const search: string = `<svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">

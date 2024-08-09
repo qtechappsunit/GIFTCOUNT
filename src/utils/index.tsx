@@ -78,6 +78,16 @@ const ROUTES = {
   CreateCouponScreen: 'CreateCouponScreen',
 };
 
+export const couponOptions = [
+  {
+    id: 1,
+    option: 'Edit Coupon'
+  },
+  {
+    id: 2,
+    option: 'Delete Coupon'
+  }
+]
 
 export const getUserType = async (key: string) => {
   return await AsyncStorage.getItem(key);
