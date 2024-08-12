@@ -26,15 +26,18 @@ import DiscountCodeModal from '../../components/DiscountCodeModal';
 import DropDownPicker from 'react-native-dropdown-picker';
 import CouponStatusModal from '../../components/CouponStatusModal';
 import { RootState } from '../../Store/Reducer';
-import { useCouponStatusMutation, useGetCouponDetailsQuery } from '../../Store/services';
+import { useCouponStatusMutation, useGetCouponDetailsQuery, useGetOwnerCouponsQuery, useLazyDeleteDiscountCouponQuery } from '../../Store/services';
 import Loader from '../../components/Loader';
 import SpinnerLoader from '../../components/SpinnerLoader';
 import OptionsMenu from '../../components/OptionsMenu';
+import Clipboard from '@react-native-clipboard/clipboard';
+import ConfirmationModal from '../../components/ConfirmationModal';
 
 const RestaurantDetail = ({ route }) => {
   const { user } = useSelector((state: RootState) => state?.authReducer);
   const nav = useNavigation();
   const [visible, setVisible] = useState(false);
+  const [modal, setModal] = useState(false)
   const [confirmationModal, setConfirmationModal] = useState(false);
   const [open, setOpen] = useState(false);
   const [pendingValue, setPendingValue] = useState('')
@@ -42,16 +45,16 @@ const RestaurantDetail = ({ route }) => {
   const [items, setItems] = useState([
     { label: 'Active', value: 1 },
     { label: 'Inactive', value: 0 },
-    // { label: 'Edit', value: 'Edit' },
-    // { label: 'Delete', value: 'Delete' },
   ]);
 
   const coupon_id = route?.params?.id
 
   const [couponStatus, { isLoading: statusLoading }] = useCouponStatusMutation()
+  const [deleteDiscountCoupon, { isLoading: deleteLoader }] = useLazyDeleteDiscountCouponQuery()
   const { data, isLoading } = useGetCouponDetailsQuery(coupon_id, {
     refetchOnMountOrArgChange: true,
   })
+  const { refetch: ownerCouponsRefetch } = useGetOwnerCouponsQuery()
 
   // console.log('set value state', data?.data?.status)
   useEffect(() => {
@@ -61,6 +64,14 @@ const RestaurantDetail = ({ route }) => {
 
   }, [data])
   // console.log('coupon details =====>', data?.data)
+
+  const onSelectOptions = (index) => {
+    if (index == 0) {
+      nav.navigate(ROUTES.CreateCouponScreen, { couponData: data?.data })
+    } else {
+      setModal(!modal)
+    }
+  }
 
   const renderImages = (restaurant_image) => {
     return (
@@ -73,7 +84,7 @@ const RestaurantDetail = ({ route }) => {
         </TouchableOpacity>
         {user?.type === 'owner' &&
           <View style={styles.OptionStyle}>
-            <OptionsMenu data={couponOptions} />
+            <OptionsMenu data={couponOptions} onSelect={(index) => onSelectOptions(index)} />
           </View>
         }
         {/* <Swiper
@@ -127,6 +138,13 @@ const RestaurantDetail = ({ route }) => {
     );
   };
 
+  const onCopyLink = async () => {
+    const template = `to avail the discount coupons${'\n'} download the GiftCount App${'\n'} with this link;`
+    Clipboard.setString(template)
+    return ShowMessage('Copy Text', 'Link has been copied', 'success')
+
+  }
+
   const renderDiscountCard = (coupon_image, discount, id) => {
     return (
       <>
@@ -142,7 +160,7 @@ const RestaurantDetail = ({ route }) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.btn}
-                  onPress={() => alert('Link copied')}>
+                  onPress={() => onCopyLink()}>
                   <Text style={styles.btnText}>Copy Link</Text>
                 </TouchableOpacity>
               </>
@@ -200,6 +218,22 @@ const RestaurantDetail = ({ route }) => {
     setConfirmationModal(!confirmationModal)
   }
 
+  const onDeleteCoupon = async () => {
+    await deleteDiscountCoupon(coupon_id).unwrap().then((res) => {
+      if (res.success) {
+        ownerCouponsRefetch()
+        nav.goBack()
+        return ShowMessage('Delete Discount Coupon', res.message, 'success')
+      } else {
+        return ShowMessage('Delete Discount Coupon', res.message, 'warning')
+      }
+    }).catch((error) => {
+      console.log('delete discount coupon error', error)
+      return ShowMessage('Delete Discount Coupon', 'Some problem occured', 'danger')
+    })
+    setModal(!modal)
+  }
+
   return (
     <Wrapper>
       {isLoading ?
@@ -235,7 +269,13 @@ const RestaurantDetail = ({ route }) => {
                   setVisible={setConfirmationModal}
                   onStatusChange={handleConfirmStatusChange}
                 />
-                <SpinnerLoader visible={statusLoading} />
+                <ConfirmationModal visible={modal}
+                  modalText={'Are you sure you want to delete your coupon ?'}
+                  onPressOut={() => setModal(!modal)}
+                  onCancel={() => setModal(!modal)}
+                  onConfirm={() => onDeleteCoupon()}
+                />
+                <SpinnerLoader visible={deleteLoader ? deleteLoader : statusLoading} />
                 {/* /> */}
               </>
             ) : null}

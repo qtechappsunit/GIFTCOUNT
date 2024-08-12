@@ -13,8 +13,13 @@ const endpoints = {
     GET_COUPONS: '/get-all-coupons',
     COUPON_DETAIL: (id) => `/coupon/${id}/detail`,
     SET_COUPON_STATUS: (id) => `/coupon/${id}/status`,
-    GET_OWNER_COUPONS: 'owner-coupons',
-    QRCODE_SCAN: 'qr-code-scan'
+    GET_OWNER_COUPONS: '/owner-coupons',
+    QRCODE_SCAN: '/qr-code-scan',
+    SEARCH_COUPONS: (text) => `/search-coupon?search=${text}`,
+    FILTER_COUPONS_BY_CUISINES: (id) => `/cuisine/${id}/coupons`,
+    EDIT_DISCOUNT_COUPON: (id) => `coupon/${id}/update`,
+    DELETE_DISCOUNT_COUPON: (id) => `/coupon/${id}/delete`
+    
 }
 
 export default endpoints;

@@ -27,7 +27,7 @@ import { useSelector } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
 import ManualEntryModal from '../../components/ManualEntryModal';
 import { RootState } from '../../Store/Reducer';
-import { useGetAllCouponsQuery, useGetCuisineTypesQuery, useGetOwnerCouponsQuery } from '../../Store/services';
+import { useFilterCouponsByCuisineQuery, useGetAllCouponsQuery, useGetCuisineTypesQuery, useGetOwnerCouponsQuery, useSearchCouponsQuery } from '../../Store/services';
 import Loader from '../../components/Loader';
 import Button from '../../components/Button';
 import images from '../../assets/images';
@@ -38,17 +38,30 @@ const Home = () => {
   const [visible, setVisible] = useState(false);
   const [manualCode, setManualCode] = useState(false);
   const [refreshing, setRefreshing] = useState(false)
+  const [search, setSearch] = useState('')
   const { user } = useSelector((state: RootState) => state?.authReducer);
 
   const nav = useNavigation();
 
-  const { refetch: refetchAllCoupons, data: getAllCoupons } = useGetAllCouponsQuery()
-  const { refetch: refetchCuisineTypes, data: cuisineTypes, isLoading } = useGetCuisineTypesQuery()
-  const { refetch: refetchOwnerCoupons, data: ownerCoupons } = useGetOwnerCouponsQuery()
+  const { refetch: refetchAllCoupons, data: getAllCoupons, isLoading: allCouponsLoader } = useGetAllCouponsQuery()
+  const { refetch: refetchCuisineTypes, data: cuisineTypes, isLoading: cuisineTypesLoader } = useGetCuisineTypesQuery()
+  const { refetch: refetchOwnerCoupons, data: ownerCoupons, isLoading: ownerCouponsLoader } = useGetOwnerCouponsQuery()
+  const { data: searchedCoupons, isLoading: searchCouponsLoader } = useSearchCouponsQuery(search)
+  const { data: filterCouponsByItem, isLoading: filterCouponsLoader } = useFilterCouponsByCuisineQuery(catId)
 
-  // console.log('dataaaa ',ownerCoupons)
+  // console.log('dataaaa ', searchedCoupons)
 
   const allTypes = [{ id: 0, title: 'All' }, ...(cuisineTypes?.data || [])]
+
+  const coupons = user?.type === 'owner'
+    ? (search.length > 0 ? searchedCoupons?.data : catId != 0 ? filterCouponsByItem?.data : ownerCoupons?.data)
+    : (search.length > 0 ? searchedCoupons?.data : catId != 0 ? filterCouponsByItem?.data : getAllCoupons?.data);
+
+  const heading = user?.type === 'owner'
+    ? (search?.length > 0 ? 'Search Results' : catId != 0 ? 'Filter Results' : 'My Offers')
+    : (search?.length > 0 ? 'Search Results' : catId != 0 ? 'Filter Results' : 'Available Coupons')
+
+  const isLoading = allCouponsLoader || ownerCouponsLoader || searchCouponsLoader || filterCouponsLoader
 
   const renderCategories = () => {
     return (
@@ -74,7 +87,6 @@ const Home = () => {
   };
 
   const ListHeaderComponent = () => {
-
     return (
       <View
         style={{
@@ -82,23 +94,29 @@ const Home = () => {
           justifyContent: 'space-between',
           marginBottom: hp(4),
         }}>
-        <Text style={styles.headerText}>{user?.type === 'owner' ? 'My Offers' : 'Available Coupons'}</Text>
+        <Text style={styles.headerText}>{heading}</Text>
       </View>
     );
   };
 
-  const listEmptyComponent = () => {
-    <Loader
-      size={'large'}
-      color={themes.primary}
-      style={{ alignSelf: 'center' }}
-    />
-  }
+  const listEmptyComponent = () => (
+    <>
+      {isLoading ?
+        <Loader
+          size={'large'}
+          color={themes.primary}
+          style={{ alignSelf: 'center' }}
+        />
+        :
+        <Text style={styles.message}>No Coupons Found</Text>
+      }
+    </>
+  )
 
   const renderCards = () => {
     return (
       <FlatList
-        data={user?.type === 'owner' ? ownerCoupons?.data : getAllCoupons?.data}
+        data={coupons}
         scrollEnabled={false}
         renderItem={({ item, index }) => (
           <RestaurantCard
@@ -131,9 +149,14 @@ const Home = () => {
     }, 2000);
   }, []);
 
+
+  const onSearchCoupons = async (text) => {
+    setSearch(text)
+  }
+
   return (
     <Wrapper>
-      {isLoading ?
+      {cuisineTypesLoader ?
         <View style={styles.loaderView}>
           <Loader
             size={'large'}
@@ -163,7 +186,7 @@ const Home = () => {
               <Text style={styles.addText}>Add Discount Coupon</Text>
             </TouchableOpacity>
           ) : null}
-          <SearchBar placeholder={'Search dishes, restaurants'} />
+          <SearchBar placeholder={'Search dishes, restaurants'} value={search} onChangeText={(text) => onSearchCoupons(text)} />
           {user?.type === 'customer' &&
             <>
               <View style={styles.buttonView}>
@@ -173,7 +196,7 @@ const Home = () => {
               <ManualEntryModal visible={manualCode} setVisible={setManualCode} />
             </>
           }
-          {renderCategories()}
+          {search?.length < 1 && renderCategories()}
           {renderCards()}
         </ScrollView>
       }
@@ -252,4 +275,10 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     padding: hp(1)
   },
+  message: {
+    color: themes.primary,
+    fontSize: hp(2.5),
+    alignSelf: 'center',
+    fontFamily: fonts.markRegular
+  }
 });

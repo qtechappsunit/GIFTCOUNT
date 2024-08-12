@@ -26,75 +26,60 @@ import { useNavigation } from '@react-navigation/native';
 import DateModal from '../../components/DateModal';
 import moment from 'moment';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { useCreateDiscountCouponMutation, useGetCuisineTypesQuery } from '../../Store/services';
-import Loader from '../../components/Loader';
-import { ShowMessage } from '../../utils';
+import { useCreateDiscountCouponMutation, useEditDiscountCouponMutation, useGetCuisineTypesQuery, useGetOwnerCouponsQuery } from '../../Store/services';
+import ROUTES, { ShowMessage, Weekdays } from '../../utils';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { useSelector } from 'react-redux';
 
-const Weekdays = [
-  {
-    id: 1,
-    title: 'Mon',
-  },
-  {
-    id: 2,
-    title: 'Tue',
-  },
-  {
-    id: 3,
-    title: 'Wed',
-  },
-  {
-    id: 4,
-    title: 'Thu',
-  },
-  {
-    id: 5,
-    title: 'Fri',
-  },
-  {
-    id: 6,
-    title: 'Sat',
-  },
-  {
-    id: 7,
-    title: 'Sun',
-  },
-];
 
-const CreateCouponScreen = () => {
+const CreateCouponScreen = ({ route }) => {
 
   const { data } = useGetCuisineTypesQuery()
 
+
+  const editableCoupon = route?.params?.couponData || {};
+  // console.log('editable', JSON.parse(editableCoupon?.week_validation))
+  const id = editableCoupon?.id || ''
+
   const pickerItems = data?.data?.map(item => ({
-    label: item.title,  
-    value: item.id,    
+    label: item.title,
+    value: item.id,
   }));
 
 
   const [state, setState] = useState({
-    coupon_name: '',
-    discount: '',
-    minimum_value: '',
-    code_usage: '',
-    date: 'Select Date',
-    hours: '',
-    desc: '',
+    coupon_name: editableCoupon?.coupon_name || '',
+    discount: editableCoupon?.discount || '',
+    minimum_value: editableCoupon?.min_order_value || '',
+    code_usage: editableCoupon?.no_of_coupons || '',
+    date: editableCoupon?.date_validation || 'Select Date',
+    hours: editableCoupon?.time_validation || '',
+    desc: editableCoupon?.description || '',
     // isPickerVisible: false,
-    coupon_image: '',
-    time_val: false,
-    date_val: false,
-    week_val: false,
+    coupon_image: editableCoupon?.coupon_image || '',
+    time_val: editableCoupon?.time_validation ? true : false,
+    date_val: editableCoupon?.date_validation != 'Select Date' ? true : false,
+    week_val: JSON.parse(editableCoupon?.week_validation).length > 0 ? true : false,
     week_days: []
   });
-  const [open,setOpen] = useState(false)
-  const [value,setValue] = useState('')
+  console.log('edit coupon data', JSON.parse(editableCoupon?.week_validation))
+
+  const isChecked = (title) => JSON.parse(editableCoupon?.week_validation).includes(title)
+
+  // const selectedTitles = new Set(getSelectedDays.map(day => day.title));
+
+
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState(editableCoupon?.cuisine?.id || '')
   const [items, setItems] = useState(pickerItems)
   const nav = useNavigation();
 
   // console.log('state ======>', value)
 
   const [createDiscountCoupon, { isLoading }] = useCreateDiscountCouponMutation()
+  const [editDiscountCoupon, { isLoading: editLoading }] = useEditDiscountCouponMutation()
+  const { refetch: ownerCouponsRefetch } = useGetOwnerCouponsQuery()
+  const { user } = useSelector(state => state.authReducer)
 
   const onChange = (value: string, text: string) => {
     setState({
@@ -117,8 +102,8 @@ const CreateCouponScreen = () => {
         fontSize: wp(3.5),
       }}
       style={{ marginVertical: wp(2), width: wp(25) }}
-      // isChecked={}
-      onPress={(isChecked) => onSelectCuisines(isChecked, item)}
+      isChecked={isChecked(item?.title)}
+      onPress={(isChecked) => onSelectDays(isChecked, item)}
       disableText={false}
     />
   );
@@ -137,51 +122,29 @@ const CreateCouponScreen = () => {
       dropDownContainerStyle={styles.dropdownStyle}
     />
   )
- 
 
-  const onSelectCuisines = (isChecked, val) => {
 
-    if (val?.status === '1') {
-      setState(prevState => {
-        const updatedCuisineTypes = [...prevState.cuisine_types];
+  const onSelectDays = (isChecked, val) => {
 
-        if (isChecked) {
-          if (!updatedCuisineTypes.includes(val?.id)) {
-            updatedCuisineTypes.push(val?.id);
-          }
-        } else {
-          const index = updatedCuisineTypes.indexOf(val?.id);
-          if (index > -1) {
-            updatedCuisineTypes.splice(index, 1);
-          }
+    setState(prevState => {
+      const updatedDays = [...prevState.week_days];
+
+      if (isChecked) {
+        if (!updatedDays.includes(val?.title)) {
+          updatedDays.push(val?.title);
         }
-
-        return {
-          ...prevState,
-          cuisine_types: updatedCuisineTypes,
-        };
-      });
-    } else {
-      setState(prevState => {
-        const updatedDays = [...prevState.week_days];
-
-        if (isChecked) {
-          if (!updatedDays.includes(val?.title)) {
-            updatedDays.push(val?.title);
-          }
-        } else {
-          const index = updatedDays.indexOf(val?.title);
-          if (index > -1) {
-            updatedDays.splice(index, 1);
-          }
+      } else {
+        const index = updatedDays.indexOf(val?.title);
+        if (index > -1) {
+          updatedDays.splice(index, 1);
         }
+      }
 
-        return {
-          ...prevState,
-          week_days: updatedDays,
-        };
-      });
-    }
+      return {
+        ...prevState,
+        week_days: updatedDays,
+      };
+    });
 
   }
 
@@ -257,18 +220,34 @@ const CreateCouponScreen = () => {
               : state.coupon_image.replace('file://', ''),
         });
       }
-      await createDiscountCoupon(data).unwrap().then((res) => {
-        // console.log('success create coupon ====>',res)
-        if (res.success) {
-          nav.goBack()
-          return ShowMessage('Create Discount Coupon', res.message, 'success')
-        } else {
-          return ShowMessage('Create Discount Coupon', res.message, 'warning')
-        }
-      }).catch((error) => {
-        console.log('failed to create coupon', error)
-        return ShowMessage('Create Discount Coupon', 'Some problem occured', 'danger')
-      })
+      if (editableCoupon) {
+        await editDiscountCoupon({ data, id }).unwrap().then((res) => {
+          if (res.success) {
+            nav.navigate(ROUTES.Home)
+           ownerCouponsRefetch()
+            return ShowMessage('Edit Discount Coupon', res.message, 'success')
+          } else {
+            return ShowMessage('Edit Discount Coupon', res.message, 'warning')
+          }
+        }).catch((error) => {
+          console.log('edit discount coupon error =====>', error)
+          return ShowMessage('Edit Discount Coupon', 'Some problem occured', 'danger')
+        })
+      } else {
+        await createDiscountCoupon(data).unwrap().then((res) => {
+          // console.log('success create coupon ====>',res)
+          if (res.success) {
+            nav.goBack()
+            ownerCouponsRefetch()
+            return ShowMessage('Create Discount Coupon', res.message, 'success')
+          } else {
+            return ShowMessage('Create Discount Coupon', res.message, 'warning')
+          }
+        }).catch((error) => {
+          console.log('failed to create coupon', error)
+          return ShowMessage('Create Discount Coupon', 'Some problem occured', 'danger')
+        })
+      }
     }
   }
 
@@ -315,7 +294,7 @@ const CreateCouponScreen = () => {
             <Text style={styles.subText}>Number of{`\n`}coupon usage</Text>
           </View>
           <CustomInput
-            value={state.code_val}
+            value={state.code_usage}
             setValue={text => onChange('code_usage', text)}
             width={wp(35)}
             keyboardType={'numeric'}
@@ -330,6 +309,7 @@ const CreateCouponScreen = () => {
               size={25}
               fillColor={themes.navy_blue}
               iconStyle={styles.round}
+              isChecked={state.date_val}
               onPress={(isChecked) => onChange('date_val', isChecked)}
               disableText={true}
             />
@@ -352,6 +332,7 @@ const CreateCouponScreen = () => {
             size={25}
             fillColor={themes.navy_blue}
             iconStyle={styles.round}
+            isChecked={state.week_val}
             onPress={(isChecked) => onChange('week_val', isChecked)}
             disableText={true}
           />
@@ -377,6 +358,7 @@ const CreateCouponScreen = () => {
               size={25}
               fillColor={themes.primary}
               unFillColor={themes.navy_blue}
+              isChecked={state.time_val}
               text={'Time Validation'}
               iconStyle={{ borderColor: themes?.red1 }}
               textStyle={{
@@ -467,8 +449,8 @@ const CreateCouponScreen = () => {
           </View>
         </View> */}
         <Button
-          buttonText={'Generate'}
-          indicator={isLoading}
+          buttonText={editableCoupon ? 'Update' : 'Generate'}
+          indicator={editableCoupon ? editLoading : isLoading}
           onPress={() => onGenerateCoupon()}
           style={styles.btn}
         />

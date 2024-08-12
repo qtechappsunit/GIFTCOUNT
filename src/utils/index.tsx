@@ -81,13 +81,44 @@ const ROUTES = {
 export const couponOptions = [
   {
     id: 1,
-    option: 'Edit Coupon'
+    option: 'Edit Coupon',
   },
   {
     id: 2,
     option: 'Delete Coupon'
   }
 ]
+
+export const Weekdays = [
+  {
+    id: 1,
+    title: 'Mon',
+  },
+  {
+    id: 2,
+    title: 'Tue',
+  },
+  {
+    id: 3,
+    title: 'Wed',
+  },
+  {
+    id: 4,
+    title: 'Thur',
+  },
+  {
+    id: 5,
+    title: 'Fri',
+  },
+  {
+    id: 6,
+    title: 'Sat',
+  },
+  {
+    id: 7,
+    title: 'Sun',
+  },
+];
 
 export const getUserType = async (key: string) => {
   return await AsyncStorage.getItem(key);

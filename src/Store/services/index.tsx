@@ -4,17 +4,17 @@ import endpoints, { BASE_URL } from '../constants'
 
 export const authApi = createApi({
     reducerPath: 'authApi',
-    baseQuery: fetchBaseQuery({ 
+    baseQuery: fetchBaseQuery({
         baseUrl: BASE_URL,
-        prepareHeaders: (headers, {getState}) => {
+        prepareHeaders: (headers, { getState }) => {
             const token = getState().authReducer.token
             // console.log('state ===>', token)
-            if(token){
-                headers.set("authorization",`Bearer ${token}`)
-            } 
+            if (token) {
+                headers.set("authorization", `Bearer ${token}`)
+            }
             return headers
         }
-     }),
+    }),
     endpoints: (builder) => ({
         createUser: builder.mutation({
             query: (userData) => ({
@@ -104,12 +104,12 @@ export const authApi = createApi({
             })
         }),
         couponStatus: builder.mutation({
-            query: ({status,coupon_id}) => {
+            query: ({ status, coupon_id }) => {
                 // console.log('statuts',status)
-               return { 
-                url: endpoints.SET_COUPON_STATUS(coupon_id),
-                method: 'POST',
-                body: status,
+                return {
+                    url: endpoints.SET_COUPON_STATUS(coupon_id),
+                    method: 'POST',
+                    body: status,
                 }
             },
         }),
@@ -119,8 +119,33 @@ export const authApi = createApi({
                 method: 'POST',
                 body: data
             })
+        }),
+        searchCoupons: builder.query({
+            query: (text) => ({
+                url: endpoints.SEARCH_COUPONS(text),
+                method: 'GET'
+            })
+        }),
+        filterCouponsByCuisine: builder.query({
+            query: (id) => ({
+                url: endpoints.FILTER_COUPONS_BY_CUISINES(id),
+                method: 'GET'
+            })
+        }),
+        editDiscountCoupon: builder.mutation({
+            query: ({ data, id }) => ({
+                url: endpoints.EDIT_DISCOUNT_COUPON(id),
+                method: 'POST',
+                body: data
+            })
+        }),
+        deleteDiscountCoupon: builder.query({
+            query: (coupon_id) => ({
+                url: endpoints.DELETE_DISCOUNT_COUPON(coupon_id),
+                method: 'GET'
+            })
         })
     }),
 })
 
-export const { useCreateUserMutation, useLoginMutation, useGetCuisineTypesQuery, useSendCodeEmailMutation, useVerifyOTPMutation, useResetPasswordMutation, useChangePasswordMutation, useEditProfileMutation, useCreateDiscountCouponMutation, useCouponStatusMutation, useGetAllCouponsQuery, useGetCouponDetailsQuery, useGetOwnerCouponsQuery, useQrCodeScanMutation } = authApi;
+export const { useCreateUserMutation, useLoginMutation, useGetCuisineTypesQuery, useSendCodeEmailMutation, useVerifyOTPMutation, useResetPasswordMutation, useChangePasswordMutation, useEditProfileMutation, useCreateDiscountCouponMutation, useCouponStatusMutation, useGetAllCouponsQuery, useGetCouponDetailsQuery, useGetOwnerCouponsQuery, useQrCodeScanMutation, useSearchCouponsQuery, useFilterCouponsByCuisineQuery, useEditDiscountCouponMutation, useLazyDeleteDiscountCouponQuery } = authApi;
