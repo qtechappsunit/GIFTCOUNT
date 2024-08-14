@@ -59,12 +59,12 @@ const CreateCouponScreen = ({ route }) => {
     coupon_image: editableCoupon?.coupon_image || '',
     time_val: editableCoupon?.time_validation ? true : false,
     date_val: editableCoupon?.date_validation != 'Select Date' ? true : false,
-    week_val: JSON.parse(editableCoupon?.week_validation).length > 0 ? true : false,
+    week_val:  JSON.parse(editableCoupon?.week_validation || '[]').length > 0 ? true : false,
     week_days: []
   });
-  console.log('edit coupon data', JSON.parse(editableCoupon?.week_validation))
+  // console.log('edit coupon data', JSON.parse(editableCoupon?.week_validation))
 
-  const isChecked = (title) => JSON.parse(editableCoupon?.week_validation).includes(title)
+  const isChecked = (title) => JSON.parse(editableCoupon?.week_validation || '[]').includes(title) || title
 
   // const selectedTitles = new Set(getSelectedDays.map(day => day.title));
 
