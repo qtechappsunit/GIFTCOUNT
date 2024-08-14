@@ -26,7 +26,7 @@ import DiscountCodeModal from '../../components/DiscountCodeModal';
 import DropDownPicker from 'react-native-dropdown-picker';
 import CouponStatusModal from '../../components/CouponStatusModal';
 import { RootState } from '../../Store/Reducer';
-import { useCouponStatusMutation, useGetCouponDetailsQuery, useGetOwnerCouponsQuery, useLazyDeleteDiscountCouponQuery } from '../../Store/services';
+import { useCouponStatusMutation, useGetCouponDetailsQuery, useLazyDeleteDiscountCouponQuery } from '../../Store/services';
 import Loader from '../../components/Loader';
 import SpinnerLoader from '../../components/SpinnerLoader';
 import OptionsMenu from '../../components/OptionsMenu';
@@ -54,7 +54,7 @@ const RestaurantDetail = ({ route }) => {
   const { data, isLoading } = useGetCouponDetailsQuery(coupon_id, {
     refetchOnMountOrArgChange: true,
   })
-  const { refetch: ownerCouponsRefetch } = useGetOwnerCouponsQuery()
+  // const { refetch: ownerCouponsRefetch } = useLazyGetOwnerCouponsQuery()
 
   // console.log('set value state', data?.data?.status)
   useEffect(() => {
@@ -114,7 +114,7 @@ const RestaurantDetail = ({ route }) => {
           <Text style={styles.validityText}>Validity</Text>
           <Text style={styles.dateText}>{'24-04-2024'}</Text>
         </View> */}
-        <Text style={styles.name}>{details?.coupon_name || ''}</Text>
+        <Text style={styles.name}>{details?.user?.restaurant_name + ' - ' + details?.coupon_name || ''}</Text>
         <Text style={styles.descStyle}>{details?.description || ''}</Text>
         <View style={styles.row}>
           <Text style={styles.subHead}>Min order value</Text>
@@ -221,7 +221,7 @@ const RestaurantDetail = ({ route }) => {
   const onDeleteCoupon = async () => {
     await deleteDiscountCoupon(coupon_id).unwrap().then((res) => {
       if (res.success) {
-        ownerCouponsRefetch()
+        // ownerCouponsRefetch()
         nav.goBack()
         return ShowMessage('Delete Discount Coupon', res.message, 'success')
       } else {

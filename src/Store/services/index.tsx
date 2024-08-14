@@ -148,4 +148,22 @@ export const authApi = createApi({
     }),
 })
 
-export const { useCreateUserMutation, useLoginMutation, useGetCuisineTypesQuery, useSendCodeEmailMutation, useVerifyOTPMutation, useResetPasswordMutation, useChangePasswordMutation, useEditProfileMutation, useCreateDiscountCouponMutation, useCouponStatusMutation, useGetAllCouponsQuery, useGetCouponDetailsQuery, useGetOwnerCouponsQuery, useQrCodeScanMutation, useSearchCouponsQuery, useFilterCouponsByCuisineQuery, useEditDiscountCouponMutation, useLazyDeleteDiscountCouponQuery } = authApi;
+export const {
+    useCreateUserMutation,
+    useLoginMutation,
+    useGetCuisineTypesQuery,
+    useSendCodeEmailMutation,
+    useVerifyOTPMutation,
+    useResetPasswordMutation,
+    useChangePasswordMutation,
+    useEditProfileMutation,
+    useCreateDiscountCouponMutation,
+    useCouponStatusMutation,
+    useLazyGetAllCouponsQuery,
+    useLazyGetOwnerCouponsQuery,
+    useGetCouponDetailsQuery,
+    useQrCodeScanMutation,
+    useSearchCouponsQuery,
+    useFilterCouponsByCuisineQuery,
+    useEditDiscountCouponMutation,
+    useLazyDeleteDiscountCouponQuery } = authApi;

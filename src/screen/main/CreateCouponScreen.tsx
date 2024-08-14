@@ -26,7 +26,7 @@ import { useNavigation } from '@react-navigation/native';
 import DateModal from '../../components/DateModal';
 import moment from 'moment';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { useCreateDiscountCouponMutation, useEditDiscountCouponMutation, useGetCuisineTypesQuery, useGetOwnerCouponsQuery } from '../../Store/services';
+import { useCreateDiscountCouponMutation, useEditDiscountCouponMutation, useGetCuisineTypesQuery } from '../../Store/services';
 import ROUTES, { ShowMessage, Weekdays } from '../../utils';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useSelector } from 'react-redux';
@@ -78,7 +78,7 @@ const CreateCouponScreen = ({ route }) => {
 
   const [createDiscountCoupon, { isLoading }] = useCreateDiscountCouponMutation()
   const [editDiscountCoupon, { isLoading: editLoading }] = useEditDiscountCouponMutation()
-  const { refetch: ownerCouponsRefetch } = useGetOwnerCouponsQuery()
+  // const { refetch: ownerCouponsRefetch } = useGetOwnerCouponsQuery()
   const { user } = useSelector(state => state.authReducer)
 
   const onChange = (value: string, text: string) => {
@@ -224,7 +224,7 @@ const CreateCouponScreen = ({ route }) => {
         await editDiscountCoupon({ data, id }).unwrap().then((res) => {
           if (res.success) {
             nav.navigate(ROUTES.Home)
-           ownerCouponsRefetch()
+            //  ownerCouponsRefetch()
             return ShowMessage('Edit Discount Coupon', res.message, 'success')
           } else {
             return ShowMessage('Edit Discount Coupon', res.message, 'warning')
@@ -238,7 +238,7 @@ const CreateCouponScreen = ({ route }) => {
           // console.log('success create coupon ====>',res)
           if (res.success) {
             nav.goBack()
-            ownerCouponsRefetch()
+            // ownerCouponsRefetch()
             return ShowMessage('Create Discount Coupon', res.message, 'success')
           } else {
             return ShowMessage('Create Discount Coupon', res.message, 'warning')
