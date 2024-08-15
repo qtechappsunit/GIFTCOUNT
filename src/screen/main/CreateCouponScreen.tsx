@@ -37,7 +37,7 @@ const CreateCouponScreen = ({ route }) => {
   const { data } = useGetCuisineTypesQuery()
 
 
-  const editableCoupon = route?.params?.couponData || {};
+  const editableCoupon = route?.params?.couponData || null
   // console.log('editable', JSON.parse(editableCoupon?.week_validation))
   const id = editableCoupon?.id || ''
 

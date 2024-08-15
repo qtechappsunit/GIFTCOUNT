@@ -27,7 +27,7 @@ import { useSelector } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
 import ManualEntryModal from '../../components/ManualEntryModal';
 import { RootState } from '../../Store/Reducer';
-import { useFilterCouponsByCuisineQuery,  useGetCuisineTypesQuery, useLazyGetAllCouponsQuery, useLazyGetOwnerCouponsQuery, useSearchCouponsQuery } from '../../Store/services';
+import { useFilterCouponsByCuisineQuery, useLazyGetAllCouponsQuery, useLazyGetCuisineTypesQuery, useLazyGetCustomerCouponsQuery, useLazyGetOwnerCouponsQuery, useSearchCouponsQuery } from '../../Store/services';
 import Loader from '../../components/Loader';
 import Button from '../../components/Button';
 import images from '../../assets/images';
@@ -43,13 +43,14 @@ const Home = () => {
 
   const nav = useNavigation();
 
-  const [getAllCoupons,{ refetch: refetchAllCoupons, data: allCoupons, isLoading: allCouponsLoader }] = useLazyGetAllCouponsQuery()
-  const { refetch: refetchCuisineTypes, data: cuisineTypes, isLoading: cuisineTypesLoader } = useGetCuisineTypesQuery()
-  const [getOwnerCoupons,{ refetch: refetchOwnerCoupons, data: ownerCoupons, isLoading: ownerCouponsLoader }] = useLazyGetOwnerCouponsQuery()
+  const [getAllCoupons, { data: allCoupons, isLoading: allCouponsLoader }] = useLazyGetAllCouponsQuery()
+  const [getCuisineTypes, { data: cuisineTypes, isLoading: cuisineTypesLoader }] = useLazyGetCuisineTypesQuery()
+  const [getOwnerCoupons, { data: ownerCoupons, isLoading: ownerCouponsLoader }] = useLazyGetOwnerCouponsQuery()
   const { data: searchedCoupons, isLoading: searchCouponsLoader } = useSearchCouponsQuery(search)
   const { data: filterCouponsByItem, isLoading: filterCouponsLoader } = useFilterCouponsByCuisineQuery(catId)
+  const [getCustomerCoupons, { data: customerCoupons, isLoading: customerCouponsLoader }] = useLazyGetCustomerCouponsQuery()
 
-  // console.log('dataaaa ', searchedCoupons)
+  // console.log('dataaaa ', customerCoupons?.data?.admin_coupons?.contact(customerCoupons?.data?.scanned_coupons))
 
   const isFocused = useIsFocused()
 
@@ -57,31 +58,38 @@ const Home = () => {
 
   const coupons = user?.type === 'owner'
     ? (search.length > 0 ? searchedCoupons?.data : catId != 0 ? filterCouponsByItem?.data : ownerCoupons?.data)
-    : (search.length > 0 ? searchedCoupons?.data : catId != 0 ? filterCouponsByItem?.data : allCoupons?.data);
+    :
+    user?.type === 'customer'
+      ? (search.length > 0 ? searchedCoupons?.data : catId != 0 ? filterCouponsByItem?.data : customerCoupons?.data?.scanned_coupons?.length > 0 && customerCoupons?.data?.admin_coupons?.concat(customerCoupons?.data?.scanned_coupons))
+      : (search.length > 0 ? searchedCoupons?.data : catId != 0 ? filterCouponsByItem?.data : allCoupons?.data);
+
+  console.log('dataaaa', coupons)
 
   const heading = user?.type === 'owner'
     ? (search?.length > 0 ? 'Search Results' : catId != 0 ? 'Filter Results' : 'My Offers')
     : (search?.length > 0 ? 'Search Results' : catId != 0 ? 'Filter Results' : 'Available Coupons')
 
-  const isLoading = allCouponsLoader || ownerCouponsLoader || searchCouponsLoader || filterCouponsLoader
+  const isLoading = allCouponsLoader || ownerCouponsLoader || searchCouponsLoader || filterCouponsLoader || customerCouponsLoader
 
   useEffect(() => {
-
-    if(user?.type === 'owner'){
+    getCuisineTypes()
+    if (user?.type === 'owner') {
       getOwnerCoupons()
+    } else if (user?.type === 'customer') {
+      getCustomerCoupons()
     } else {
       getAllCoupons()
     }
 
-  },[])
+  }, [])
 
   useEffect(() => {
 
-      if(isFocused){
-        getOwnerCoupons()
-      }
+    if (isFocused) {
+      getOwnerCoupons()
+    }
 
-  },[isFocused])
+  }, [isFocused])
 
   const renderCategories = () => {
     return (
@@ -138,17 +146,21 @@ const Home = () => {
       <FlatList
         data={coupons}
         scrollEnabled={false}
-        renderItem={({ item, index }) => (
-          <RestaurantCard
-            key={index}
-            name={item?.user?.restaurant_name + ' - ' + item.coupon_name}
-            onPress={() => nav.navigate(ROUTES.RestaurantDetail, { id: item?.id })}
-            discount={`${item.discount}%`}
-            validity={item.date_validation != '0000-00-00' || item.date_validation ? item.date_validation : item.week_validation ? JSON.parse(item.week_validation).join(',') : '0000-00-00'}
-            image={item?.user?.profile_pic ? { uri: item?.user?.profile_pic } : images.dummy}
-            hour={item?.time_validation && `(${item.time_validation})`}
-          />
-        )}
+        renderItem={({ item, index }) => {
+          const scannedValidity = item?.coupon?.date_validation != '0000-00-00' ? item?.coupon?.date_validation : item?.coupon?.week_validation != '[]' ? JSON.parse(item?.coupon?.week_validation).join(',') : '0000-00-00'
+          const normalValidity = item.date_validation != '0000-00-00' ? item.date_validation : item.week_validation != '[]' ? JSON.parse(item.week_validation).join(',') : '0000-00-00'
+          return (
+            <RestaurantCard
+              key={index}
+              name={item?.type ? item?.coupon?.user?.restaurant_name + ' - ' + item?.coupon?.coupon_name : item?.user?.restaurant_name + ' - ' + item.coupon_name}
+              onPress={() => nav.navigate(ROUTES.RestaurantDetail, { id: item?.type ? item?.coupon?.id : item?.id })}
+              discount={item?.type ? `${item?.coupon?.discount}%` : `${item.discount}%`}
+              validity={item?.type ? scannedValidity : normalValidity}
+              image={item?.type && item?.coupon?.user?.profile_pic ? { uri: item?.coupon?.user?.profile_pic } : item?.user?.profile_pic ? { uri: item?.user?.profile_pic } : images.dummy}
+              hour={item?.type && item?.coupon?.time_validation ? `(${item?.coupon?.time_validation})` : item?.time_validation && `(${item.time_validation})`}
+            />
+          )
+        }}
         contentContainerStyle={styles.cardWrapper}
         ListEmptyComponent={listEmptyComponent}
         ListHeaderComponent={ListHeaderComponent}
@@ -159,9 +171,11 @@ const Home = () => {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
-      refetchCuisineTypes().then(() => {
+      getCuisineTypes().then(() => {
         if (user?.type === 'owner') {
           getOwnerCoupons()
+        } else if (user?.type === 'customer') {
+          getCustomerCoupons()
         } else {
           getAllCoupons()
         }

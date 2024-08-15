@@ -144,6 +144,12 @@ export const authApi = createApi({
                 url: endpoints.DELETE_DISCOUNT_COUPON(coupon_id),
                 method: 'GET'
             })
+        }),
+        getCustomerCoupons: builder.query({
+            query: () => ({
+                url: endpoints.GET_CUSTOMER_COUPONS,
+                method: 'GET'
+            })
         })
     }),
 })
@@ -151,7 +157,7 @@ export const authApi = createApi({
 export const {
     useCreateUserMutation,
     useLoginMutation,
-    useGetCuisineTypesQuery,
+    useLazyGetCuisineTypesQuery,
     useSendCodeEmailMutation,
     useVerifyOTPMutation,
     useResetPasswordMutation,
@@ -166,4 +172,6 @@ export const {
     useSearchCouponsQuery,
     useFilterCouponsByCuisineQuery,
     useEditDiscountCouponMutation,
-    useLazyDeleteDiscountCouponQuery } = authApi;
+    useLazyDeleteDiscountCouponQuery,
+    useLazyGetCustomerCouponsQuery
+} = authApi;

@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
     backgroundColor: themes.white,
   },
   contentWrapper: {
-    paddingTop: hp('2%'),
+    paddingTop: Platform.OS === 'ios' ? hp('12%') : hp('4%'),
     padding: hp('2.5%'),
   },
   textWrapper: {
@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
     fontSize: hp('1.8%'),
   },
   name: {
-    marginTop: hp('2%'),
+    // marginTop: hp('4%'),
     color: themes.white,
     fontSize: hp(2.8),
     fontFamily: fonts.lexendBold,

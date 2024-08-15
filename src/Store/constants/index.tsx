@@ -18,7 +18,8 @@ const endpoints = {
     SEARCH_COUPONS: (text) => `/search-coupon?search=${text}`,
     FILTER_COUPONS_BY_CUISINES: (id) => `/cuisine/${id}/coupons`,
     EDIT_DISCOUNT_COUPON: (id) => `coupon/${id}/update`,
-    DELETE_DISCOUNT_COUPON: (id) => `/coupon/${id}/delete`
+    DELETE_DISCOUNT_COUPON: (id) => `/coupon/${id}/delete`,
+    GET_CUSTOMER_COUPONS: '/get-scanned-coupons'
     
 }
 

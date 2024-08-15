@@ -8,7 +8,7 @@ import Button from './Button';
 import Loader from './Loader';
 import { useSelector } from 'react-redux';
 import { RootState } from '../Store/Reducer';
-import { useGetCuisineTypesQuery } from '../Store/services';
+import { useLazyGetCuisineTypesQuery } from '../Store/services';
 
 
 interface ModalProps {
@@ -20,10 +20,16 @@ interface ModalProps {
 const CuisineTypeModal = (props: ModalProps) => {
     const [selectedIds, setSelectedIds] = useState([])
     const { user } = useSelector((state: RootState) => state.authReducer)
-    const { data, isLoading } = useGetCuisineTypesQuery()
+    const [getCuisineTypes,{ data, isLoading }] = useLazyGetCuisineTypesQuery()
 
 
     // console.log('dataa',props.cuisine_types)
+
+    useEffect(() => {
+
+        getCuisineTypes()
+
+    },[])
 
     useEffect(() => {
 
