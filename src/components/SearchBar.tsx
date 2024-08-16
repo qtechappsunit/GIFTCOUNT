@@ -1,4 +1,4 @@
-import {Platform, StyleSheet, TextInput, View, ViewStyle} from 'react-native';
+import {Platform, StyleSheet, TextInput, TouchableOpacity, View, ViewStyle} from 'react-native';
 import React from 'react';
 import themes from '../assets/themes';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -10,13 +10,16 @@ interface SearchBarProps {
   value: string,
   onChangeText: (param: string) => void,
   placeholder: string,
-  style: ViewStyle
+  style: ViewStyle,
+  onSearchPress: () => void
 }
 
 const SearchBar = (props: SearchBarProps) => {
   return (
     <View style={[styles.searchView, props.style]}>
-      <SVGIcons image={icons.search} />
+     <TouchableOpacity activeOpacity={0.7} onPress={props.onSearchPress}> 
+      <SVGIcons image={icons.search}/>
+      </TouchableOpacity>
       <TextInput
         placeholder={props.placeholder}
         placeholderTextColor={themes.light_black}

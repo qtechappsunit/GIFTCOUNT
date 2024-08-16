@@ -27,7 +27,7 @@ import { useSelector } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
 import ManualEntryModal from '../../components/ManualEntryModal';
 import { RootState } from '../../Store/Reducer';
-import { useFilterCouponsByCuisineQuery, useLazyGetAllCouponsQuery, useLazyGetCuisineTypesQuery, useLazyGetCustomerCouponsQuery, useLazyGetOwnerCouponsQuery, useSearchCouponsQuery } from '../../Store/services';
+import { useLazyFilterCouponsByCuisineQuery, useLazyGetAllCouponsQuery, useLazyGetCuisineTypesQuery, useLazyGetCustomerCouponsQuery, useLazyGetOwnerCouponsQuery, useLazySearchCouponsQuery } from '../../Store/services';
 import Loader from '../../components/Loader';
 import Button from '../../components/Button';
 import images from '../../assets/images';
@@ -39,6 +39,7 @@ const Home = () => {
   const [manualCode, setManualCode] = useState(false);
   const [refreshing, setRefreshing] = useState(false)
   const [search, setSearch] = useState('')
+  const [searchPress, setSearchPress] = useState(false)
   const { user } = useSelector((state: RootState) => state?.authReducer);
 
   const nav = useNavigation();
@@ -46,28 +47,50 @@ const Home = () => {
   const [getAllCoupons, { data: allCoupons, isLoading: allCouponsLoader }] = useLazyGetAllCouponsQuery()
   const [getCuisineTypes, { data: cuisineTypes, isLoading: cuisineTypesLoader }] = useLazyGetCuisineTypesQuery()
   const [getOwnerCoupons, { data: ownerCoupons, isLoading: ownerCouponsLoader }] = useLazyGetOwnerCouponsQuery()
-  const { data: searchedCoupons, isLoading: searchCouponsLoader } = useSearchCouponsQuery(search)
-  const { data: filterCouponsByItem, isLoading: filterCouponsLoader } = useFilterCouponsByCuisineQuery(catId)
+  const [searchCoupons, { data: searchedCoupons, isLoading: searchCouponsLoader }] = useLazySearchCouponsQuery()
+  const [filterCouponsByCuisine, { data: filterCouponsByItem, isLoading: filterCouponsLoader }] = useLazyFilterCouponsByCuisineQuery()
   const [getCustomerCoupons, { data: customerCoupons, isLoading: customerCouponsLoader }] = useLazyGetCustomerCouponsQuery()
 
   // console.log('dataaaa ', customerCoupons?.data?.admin_coupons?.contact(customerCoupons?.data?.scanned_coupons))
 
   const isFocused = useIsFocused()
 
+
   const allTypes = [{ id: 0, title: 'All' }, ...(cuisineTypes?.data || [])]
 
-  const coupons = user?.type === 'owner'
-    ? (search.length > 0 ? searchedCoupons?.data : catId != 0 ? filterCouponsByItem?.data : ownerCoupons?.data)
-    :
-    user?.type === 'customer'
-      ? (search.length > 0 ? searchedCoupons?.data : catId != 0 ? filterCouponsByItem?.data : customerCoupons?.data?.scanned_coupons?.length > 0 && customerCoupons?.data?.admin_coupons?.concat(customerCoupons?.data?.scanned_coupons))
-      : (search.length > 0 ? searchedCoupons?.data : catId != 0 ? filterCouponsByItem?.data : allCoupons?.data);
+  const getCouponsData = () => {
+    if (search.length > 0 && searchPress) {
+      return searchedCoupons?.data;
+    }
+
+    if (catId != 0) {
+      return filterCouponsByItem?.data;
+    }
+
+    if (user?.type === 'owner') {
+      return ownerCoupons?.data;
+    }
+
+    if (user?.type === 'customer') {
+      const combinedCoupons = customerCoupons?.data?.scanned_coupons?.length > 0
+        ? [...(customerCoupons?.data?.admin_coupons || []), ...customerCoupons?.data?.scanned_coupons]
+        : customerCoupons?.data?.admin_coupons || [];
+      return customerCoupons?.data?.admin_coupons;
+    }
+
+    return allCoupons?.data;
+  };
+
+  const coupons = getCouponsData();
 
   console.log('dataaaa', coupons)
-
-  const heading = user?.type === 'owner'
-    ? (search?.length > 0 ? 'Search Results' : catId != 0 ? 'Filter Results' : 'My Offers')
-    : (search?.length > 0 ? 'Search Results' : catId != 0 ? 'Filter Results' : 'Available Coupons')
+  const heading = (() => {
+    if (user?.type === 'owner') {
+      return search?.length > 0 && searchPress ? 'Search Results' : catId != 0 ? 'Filter Results' : 'My Offers'
+    } else {
+      return search?.length > 0 && searchPress ? 'Search Results' : catId != 0 ? 'Filter Results' : 'Available Coupons'
+    }
+  })();
 
   const isLoading = allCouponsLoader || ownerCouponsLoader || searchCouponsLoader || filterCouponsLoader || customerCouponsLoader
 
@@ -81,7 +104,7 @@ const Home = () => {
       getAllCoupons()
     }
 
-  }, [])
+  }, [user?.type])
 
   useEffect(() => {
 
@@ -90,6 +113,42 @@ const Home = () => {
     }
 
   }, [isFocused])
+
+  useEffect(() => {
+
+    if (catId != 0) {
+      filterCouponsByCuisine(catId)
+      // alert('hello world')
+    }
+
+  }, [catId])
+
+  useEffect(() => {
+
+    if(search.length > 0 && searchPress) {
+      searchCoupons(search)
+    }
+
+  },[search,searchPress])
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      getCuisineTypes().then(() => {
+        if (user?.type === 'owner') {
+          getOwnerCoupons()
+        } else if (user?.type === 'customer') {
+          getCustomerCoupons()
+        } else {
+          getAllCoupons()
+        }
+      }).finally(() => setRefreshing(false))
+    }, 2000);
+  }, []);
+
+  const onPressCuisine = (id) => {
+    setCatId(id)
+  }
 
   const renderCategories = () => {
     return (
@@ -104,7 +163,7 @@ const Home = () => {
             key={item.id}
             catImage={item.id == 0 ? images.cat3 : { uri: item.image }}
             catName={item.title}
-            onCatPress={() => setCatId(item.id)}
+            onCatPress={() => onPressCuisine(item?.id)}
             catStyle={{
               backgroundColor: catId == item.id ? themes.primary : themes.white,
             }}
@@ -128,64 +187,93 @@ const Home = () => {
   };
 
   const listEmptyComponent = () => (
-    <>
-      {isLoading ?
-        <Loader
-          size={'large'}
-          color={themes.primary}
-          style={{ alignSelf: 'center' }}
-        />
-        :
-        <Text style={styles.message}>No Coupons Found</Text>
-      }
-    </>
+    <Text style={styles.message}>No Coupons Found</Text>
   )
+
 
   const renderCards = () => {
     return (
-      <FlatList
-        data={coupons}
-        scrollEnabled={false}
-        renderItem={({ item, index }) => {
-          const scannedValidity = item?.coupon?.date_validation != '0000-00-00' ? item?.coupon?.date_validation : item?.coupon?.week_validation != '[]' ? JSON.parse(item?.coupon?.week_validation).join(',') : '0000-00-00'
-          const normalValidity = item.date_validation != '0000-00-00' ? item.date_validation : item.week_validation != '[]' ? JSON.parse(item.week_validation).join(',') : '0000-00-00'
-          return (
-            <RestaurantCard
-              key={index}
-              name={item?.type ? item?.coupon?.user?.restaurant_name + ' - ' + item?.coupon?.coupon_name : item?.user?.restaurant_name + ' - ' + item.coupon_name}
-              onPress={() => nav.navigate(ROUTES.RestaurantDetail, { id: item?.type ? item?.coupon?.id : item?.id })}
-              discount={item?.type ? `${item?.coupon?.discount}%` : `${item.discount}%`}
-              validity={item?.type ? scannedValidity : normalValidity}
-              image={item?.type && item?.coupon?.user?.profile_pic ? { uri: item?.coupon?.user?.profile_pic } : item?.user?.profile_pic ? { uri: item?.user?.profile_pic } : images.dummy}
-              hour={item?.type && item?.coupon?.time_validation ? `(${item?.coupon?.time_validation})` : item?.time_validation && `(${item.time_validation})`}
-            />
-          )
-        }}
-        contentContainerStyle={styles.cardWrapper}
-        ListEmptyComponent={listEmptyComponent}
-        ListHeaderComponent={ListHeaderComponent}
-      />
+      isLoading ? (
+        <Loader
+          size={'large'}
+          color={themes.primary}
+          style={{ alignSelf: 'center', paddingTop: hp(5) }}
+        />
+      ) : (
+        <FlatList
+          data={coupons}
+          scrollEnabled={false}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => {
+            // console.log('Rendering item:', item);
+
+            const scannedValidity =
+              item?.coupon?.date_validation !== '0000-00-00'
+                ? item?.coupon?.date_validation
+                : item?.coupon?.week_validation !== '[]'
+                  ? JSON.parse(item?.coupon?.week_validation).join(',')
+                  : '0000-00-00';
+
+            const normalValidity =
+              item?.date_validation !== '0000-00-00'
+                ? item?.date_validation
+                : item?.week_validation !== '[]'
+                  ? JSON.parse(item?.week_validation).join(',')
+                  : '0000-00-00';
+
+            return (
+              <RestaurantCard
+                key={item.id}
+                name={
+                  item?.type
+                    ? `${item?.coupon?.user?.restaurant_name} - ${item?.coupon?.coupon_name}`
+                    : `${item?.user?.restaurant_name} - ${item.coupon_name}`
+                }
+                onPress={() =>
+                  nav.navigate(ROUTES.RestaurantDetail, {
+                    id: item?.type ? item?.coupon?.id : item?.id,
+                  })
+                }
+                discount={
+                  item?.type
+                    ? `${item?.coupon?.discount}%`
+                    : `${item.discount}%`
+                }
+                validity={item?.type ? scannedValidity : normalValidity}
+                image={
+                  item?.type && item?.coupon?.user?.profile_pic
+                    ? { uri: item?.coupon?.user?.profile_pic }
+                    : item?.user?.profile_pic
+                      ? { uri: item?.user?.profile_pic }
+                      : images.dummy
+                }
+                hour={
+                  item?.type && item?.coupon?.time_validation
+                    ? `(${item?.coupon?.time_validation})`
+                    : item?.time_validation
+                      ? `(${item.time_validation})`
+                      : null
+                }
+              />
+            );
+          }}
+          contentContainerStyle={styles.cardWrapper}
+          ListEmptyComponent={listEmptyComponent}
+          ListHeaderComponent={ListHeaderComponent}
+        />
+      )
     );
   };
 
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => {
-      getCuisineTypes().then(() => {
-        if (user?.type === 'owner') {
-          getOwnerCoupons()
-        } else if (user?.type === 'customer') {
-          getCustomerCoupons()
-        } else {
-          getAllCoupons()
-        }
-      }).finally(() => setRefreshing(false))
-    }, 2000);
-  }, []);
-
-
-  const onSearchCoupons = async (text) => {
+  const onChangeText = async (text) => {
     setSearch(text)
+    if (text.length < 1) {
+      setSearchPress(false)
+    }
+  }
+
+  const onSearchIcon = () => {
+    setSearchPress(true)
   }
 
   return (
@@ -220,7 +308,7 @@ const Home = () => {
               <Text style={styles.addText}>Add Discount Coupon</Text>
             </TouchableOpacity>
           ) : null}
-          <SearchBar placeholder={'Search dishes, restaurants'} value={search} onChangeText={(text) => onSearchCoupons(text)} />
+          <SearchBar placeholder={'Search dishes, restaurants'} value={search} onChangeText={(text) => onChangeText(text)} onSearchPress={() => onSearchIcon()} />
           {user?.type === 'customer' &&
             <>
               <View style={styles.buttonView}>
@@ -230,7 +318,7 @@ const Home = () => {
               <ManualEntryModal visible={manualCode} setVisible={setManualCode} />
             </>
           }
-          {search?.length < 1 && renderCategories()}
+          {!searchPress && renderCategories()}
           {renderCards()}
         </ScrollView>
       }

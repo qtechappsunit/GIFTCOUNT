@@ -97,11 +97,15 @@ export const authApi = createApi({
                 method: 'GET',
             }),
         }),
-        getCouponDetails: builder.query({
-            query: (id) => ({
-                url: endpoints.COUPON_DETAIL(id),
-                method: 'GET'
-            })
+        getCouponDetails: builder.mutation({
+            query: ({type,coupon_id}) => {
+                console.log('type and id',type,coupon_id)
+               return { 
+                url: endpoints.COUPON_DETAIL(coupon_id),
+                method: 'POST',
+                body: type
+            }
+            }
         }),
         couponStatus: builder.mutation({
             query: ({ status, coupon_id }) => {
@@ -127,10 +131,13 @@ export const authApi = createApi({
             })
         }),
         filterCouponsByCuisine: builder.query({
-            query: (id) => ({
+            query: (id) => {
+                console.log('cuisine id',id)
+               return { 
                 url: endpoints.FILTER_COUPONS_BY_CUISINES(id),
                 method: 'GET'
-            })
+            }
+            }
         }),
         editDiscountCoupon: builder.mutation({
             query: ({ data, id }) => ({
@@ -167,10 +174,10 @@ export const {
     useCouponStatusMutation,
     useLazyGetAllCouponsQuery,
     useLazyGetOwnerCouponsQuery,
-    useGetCouponDetailsQuery,
+    useGetCouponDetailsMutation,
     useQrCodeScanMutation,
-    useSearchCouponsQuery,
-    useFilterCouponsByCuisineQuery,
+    useLazySearchCouponsQuery,
+    useLazyFilterCouponsByCuisineQuery,
     useEditDiscountCouponMutation,
     useLazyDeleteDiscountCouponQuery,
     useLazyGetCustomerCouponsQuery

@@ -26,12 +26,13 @@ import DiscountCodeModal from '../../components/DiscountCodeModal';
 import DropDownPicker from 'react-native-dropdown-picker';
 import CouponStatusModal from '../../components/CouponStatusModal';
 import { RootState } from '../../Store/Reducer';
-import { useCouponStatusMutation, useGetCouponDetailsQuery, useLazyDeleteDiscountCouponQuery } from '../../Store/services';
+import { useCouponStatusMutation, useGetCouponDetailsMutation,  useLazyDeleteDiscountCouponQuery } from '../../Store/services';
 import Loader from '../../components/Loader';
 import SpinnerLoader from '../../components/SpinnerLoader';
 import OptionsMenu from '../../components/OptionsMenu';
 import Clipboard from '@react-native-clipboard/clipboard';
 import ConfirmationModal from '../../components/ConfirmationModal';
+import FormData from 'form-data';
 
 const RestaurantDetail = ({ route }) => {
   const { user } = useSelector((state: RootState) => state?.authReducer);
@@ -51,10 +52,22 @@ const RestaurantDetail = ({ route }) => {
 
   const [couponStatus, { isLoading: statusLoading }] = useCouponStatusMutation()
   const [deleteDiscountCoupon, { isLoading: deleteLoader }] = useLazyDeleteDiscountCouponQuery()
-  const { data, isLoading } = useGetCouponDetailsQuery(coupon_id, {
-    refetchOnMountOrArgChange: true,
-  })
+  const [getCouponDetails,{ data, isLoading }] = useGetCouponDetailsMutation(user?.type,coupon_id)
   // const { refetch: ownerCouponsRefetch } = useLazyGetOwnerCouponsQuery()
+  // console.log('hhhh coupon id from screen',data?.data?.application_link)
+
+  useEffect(() => {
+
+  FetchCouponDetails()
+
+  },[coupon_id])
+
+  const FetchCouponDetails = async () => {
+    var type = new FormData()
+    type.append('user_type',user?.type)
+
+   await getCouponDetails({type,coupon_id}).unwrap()
+  }
 
   // console.log('set value state', data?.data?.status)
   useEffect(() => {
@@ -138,14 +151,14 @@ const RestaurantDetail = ({ route }) => {
     );
   };
 
-  const onCopyLink = async () => {
-    const template = `to avail the discount coupons${'\n'} download the GiftCount App${'\n'} with this link;`
+  const onCopyLink = async (link) => {
+    const template = `to avail the discount coupons${'\n'} download the GiftCount App${'\n'} with this link ${'\n'}${link}`
     Clipboard.setString(template)
     return ShowMessage('Copy Text', 'Link has been copied', 'success')
 
   }
 
-  const renderDiscountCard = (coupon_image, discount, id) => {
+  const renderDiscountCard = (coupon_image, discount, id,number,restaurant_web,discount_code,link) => {
     return (
       <>
         <View style={styles.wrapper}>
@@ -160,7 +173,7 @@ const RestaurantDetail = ({ route }) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.btn}
-                  onPress={() => onCopyLink()}>
+                  onPress={() => onCopyLink(link)}>
                   <Text style={styles.btnText}>Copy Link</Text>
                 </TouchableOpacity>
               </>
@@ -183,6 +196,9 @@ const RestaurantDetail = ({ route }) => {
         <View style={{ height: hp(2) }} />
         <DiscountCodeModal
           modalVisible={visible}
+          restaurant_phone={number}
+          code={discount_code}
+          url={restaurant_web}
           setModalVisible={setVisible}
         />
       </>
@@ -243,7 +259,7 @@ const RestaurantDetail = ({ route }) => {
           <ScrollView showsVerticalScrollIndicator={false}>
             {renderImages(data?.data?.user?.profile_pic)}
             {renderContent(data?.data)}
-            {renderDiscountCard(data?.data?.coupon_image, data?.data?.discount, data?.data?.id)}
+            {renderDiscountCard(data?.data?.coupon_image, data?.data?.discount, data?.data?.id,data?.data?.user?.phone_number,data?.data?.user?.restaurant_web,data?.data?.coupon_code,data?.data?.application_link)}
             {user?.type == 'owner' ? (
               <>
                 <DropDownPicker
