@@ -43,7 +43,6 @@ const Home = () => {
   const { user } = useSelector((state: RootState) => state?.authReducer);
 
   const nav = useNavigation();
-
   const [getAllCoupons, { data: allCoupons, isLoading: allCouponsLoader }] = useLazyGetAllCouponsQuery()
   const [getCuisineTypes, { data: cuisineTypes, isLoading: cuisineTypesLoader }] = useLazyGetCuisineTypesQuery()
   const [getOwnerCoupons, { data: ownerCoupons, isLoading: ownerCouponsLoader }] = useLazyGetOwnerCouponsQuery()
@@ -75,7 +74,7 @@ const Home = () => {
       const combinedCoupons = customerCoupons?.data?.scanned_coupons?.length > 0
         ? [...(customerCoupons?.data?.admin_coupons || []), ...customerCoupons?.data?.scanned_coupons]
         : customerCoupons?.data?.admin_coupons || [];
-      return customerCoupons?.data?.admin_coupons;
+      return combinedCoupons;
     }
 
     return allCoupons?.data;
@@ -83,7 +82,7 @@ const Home = () => {
 
   const coupons = getCouponsData();
 
-  console.log('dataaaa', coupons)
+  // console.log('dataaaa', coupons)
   const heading = (() => {
     if (user?.type === 'owner') {
       return search?.length > 0 && searchPress ? 'Search Results' : catId != 0 ? 'Filter Results' : 'My Offers'
@@ -125,11 +124,11 @@ const Home = () => {
 
   useEffect(() => {
 
-    if(search.length > 0 && searchPress) {
+    if (search.length > 0 && searchPress) {
       searchCoupons(search)
     }
 
-  },[search,searchPress])
+  }, [search, searchPress])
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -224,6 +223,7 @@ const Home = () => {
             return (
               <RestaurantCard
                 key={item.id}
+                type={item?.type}
                 name={
                   item?.type
                     ? `${item?.coupon?.user?.restaurant_name} - ${item?.coupon?.coupon_name}`
