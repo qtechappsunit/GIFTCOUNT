@@ -8,41 +8,16 @@ import InputField from '../../components/InputField';
 import icons from '../../assets/icons';
 import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
-import ROUTES, { ShowMessage } from '../../utils';
-import { useSendCodeEmailMutation } from '../../Store/services';
-import FormData from 'form-data';
+import ROUTES from '../../utils';
 
 const ForgetPassword = () => {
   const [email, setEmail] = useState<string>('')
 
   const nav = useNavigation();
 
-  const [sendCodeEmail, { isLoading }] = useSendCodeEmailMutation()
 
   const onSubmitPress = async () => {
-    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-
-
-    if (!email) {
-      return ShowMessage('Forget Password', 'Please enter your email', 'warning')
-    } else if (emailRegex.test(email) == false) {
-      return ShowMessage('Forget Password', 'Invalid email', 'warning')
-    }
-    else {
-      var data = new FormData()
-      data.append('email', email)
-      await sendCodeEmail(data).unwrap().then((res) => {
-        if (res.success) {
-          nav.navigate(ROUTES.OTPScreen, { id: res.data.id, code: res.data.code, email: res.data.email })
-          return ShowMessage('Forget Password', res.message, 'success')
-        } else {
-          return ShowMessage('Forget Password', res.message, 'warning')
-        }
-      }).catch((error) => {
-        console.log('send code on email error =====>', error)
-        return ShowMessage('Forget Password', 'Some problem occured', 'danger')
-      })
-    }
+    nav.navigate(ROUTES.OTPScreen)
   }
 
   return (
@@ -65,7 +40,6 @@ const ForgetPassword = () => {
         <Button
           buttonText={'Submit'}
           style={styles.btn}
-          indicator={isLoading}
           onPress={() => onSubmitPress()}
         />
       </View>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Container from '../../components/Container';
 import images from '../../assets/images';
 import {
@@ -15,10 +15,8 @@ import { useSelector } from 'react-redux';
 import CuisineTypeModal from '../../components/CuisineTypeModal';
 import ProfileCreatedModal from '../../components/ProfileCreatedModal';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { useCreateUserMutation } from '../../Store/services';
 import { RootState } from '../../Store/Reducer';
-import { requestPermission, ShowMessage, validateFields } from '../../utils';
-import FormData from 'form-data';
+import { requestPermission, ShowMessage } from '../../utils';
 
 interface InputField {
   type: string,
@@ -65,7 +63,7 @@ const Register = () => {
 
   })
 
-  const [createUser, { isLoading: isCreateUserLoading}] = useCreateUserMutation()
+
 
   const onSelectPhoto = async () => {
    const status = await requestPermission('media')
@@ -102,55 +100,7 @@ const Register = () => {
   }
 
   const onSubmitPress = async () => {
-    const errors = validateFields(state, userType);
-    if (errors) {
-      return ShowMessage(
-        'Signup',
-        errors,
-        'warning',
-      );
-    }
-
-    const formData = new FormData();
-
-    formData.append('type', userType)
-    formData.append('first_name', state.first_name)
-    formData.append('last_name', state.last_name)
-    formData.append('email', state.email)
-    formData.append('phone_number', state.phone)
-    formData.append('bank_IBAN', state.bank_iban)
-    formData.append('street', state.street)
-    formData.append('city', state.city)
-    formData.append('state', state.state)
-    formData.append('zip_code', state.zip_code)
-    formData.append('password', state.password)
-    formData.append('restaurant_name', state.restaurant_name)
-    formData.append('owner_name', state.owner_name)
-    formData.append('restaurant_web', state.restaurant_web)
-    formData.append('cuisine_type_ids', JSON.stringify(state.cuisine_type))
-    if (state.profile_pic) {
-      formData.append('profile_pic', {
-        name: 'image.jpg',
-        type: 'image/jpeg',
-        uri:
-          Platform.OS === 'android'
-            ? state.profile_pic
-            : state.profile_pic.replace('file://', ''),
-      });
-    }
-
-    await createUser(formData).unwrap().then(data => {
-      console.log('signup response ===>',data)
-      if (data.success) {
-        return ShowMessage('Signup',data.message,'success')
-        // setOpenProfileModal(!openProfileModal)
-      } else {
-       return ShowMessage('Signup', data.message, 'warning');
-      }
-    }).catch((error) => {
-      console.log('signup error ====>', error)
-      return ShowMessage('Signup','Some problem occured','danger')
-    })
+    setOpenProfileModal(!openProfileModal)
   }
 
   return (
@@ -350,16 +300,11 @@ const Register = () => {
       <Button
         buttonText={'Submit'}
         style={styles.btn}
-        indicator={isCreateUserLoading}
         onPress={() => onSubmitPress()}
       />
       <CuisineTypeModal
         modalVisible={open}
         setModalVisible={setOpen}
-        setValue={(type) => setState({
-          ...state,
-          cuisine_type: type
-        })}
       />
       <ProfileCreatedModal
         modalVisible={openProfileModal}

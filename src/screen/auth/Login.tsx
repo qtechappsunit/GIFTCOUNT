@@ -8,14 +8,12 @@ import themes from '../../assets/themes';
 import InputField from '../../components/InputField';
 import icons from '../../assets/icons';
 import Button from '../../components/Button';
-import ROUTES, { ShowMessage, socialIcons } from '../../utils';
+import ROUTES, { socialIcons } from '../../utils';
 import { useNavigation } from '@react-navigation/native';
 import AuthContainer from '../../components/AuthContainer';
 import fonts from '../../assets/fonts';
 import { useSelector } from 'react-redux';
-import { useLoginMutation } from '../../Store/services';
 import { RootState } from '../../Store/Reducer';
-import { signinWithGoogle } from './socialauth';
 
 interface InputField {
   email: string,
@@ -31,39 +29,13 @@ const Login = () => {
     password: ''
   })
 
-  const [login, { isLoading }] = useLoginMutation()
 
   const onLoginPress = async () => {
-    if (!state.email) {
-      return ShowMessage('Signin', 'Please enter your email', 'warning')
-    } else if (!state.password) {
-      return ShowMessage('Signin', 'Please enter your password', 'warning')
-    } else {
-      const data = new FormData()
-      data.append('email', state.email)
-      data.append('password', state.password)
-      await login(data).unwrap().then((res) => {
-        // console.log('login response =====>', res)
-        if (res.success) {
-          return ShowMessage('Signin', res.message, 'success')
-        } else {
-          return ShowMessage('Signin', res.message, 'warning')
-        }
-      }).catch((error) => {
-        console.log('login error =====>', error)
-        return ShowMessage('Signin', 'Some problem occured', 'danger')
-      })
-    }
+    navigation.navigate(ROUTES.MainStack)
   }
 
-  const onSocialLogin = (index) => {
-    if (index == 1) {
-      signinWithGoogle().then(data => {
-        console.log('google signin user data ===>', data)
-      })
-    } else {
+  const onSocialLogin = () => {
       alert('work in progress')
-    }
   }
 
   return (
@@ -112,7 +84,6 @@ const Login = () => {
         </TouchableOpacity>
         <Button
           buttonText={'Submit'}
-          indicator={isLoading}
           onPress={() => onLoginPress()}
         />
         <TouchableOpacity
@@ -145,7 +116,7 @@ const Login = () => {
                 borderRadius: 100,
               }
             }
-            onPress={() => onSocialLogin(ind)}
+            onPress={() => onSocialLogin()}
           >
             <Image
               source={item.icon}

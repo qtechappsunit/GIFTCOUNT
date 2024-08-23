@@ -7,118 +7,68 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, {useState} from 'react';
 import Wrapper from '../../components/Wrapper';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import ROUTES, { couponOptions, ShowMessage } from '../../utils';
+import ROUTES, {ShowMessage} from '../../utils';
 import themes from '../../assets/themes';
 import SVGIcons from '../../components/SVGIcons';
 import icons from '../../assets/icons';
 import images from '../../assets/images';
 import Button from '../../components/Button';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import fonts from '../../assets/fonts';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import DiscountCodeModal from '../../components/DiscountCodeModal';
 import DropDownPicker from 'react-native-dropdown-picker';
 import CouponStatusModal from '../../components/CouponStatusModal';
-import { RootState } from '../../Store/Reducer';
-import { useCouponStatusMutation, useGetCouponDetailsMutation,  useLazyDeleteDiscountCouponQuery } from '../../Store/services';
-import Loader from '../../components/Loader';
-import SpinnerLoader from '../../components/SpinnerLoader';
-import OptionsMenu from '../../components/OptionsMenu';
+import {RootState} from '../../Store/Reducer';
 import Clipboard from '@react-native-clipboard/clipboard';
-import ConfirmationModal from '../../components/ConfirmationModal';
-import FormData from 'form-data';
 
-const RestaurantDetail = ({ route }) => {
-  const { user } = useSelector((state: RootState) => state?.authReducer);
+const RestaurantDetail = ({route}) => {
+  const {userType} = useSelector((state: RootState) => state?.authReducer);
   const nav = useNavigation();
   const [visible, setVisible] = useState(false);
-  const [modal, setModal] = useState(false)
   const [confirmationModal, setConfirmationModal] = useState(false);
   const [open, setOpen] = useState(false);
-  const [pendingValue, setPendingValue] = useState('')
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    { label: 'Active', value: 1 },
-    { label: 'Inactive', value: 0 },
+    {label: 'Active', value: 1},
+    {label: 'Inactive', value: 0},
+    {label: 'Edit', value: 1},
+    {label: 'Delete', value: 0},
   ]);
 
-  const coupon_id = route?.params?.id
-
-  const [couponStatus, { isLoading: statusLoading }] = useCouponStatusMutation()
-  const [deleteDiscountCoupon, { isLoading: deleteLoader }] = useLazyDeleteDiscountCouponQuery()
-  const [getCouponDetails,{ data, isLoading }] = useGetCouponDetailsMutation(user?.type,coupon_id)
-  // const { refetch: ownerCouponsRefetch } = useLazyGetOwnerCouponsQuery()
-  // console.log('hhhh coupon id from screen',data?.data?.application_link)
-
-  useEffect(() => {
-
-  FetchCouponDetails()
-
-  },[coupon_id])
-
-  const FetchCouponDetails = async () => {
-    var type = new FormData()
-    type.append('user_type',user?.type)
-
-   await getCouponDetails({type,coupon_id}).unwrap()
-  }
-
-  // console.log('set value state', data?.data?.status)
-  useEffect(() => {
-    if (data) {
-      setValue(data?.data?.status)
-    }
-
-  }, [data])
-  // console.log('coupon details =====>', data?.data)
-
-  const onSelectOptions = (index) => {
-    if (index == 0) {
-      nav.navigate(ROUTES.CreateCouponScreen, { couponData: data?.data })
-    } else {
-      setModal(!modal)
-    }
-  }
-
-  const renderImages = (restaurant_image) => {
+  const renderImages = () => {
     return (
       <View style={styles.swiperWrapper}>
         <TouchableOpacity onPress={() => nav.goBack()} style={styles.backArrow}>
           <SVGIcons
             image={icons.arrowNext}
-            style={{ transform: [{ rotate: '180deg' }] }}
+            style={{transform: [{rotate: '180deg'}]}}
           />
         </TouchableOpacity>
-        {user?.type === 'owner' &&
-          <View style={styles.OptionStyle}>
-            <OptionsMenu data={couponOptions} onSelect={(index) => onSelectOptions(index)} />
-          </View>
-        }
         {/* <Swiper
           activeDotStyle={styles.activeStyle}
           dotColor={themes.secondary}
           dotStyle={styles.inactiveStyle}> */}
         {/* {multipleImages.map((item, ind) => ( */}
         <Image
-          source={restaurant_image ? { uri: restaurant_image } : images.dummy}
+          source={images.restaurant3}
           style={styles.imageStyle}
           borderBottomLeftRadius={30}
           borderBottomRightRadius={30}
         />
         {/* ))} */}
         {/* </Swiper> */}
-
       </View>
     );
   };
 
-  const renderContent = (details) => {
+  const renderContent = () => {
     return (
       <View style={styles.contentWrapper}>
         {/* <View style={styles.textWrapper}>
@@ -127,177 +77,128 @@ const RestaurantDetail = ({ route }) => {
           <Text style={styles.validityText}>Validity</Text>
           <Text style={styles.dateText}>{'24-04-2024'}</Text>
         </View> */}
-        <Text style={styles.name}>{details?.user?.restaurant_name + ' - ' + details?.coupon_name || ''}</Text>
-        <Text style={styles.descStyle}>{details?.description || ''}</Text>
+        <Text style={styles.name}>{'Burger Den - Coupon 1'}</Text>
+        <Text style={styles.descStyle}>
+          {
+            'Burger Den Restaurant is the perfect spot for an evening out. The historic white-columned Merritt House restored and renovated to its gleaming splendor, is home to gallery and Garden.'
+          }
+        </Text>
         <View style={styles.row}>
           <Text style={styles.subHead}>Min order value</Text>
-          <Text style={styles.subVal}>${details?.min_order_value || ''}</Text>
+          <Text style={styles.subVal}>${'20'}</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.subHead}>Validity</Text>
-          <Text style={styles.subVal}>{details?.date_validation != '0000-00-00' ? details?.date_validation : details?.week_validation != '[]' ? JSON.parse(details?.week_validation).join(',') : '0000-00-00'}</Text>
+          <Text style={styles.subVal}>{'24-04-2024'}</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.subHead}>Code Validation</Text>
-          <Text style={styles.subVal}>{details?.no_of_coupons || ''}</Text>
+          <Text style={styles.subVal}>{'1'}</Text>
         </View>
-        {details?.time_validation &&
-          <View style={styles.row}>
-            <Text style={styles.subHead}>Hours</Text>
-            <Text style={styles.subVal}>({details?.time_validation})</Text>
-          </View>
-        }
+        <View style={styles.row}>
+          <Text style={styles.subHead}>Hours</Text>
+          <Text style={styles.subVal}>({'22:00-23:59'})</Text>
+        </View>
       </View>
     );
   };
 
-  const onCopyLink = async (link) => {
-    const template = `to avail the discount coupons${'\n'} download the GiftCount App${'\n'} with this link ${'\n'}${link}`
-    Clipboard.setString(template)
-    return ShowMessage('Copy Text', 'Link has been copied', 'success')
+  const onCopyLink = async () => {
+    const template = `to avail the discount coupons${'\n'} download the GiftCount App${'\n'} with this link`;
+    Clipboard.setString(template);
+    return ShowMessage('Copy Text', 'Link has been copied', 'success');
+  };
 
-  }
-
-  const renderDiscountCard = (coupon_image, discount, id,number,restaurant_web,discount_code,link) => {
+  const renderDiscountCard = () => {
     return (
       <>
         <View style={styles.wrapper}>
-          <Image source={coupon_image ? { uri: coupon_image } : images.dummy} style={styles.foodStyle} />
+          <Image source={images.burger} style={styles.foodStyle} />
           <View style={styles.discountView}>
-            {user?.type == 'driver' ? (
+            {userType == 'driver' ? (
               <>
                 <TouchableOpacity
-                  style={[styles.btn, { marginBottom: hp(2) }]}
-                  onPress={() => nav.navigate(ROUTES.QRCode, { driver_id: user?.id, coupon_id: id })}>
+                  style={[styles.btn, {marginBottom: hp(2)}]}
+                  onPress={() => nav.navigate(ROUTES.QRCode)}>
                   <Text style={styles.btnText}>Get QR code</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.btn}
-                  onPress={() => onCopyLink(link)}>
+                  onPress={() => onCopyLink()}>
                   <Text style={styles.btnText}>Copy Link</Text>
                 </TouchableOpacity>
               </>
             ) : (
               <>
                 <Text style={styles.discountText}>Flat</Text>
-                <Text style={styles.percentage}>{discount}%</Text>
+                <Text style={styles.percentage}>{'50'}%</Text>
                 <Text style={styles.discountText}>Discount</Text>
               </>
             )}
           </View>
         </View>
-        {user?.type == 'customer' ? (
+        {userType == 'customer' ? (
           <Button
             buttonText={'Get Discount Code'}
             style={styles.button}
             onPress={() => setVisible(!visible)}
           />
         ) : null}
-        <View style={{ height: hp(2) }} />
+        <View style={{height: hp(2)}} />
         <DiscountCodeModal
           modalVisible={visible}
-          restaurant_phone={number}
-          code={discount_code}
-          url={restaurant_web}
           setModalVisible={setVisible}
         />
       </>
     );
   };
 
-  const renderLoader = () => {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Loader size={'large'} color={themes.primary} />
-      </View>
-    )
-  }
-
-  const handleConfirmStatusChange = async (confirmValue) => {
-    if (confirmValue === 'yes') {
-      var status = new FormData()
-      status.append('status', pendingValue)
-      // return console.log('dataa',data)
-      await couponStatus({ status, coupon_id }).unwrap().then((res) => {
-        console.log('response', res)
-        if (res.data.status) {
-          setValue(res.data.status)
-          return ShowMessage('Coupon Status', 'Coupon Status Changed Successfully', 'success')
-        } else {
-          return ShowMessage('Coupon Status', 'Failed To Change The Coupon Status', 'warning')
-        }
-      }).catch((error) => {
-        console.log('error changing the status ====>', error)
-        return ShowMessage('Coupon Status', 'Some problem occured', 'danger')
-      })
-    }
-    setConfirmationModal(!confirmationModal)
-  }
-
-  const onDeleteCoupon = async () => {
-    await deleteDiscountCoupon(coupon_id).unwrap().then((res) => {
-      if (res.success) {
-        // ownerCouponsRefetch()
-        nav.goBack()
-        return ShowMessage('Delete Discount Coupon', res.message, 'success')
-      } else {
-        return ShowMessage('Delete Discount Coupon', res.message, 'warning')
-      }
-    }).catch((error) => {
-      console.log('delete discount coupon error', error)
-      return ShowMessage('Delete Discount Coupon', 'Some problem occured', 'danger')
-    })
-    setModal(!modal)
-  }
+  const handleConfirmStatusChange = async confirmValue => {
+    setConfirmationModal(!confirmationModal);
+  };
 
   return (
     <Wrapper>
-      {isLoading ?
-        renderLoader()
-        :
-        <>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            {renderImages(data?.data?.user?.profile_pic)}
-            {renderContent(data?.data)}
-            {renderDiscountCard(data?.data?.coupon_image, data?.data?.discount, data?.data?.id,data?.data?.user?.phone_number,data?.data?.user?.restaurant_web,data?.data?.coupon_code,data?.data?.application_link)}
-            {user?.type == 'owner' ? (
-              <>
-                <DropDownPicker
-                  open={open}
-                  value={value}
-                  items={items}
-                  setOpen={setOpen}
-                  setValue={val => {
-                    setPendingValue(val)
-                    setOpen(!open)
-                  }}
-                  setItems={setItems}
-                  placeholder={value === '1' ? 'Active' : value === '0' ? 'Inactive' : 'Change Status'}
-                  style={styles.dropView}
-                  textStyle={styles.dropText}
-                  onSelectItem={() => setConfirmationModal(!confirmationModal)}
-                  dropDownContainerStyle={styles.dropdownStyle}
-                  showArrowIcon={true}
-                  showTickIcon={false}
-                />
-                <CouponStatusModal
-                  visible={confirmationModal}
-                  setVisible={setConfirmationModal}
-                  onStatusChange={handleConfirmStatusChange}
-                />
-                <ConfirmationModal visible={modal}
-                  modalText={'Are you sure you want to delete your coupon ?'}
-                  onPressOut={() => setModal(!modal)}
-                  onCancel={() => setModal(!modal)}
-                  onConfirm={() => onDeleteCoupon()}
-                />
-                <SpinnerLoader visible={deleteLoader ? deleteLoader : statusLoading} />
-                {/* /> */}
-              </>
-            ) : null}
-          </ScrollView>
-        </>
-      }
+      <>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {renderImages()}
+          {renderContent()}
+          {renderDiscountCard()}
+          {userType == 'owner' ? (
+            <>
+              <DropDownPicker
+                open={open}
+                value={value}
+                items={items}
+                setOpen={setOpen}
+                setValue={val => {
+                  setOpen(!open);
+                }}
+                setItems={setItems}
+                placeholder={
+                  value === '1'
+                    ? 'Active'
+                    : value === '0'
+                    ? 'Inactive'
+                    : 'Change Status'
+                }
+                style={styles.dropView}
+                textStyle={styles.dropText}
+                onSelectItem={() => setConfirmationModal(!confirmationModal)}
+                dropDownContainerStyle={styles.dropdownStyle}
+                showArrowIcon={true}
+                showTickIcon={false}
+              />
+              <CouponStatusModal
+                visible={confirmationModal}
+                setVisible={setConfirmationModal}
+                onStatusChange={handleConfirmStatusChange}
+              />
+              {/* /> */}
+            </>
+          ) : null}
+        </ScrollView>
+      </>
     </Wrapper>
   );
 };
@@ -457,6 +358,6 @@ const styles = StyleSheet.create({
     width: hp(5),
     zIndex: 1,
     right: hp(2.5),
-    top: hp(1.7)
-  }
+    top: hp(1.7),
+  },
 });

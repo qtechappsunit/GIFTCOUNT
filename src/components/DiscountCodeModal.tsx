@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   ImageBackground,
@@ -7,7 +7,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Linking
 } from 'react-native';
 import images from '../assets/images';
 import themes from '../assets/themes';
@@ -20,29 +19,14 @@ import Button from './Button';
 import icons from '../assets/icons';
 import RedirectingModal from './RedirectingModal';
 
-const DiscountCodeModal = ({ modalVisible, setModalVisible, restaurant_phone, url,code }) => {
-
+const DiscountCodeModal = ({modalVisible, setModalVisible}) => {
   const [redirect, setRedirect] = useState(false);
-  // const [isBlurred, setIsBlurred] = useState(true);
 
-  // const toggleBlur = () => {
-  //   setIsBlurred(!isBlurred);
-  // };
-
-  const discount_code = code?.split('')
-
-  const onRestaurantCall = async () => {
-    const phoneNumberToDial = `tel:${restaurant_phone}`;
-    await Linking.openURL(phoneNumberToDial);
-  }
+  const onRestaurantCall = async () => {};
 
   const onRestaurantWeb = async () => {
-    setTimeout(async () => {
-      await Linking.openURL(url)
-    }, 3000)
-    setRedirect(!redirect)
-
-  }
+    setRedirect(!redirect);
+  };
 
   return (
     <Modal
@@ -58,17 +42,14 @@ const DiscountCodeModal = ({ modalVisible, setModalVisible, restaurant_phone, ur
           <TouchableOpacity
             activeOpacity={0.9}
             onPress={() => setModalVisible(false)}
-            style={{ alignSelf: 'flex-end' }}>
+            style={{alignSelf: 'flex-end'}}>
             <Image source={images.cross} style={styles.crossStyle} />
           </TouchableOpacity>
           <Text style={styles.modalText}>Discount Code</Text>
           <View style={styles.row}>
-            {discount_code?.map((val, ind) => (
+            {['B', 'B', '5', '6', '7', 'M']?.map((val, ind) => (
               <View key={ind} style={styles.codeLetterView}>
-                <Text
-                  style={[styles.codeLetter]}>
-                  {val}
-                </Text>
+                <Text style={[styles.codeLetter]}>{val}</Text>
               </View>
             ))}
           </View>
@@ -163,7 +144,7 @@ const styles = StyleSheet.create({
     color: themes.white,
     shadowOpacity: 1,
     shadowColor: 'red',
-    shadowOffset: { width: 10, height: 10 },
+    shadowOffset: {width: 10, height: 10},
     shadowRadius: 5,
     elevation: 5,
     borderWidth: 0.5,

@@ -7,9 +7,8 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
-  Alert,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import images from '../../assets/images';
 import {
   heightPercentageToDP as hp,
@@ -25,97 +24,18 @@ import { RNCamera } from 'react-native-camera';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../Store/Reducer';
 import QRCodeGenerator from 'react-native-qrcode-svg';
-import { useQrCodeScanMutation } from '../../Store/services';
-import { parseQRCodeData, ShowMessage, validateQRCodeFormat } from '../../utils';
-import ROUTES from '../../utils';
-import SpinnerLoader from '../../components/SpinnerLoader';
 
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('window').height;
 
 const QRCode = ({ route }) => {
-  const [scanning, setScanning] = useState(true);
-  const scanTimeoutRef = useRef(null);
-  const { user } = useSelector((state: RootState) => state.authReducer);
-  const [qrCodeScan, { isLoading }] = useQrCodeScanMutation()
+  const { userType } = useSelector((state: RootState) => state.authReducer);
 
   const nav = useNavigation();
 
-  const { driver_id, coupon_id } = route?.params || {};
-  console.log('driver id', driver_id)
-  console.log('coupon id', coupon_id)
-
-  const qrCodeValue = `${driver_id}:${coupon_id}`;
-
-  useEffect(() => {
-    if (user?.type === 'customer') {
-      scanTimeoutRef.current = setTimeout(() => {
-        if (scanning) {
-          ShowMessage('QRCODE', 'The QR code could not be read. Please try again.', 'warning');
-          setScanning(false);
-        }
-      }, 10000);
-
-      return () => clearTimeout(scanTimeoutRef.current);
-    }
-  }, [scanning]);
-
-
   const onSuccess = (e: any) => {
-    clearTimeout(scanTimeoutRef.current);
-    if (validateQRCodeFormat(e.data)) {
-      const parsedData = parseQRCodeData(e.data);
-      if (parsedData) {
-        Alert.alert(
-          'Scan Successful',
-          'The QR code was successfully scanned! Do you want to proceed?',
-          [
-            {
-              text: 'Yes',
-              onPress: () => {
-                const { driverId, couponId } = parsedData;
-                onScanQRCODE(couponId, driverId)
-              }
-            },
-            {
-              text: 'No',
-              onPress: () => {
-                setScanning(true)
-                return ShowMessage('QRCODE', 'The scan process has been cancelled. Please try scanning again.', 'warning')
-              },
-              style: 'cancel',
-            }
-          ]
-        );
-      } else {
-        console.log('Data parsing error');
-        setScanning(true);
-      }
-    } else {
-      console.log('Invalid QR code format');
-      setScanning(true);
-    }
-    setScanning(false)
+
   };
-
-  const onScanQRCODE = async (coupon_id, driver_id) => {
-    var data = new FormData()
-    data.append('coupon_id', coupon_id)
-    data.append('driver_id', driver_id)
-
-    await qrCodeScan(data).unwrap().then((res) => {
-      console.log('qr code scan response ===>', res)
-      if (res.success) {
-        nav.navigate(ROUTES.Home)
-        return ShowMessage('QRCODE', res.message, 'success')
-      } else {
-        return ShowMessage('QRCODE', res.message, 'warning')
-      }
-    }).catch((error) => {
-      console.log('qr code scan error =====>', error)
-      return ShowMessage('QRCODE', 'Some problem occured', 'danger')
-    })
-  }
 
   const QRCodeImage = () => {
     return (
@@ -142,7 +62,7 @@ const QRCode = ({ route }) => {
             </Text>
             <TouchableOpacity style={styles.redCorners}>
               <QRCodeGenerator
-                value={qrCodeValue}
+                value={'www.google.com'}
                 backgroundColor='transparent'
                 size={220}
               />
@@ -173,7 +93,6 @@ const QRCode = ({ route }) => {
   const QRCodeCamera = () => {
     return (
       <View>
-        <SpinnerLoader visible={isLoading} />
         <View style={styles.header}>
           <TouchableOpacity
             onPress={() => nav.goBack()}
@@ -230,7 +149,7 @@ const QRCode = ({ route }) => {
     );
   };
 
-  return user?.type === 'driver' ? QRCodeImage() : QRCodeCamera();
+  return userType === 'driver' ? QRCodeImage() : QRCodeCamera();
 };
 
 export default QRCode;

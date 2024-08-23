@@ -1,15 +1,14 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
 import React from 'react';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import themes from '../assets/themes';
 import images from '../assets/images';
 import fonts from '../assets/fonts';
-import { useSelector } from 'react-redux';
-import { RootState } from '../Store/Reducer';
 
 const Header = () => {
-  const { user } = useSelector((state: RootState) => state?.authReducer)
-
   return (
     <View style={styles.headerView}>
       <View style={styles.wrapper}>
@@ -20,8 +19,8 @@ const Header = () => {
         >
           <SVGIcons image={icons.Menu} />
         </TouchableOpacity> */}
-        <Image source={user?.profile_pic ? { uri: user?.profile_pic } : images.user} style={styles.userImage} />
-        <Text style={styles.userNameStyle}>{user?.type === 'owner' ? user?.owner_name : user?.first_name + user?.last_name}</Text>
+        <Image source={images.userImage} style={styles.userImage} />
+        <Text style={styles.userNameStyle}>{'Mark'}</Text>
       </View>
       <Image source={images.logo} style={styles.logoStyle} />
     </View>

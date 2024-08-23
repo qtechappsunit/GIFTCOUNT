@@ -5,8 +5,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import AppStatusBar from '../components/AppStatusBar';
 import ROUTES from '../utils';
 import MainStack from './MainStack';
-import { useSelector } from 'react-redux';
-import { RootState } from '../Store/Reducer';
 
 export type AuthParams = {
   AuthStack: undefined,
@@ -28,7 +26,6 @@ const Stack = createNativeStackNavigator<AuthParams>();
 
 const Routes = () => {
 
-  const { token } = useSelector((state: RootState) => state.authReducer)
 
   return (
     <>
@@ -39,12 +36,8 @@ const Routes = () => {
             headerShown: false,
             animation: 'fade_from_bottom',
           }}>
-          {token ?
-            <Stack.Screen name={ROUTES.MainStack} component={MainStack} />
-            :
             <Stack.Screen name={ROUTES.AuthStack} component={AuthStack} />
-          }
-
+            <Stack.Screen name={ROUTES.MainStack} component={MainStack} />
         </Stack.Navigator>
       </NavigationContainer>
     </>

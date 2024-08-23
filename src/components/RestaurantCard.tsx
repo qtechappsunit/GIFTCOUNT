@@ -1,13 +1,10 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import images from '../assets/images';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import themes from '../assets/themes';
-import SVGIcons from './SVGIcons';
-import icons from '../assets/icons';
 import fonts from '../assets/fonts';
 
-const RestaurantCard = ({ onPress, name, discount, validity, image, hour, type }) => {
+const RestaurantCard = ({ onPress, name, discount, validity, image, hour }) => {
   return (
     <TouchableOpacity
       style={styles.cardStyle}
@@ -26,9 +23,6 @@ const RestaurantCard = ({ onPress, name, discount, validity, image, hour, type }
           </View>
         ) : null}
       </View>
-      {type === 'scanned' &&
-        <Text style={styles.typeText}>{'Exclusive Offer for You'}</Text>
-      }
       <Text style={styles.name}>{name}</Text>
       <View style={styles.textWrapper}>
         <Text style={styles.validityText}>Validity</Text>

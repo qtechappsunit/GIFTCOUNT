@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { authApi } from '../../services';
 
 interface AuthTypes {
   userType: string,
@@ -25,19 +24,6 @@ export const AuthSlice = createSlice({
       state.token = null;
     }
   },
-  extraReducers: (builder) => {
-    builder.addMatcher(authApi.endpoints.createUser.matchFulfilled, (state, action) => {
-      state.user = action.payload.user
-      state.token = action.payload.token
-    }),
-    builder.addMatcher(authApi.endpoints.login.matchFulfilled, (state,action) => {
-      state.user = action.payload.user,
-      state.token = action.payload.token
-    }),
-    builder.addMatcher(authApi.endpoints.editProfile.matchFulfilled,(state,action) => {
-      state.user = action.payload.data
-    })
-  }
 });
 
 export const { UserType, Logout } = AuthSlice.actions;

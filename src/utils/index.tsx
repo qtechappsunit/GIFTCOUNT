@@ -1,10 +1,9 @@
-import { Linking, Platform } from 'react-native';
-import images from '../assets/images'
+import {Linking, Platform} from 'react-native';
+import images from '../assets/images';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { showMessage } from 'react-native-flash-message';
+import {showMessage} from 'react-native-flash-message';
 import themes from '../assets/themes';
-import { PERMISSIONS, request } from 'react-native-permissions';
-
+import {PERMISSIONS, request} from 'react-native-permissions';
 
 export const slides = [
   {
@@ -54,6 +53,79 @@ export const socialIcons = [
   },
 ];
 
+export const cuisineTypes = [
+  {
+    id: 1,
+    title: 'Bar B Que',
+  },
+  {
+    id: 2,
+    title: 'Fast Food',
+  },
+  {
+    id: 3,
+    title: 'Pizza',
+  },
+  {
+    id: 4,
+    title: 'Japanese',
+  },
+  {
+    id: 5,
+    title: 'Chinese',
+  },
+  {
+    id: 6,
+    title: 'Thai',
+  },
+];
+
+export const foodCategories = [
+  {
+    id: 1,
+    title: 'All',
+    image: images.cat3,
+  },
+  {
+    id: 2,
+    title: 'Pizza',
+    image: images.cat1,
+  },
+  {
+    id: 3,
+    title: 'Burger',
+    image: images.cat2,
+  },
+  {
+    id: 4,
+    title: 'Mexican',
+    image: images.cat5,
+  },
+  {
+    id: 5,
+    title: 'Asian',
+    image: images.cat4,
+  },
+];
+
+export const couponsData = [
+  {
+    id: 1,
+    coupon_image: images.restaurant3,
+    title: 'Burger Den - Coupon 1',
+    validity: '24-04-2024',
+    discount: 50,
+  },
+  {
+    id: 2,
+    coupon_image: images.restaurant3,
+    title: 'Burger Den - Coupon 2',
+    validity: '24-04-2024',
+    discount: 50,
+    hours: '(22:00-23:59)'
+  },
+];
+
 const ROUTES = {
   AuthStack: 'AuthStack',
   MainStack: 'MainStack',
@@ -85,9 +157,9 @@ export const couponOptions = [
   },
   {
     id: 2,
-    option: 'Delete Coupon'
-  }
-]
+    option: 'Delete Coupon',
+  },
+];
 
 export const Weekdays = [
   {
@@ -141,61 +213,10 @@ export const ShowMessage = (message, description, type) => {
     statusBarHeight: 0,
     backgroundColor: themes.red,
     color: themes.white,
-    icon: "auto",
+    icon: 'auto',
     animated: true,
-
   });
-}
-
-
-export const getRequiredFields = (userType: string) => {
-  const commonFields = ['phone', 'street', 'city', 'state', 'zip_code', 'email', 'password', 'profile_pic'];
-  const userFields = {
-    rider: ['first_name', 'last_name', 'bank_iban'],
-    customer: ['first_name', 'last_name'],
-    owner: ['restaurant_name', 'owner_name', 'restaurant_web', 'cuisine_type'],
-  };
-
-  return [...userFields[userType], ...commonFields]
 };
-
-export const validateFields = (state: any, userType: string) => {
-  const requiredFields = getRequiredFields(userType)
-
-  for (let field of requiredFields) {
-    if (!state[field]) {
-      return `Please enter your ${field.replace('_', ' ')}`
-    }
-  }
-
-  if (state.password.length < 6) {
-    return 'Password is too short'
-  }
-
-  if (state.password !== state.cpassword) {
-    return 'Password does not match'
-  }
-};
-
-export const validateQRCodeFormat = (data) => {
-  const parts = data.split(':');
-  return parts.length === 2 && parts.every(part => part.trim().length > 0);
-};
-
-export const parseQRCodeData = (data) => {
-
-  try {
-    const [couponId, driverId] = data.split(':');
-    if (!isValidId(couponId) || !isValidId(driverId)) {
-      console.log('Invalid IDs');
-    }
-    return { couponId, driverId };
-  } catch (error) {
-    return null;
-  }
-};
-
-const isValidId = (id) => /^[a-zA-Z0-9]+$/.test(id);
 
 
 export const requestPermission = async permissionType => {
@@ -234,6 +255,5 @@ export const requestPermission = async permissionType => {
     return status;
   }
 };
-
 
 export default ROUTES;
